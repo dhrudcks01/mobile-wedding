@@ -4,8 +4,16 @@
 
 :root {
   color-scheme: light;
-  background: #f7f4ef;
-  color: #2f2a26;
+  --color-page: #eee7dc;
+  --color-surface: #fffaf2;
+  --color-surface-muted: #f8f0e4;
+  --color-text: #2f2a26;
+  --color-text-muted: #73675d;
+  --color-line: #e2d6c8;
+  --color-accent: #8d6652;
+  --color-accent-strong: #6d4b3f;
+  background: var(--color-page);
+  color: var(--color-text);
 }
 
 * {
@@ -20,9 +28,19 @@ html {
 body {
   min-height: 100vh;
   margin: 0;
-  background: #f7f4ef;
-  color: #2f2a26;
-  font-family: Arial, Helvetica, sans-serif;
+  background:
+    linear-gradient(180deg, rgba(255, 250, 242, 0.76), rgba(238, 231, 220, 0.94)),
+    var(--color-page);
+  color: var(--color-text);
+  font-family:
+    Arial,
+    "Apple SD Gothic Neo",
+    "Malgun Gothic",
+    sans-serif;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 a {
@@ -35,4 +53,8 @@ input,
 select,
 textarea {
   font: inherit;
+}
+
+::selection {
+  background: rgba(141, 102, 82, 0.22);
 }

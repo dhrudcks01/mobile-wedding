@@ -3,15 +3,15 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "mobile-wedding",
-  description: "Personal mobile wedding invitation.",
+  title: "모바일 청첩장",
+  description: "개인용 모바일 청첩장입니다.",
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#f7f4ef",
+  themeColor: "#eee7dc",
 };
 
 type RootLayoutProps = Readonly<{
