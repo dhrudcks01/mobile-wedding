@@ -117,6 +117,27 @@ pnpm build
 
 전화번호와 계좌번호는 공개 페이지에 그대로 노출됩니다. 실제 값을 입력하기 전에 공개 가능 여부를 반드시 확인합니다.
 
+## 빠른 실제 데이터 변경 순서
+
+1. `src/data/wedding.ts`를 엽니다.
+2. `meta.title`, `meta.description`, `meta.url`을 실제 공유 문구와 배포 URL로 바꿉니다.
+3. `couple.groom`, `couple.bride`의 이름과 부모님 성함을 입력합니다.
+4. 전화/문자 버튼이 필요할 때만 `phone`에 전화번호를 입력합니다. 비워두면 연락 버튼은 숨겨집니다.
+5. `event.dateTime`은 `YYYY-MM-DDTHH:mm:ss+09:00` 형식으로 입력합니다.
+6. `event.displayDate`, `venueName`, `hallName`, `address`, `parking`, `transport`를 실제 예식 정보로 바꿉니다.
+7. 갤러리가 필요하면 `images.gallery` 배열의 주석 예시를 참고해 이미지 경로를 추가합니다. 배열이 비어 있으면 갤러리는 숨겨집니다.
+8. 지도 버튼이 필요하면 `mapLinks`에 각 지도 앱 URL을 입력합니다. 빈 값인 지도 버튼은 숨겨집니다.
+9. 계좌 안내가 필요하면 `accounts` 배열의 주석 예시를 참고해 신랑측/신부측 계좌를 추가합니다. 배열이 비어 있으면 계좌 섹션은 숨겨집니다.
+10. 변경 후 `pnpm lint`와 `pnpm build`로 확인합니다.
+
+## 빈 값 처리 기준
+
+- `couple.*.phone`이 비어 있으면 해당 전화/문자 버튼은 표시되지 않습니다.
+- `images.gallery`가 빈 배열이면 갤러리 섹션은 표시되지 않습니다.
+- `mapLinks`의 각 값이 비어 있으면 해당 지도 앱 버튼은 표시되지 않습니다.
+- `accounts`가 빈 배열이면 계좌 섹션은 표시되지 않습니다.
+- 예식 날짜, 장소, 가족 정보가 비어 있으면 화면에는 입력 예정 fallback 문구가 표시됩니다.
+
 ## 이미지 교체 방법
 
 1. `public/images` 폴더를 만들고 이미지를 넣습니다.
