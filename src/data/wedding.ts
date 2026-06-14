@@ -17,7 +17,7 @@ export const wedding: Wedding = {
     description: "2026년 10월 9일 금요일 오후 3시, 라비두스",
     // 배포 후 실제 URL로 교체하세요. 예: "https://wedding.example.com"
     url: "https://example.com",
-    // public 폴더 기준 경로입니다. 예: "/images/og-image.jpg"
+    // 공유 미리보기 이미지입니다. public/images/og-image.jpg 파일을 교체하면 됩니다.
     ogImage: "/images/og-image.jpg",
   },
   couple: {
@@ -56,9 +56,10 @@ export const wedding: Wedding = {
 귀한 걸음으로 축복해 주시면
 더없는 기쁨으로 간직하겠습니다.`,
   images: {
-    // 대표 이미지 경로입니다. 비워두면 기본 경로("/images/hero.jpg")를 사용합니다.
+    // 대표 이미지 경로입니다. public/images/hero.jpg 파일을 교체하면 메인 이미지가 바뀝니다.
     hero: "/images/hero.jpg",
-    // 갤러리 배열이 비어 있으면 Gallery 섹션이 표시되지 않습니다.
+    // public/images에 사진을 넣고 아래 배열에 경로를 추가하면 갤러리에 표시됩니다.
+    // 배열이 비어 있으면 Gallery 섹션이 표시되지 않습니다.
     gallery: [
       "/images/gallery-01.jpg",
       "/images/gallery-02.jpg",

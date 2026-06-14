@@ -1,5 +1,4 @@
-import Image from "next/image";
-
+import { ImageWithFallback } from "@/components/common/ImageWithFallback";
 import type { Wedding } from "@/types/wedding";
 
 type HeroSectionProps = {
@@ -43,10 +42,12 @@ export function HeroSection({ wedding }: HeroSectionProps) {
       <div
         className="relative my-10 min-h-[360px] overflow-hidden rounded-t-[180px] border border-white/70 bg-[linear-gradient(135deg,#f5eee8,#dfcdbd)] shadow-[0_28px_70px_rgba(68,49,39,0.18)]"
       >
-        <Image
+        <ImageWithFallback
           alt={`${coupleNames} 웨딩 대표 이미지`}
           className="object-cover"
           fill
+          fallbackDescription="대표 사진을 public/images/hero.jpg로 넣으면 자동으로 표시됩니다."
+          fallbackTitle="대표 사진 준비 중"
           priority
           sizes="(max-width: 430px) 100vw, 430px"
           src={heroImage}

@@ -481,7 +481,7 @@ README에 배포 방법, 실제 데이터 입력 위치, 이미지 교체 방법
 
 ## MW-13. 사진 교체 및 이미지 가이드
 
-상태: [ ] todo
+상태: [x] done
 
 ### 목표
 청첩장 사진을 public/images에 넣고 wedding.ts에서 쉽게 연결할 수 있게 한다.
@@ -493,10 +493,10 @@ README에 배포 방법, 실제 데이터 입력 위치, 이미지 교체 방법
 - README에 사진 넣는 방법 추가
 
 ### 완료 기준
-- [ ] public/images/hero.jpg 교체 시 메인 이미지 변경
-- [ ] public/images/og-image.jpg 교체 시 공유 이미지 변경
-- [ ] gallery 배열에 경로 추가 시 갤러리에 표시
-- [ ] 이미지가 없어도 화면 깨지지 않음
+- [x] public/images/hero.jpg 교체 시 메인 이미지 변경
+- [x] public/images/og-image.jpg 교체 시 공유 이미지 변경
+- [x] gallery 배열에 경로 추가 시 갤러리에 표시
+- [x] 이미지가 없어도 화면 깨지지 않음
 
 
 ## MW-14. 모바일 첫 진입 인트로 화면

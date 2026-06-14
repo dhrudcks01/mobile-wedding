@@ -140,12 +140,23 @@ pnpm build
 
 ## 이미지 교체 방법
 
-1. `public/images` 폴더를 만들고 이미지를 넣습니다.
-2. 대표 이미지는 `public/images/hero.jpg`로 둡니다.
-3. 공유 이미지는 `public/images/og-image.jpg`로 둡니다.
-4. 갤러리는 `public/images/gallery-01.jpg`, `gallery-02.jpg`처럼 연속된 이름을 권장합니다.
-5. 파일명을 바꾸면 `src/data/wedding.ts`의 `images`와 `meta.ogImage` 경로도 함께 수정합니다.
-6. 배포 전 모바일 로딩을 위해 이미지를 압축합니다.
+```txt
+public/images/
+  hero.jpg          # 첫 화면 대표 사진
+  og-image.jpg      # 카카오톡/문자 공유 미리보기 이미지
+  gallery-01.jpg    # 갤러리 사진
+  gallery-02.jpg
+  gallery-03.jpg
+```
+
+1. `public/images` 폴더에 실제 사진을 넣습니다.
+2. 대표 이미지는 `public/images/hero.jpg`로 두면 `src/data/wedding.ts`의 `images.hero` 기본 경로와 연결됩니다.
+3. 공유 이미지는 `public/images/og-image.jpg`로 두면 `meta.ogImage` 기본 경로와 연결됩니다.
+4. 갤러리는 `gallery-01.jpg`, `gallery-02.jpg`처럼 연속된 이름을 권장합니다.
+5. 갤러리 사진을 추가하거나 제거하면 `src/data/wedding.ts`의 `images.gallery` 배열도 함께 수정합니다.
+6. 파일명을 다르게 쓰고 싶으면 `images.hero`, `images.gallery`, `meta.ogImage` 경로를 실제 파일명에 맞게 바꿉니다.
+7. 이미지 파일이 없거나 경로가 잘못되어도 화면에는 fallback 안내가 표시됩니다.
+8. 배포 전 모바일 로딩을 위해 이미지를 압축합니다. 대표/갤러리는 300KB~800KB 이하, 공유 이미지는 1200x630 비율을 권장합니다.
 
 ## 공유 미리보기 확인
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Image from "next/image";
 
+import { ImageWithFallback } from "@/components/common/ImageWithFallback";
 import { Section } from "@/components/common/Section";
 import type { Wedding } from "@/types/wedding";
 
@@ -91,16 +91,18 @@ export function GallerySection({ wedding }: GallerySectionProps) {
       <div className="grid grid-cols-3 gap-2.5">
         {gallery.map((image, index) => (
           <button
-            key={image}
+            key={`${image}-${index}`}
             type="button"
             onClick={() => setSelectedIndex(index)}
             className="group relative aspect-[3/4] overflow-hidden rounded-[20px] bg-[linear-gradient(135deg,#f5eee8,#dfcdbd)] shadow-[0_14px_30px_rgba(73,56,44,0.12)] transition duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2"
             aria-label={`갤러리 이미지 ${index + 1} 크게 보기`}
           >
-            <Image
+            <ImageWithFallback
               alt={`갤러리 이미지 ${index + 1}`}
               className="object-cover transition duration-500 group-hover:scale-105"
               fill
+              fallbackDescription="이미지를 public/images에 추가하거나 경로를 확인해 주세요."
+              fallbackTitle="사진 준비 중"
               loading="lazy"
               sizes="(max-width: 430px) 30vw, 126px"
               src={image}
@@ -127,10 +129,13 @@ export function GallerySection({ wedding }: GallerySectionProps) {
               role="img"
               aria-label={selectedLabel}
             >
-              <Image
+              <ImageWithFallback
                 alt={selectedLabel}
                 className="object-contain"
                 fill
+                fallbackClassName="text-white/80"
+                fallbackDescription="이미지를 public/images에 추가하거나 경로를 확인해 주세요."
+                fallbackTitle="사진 준비 중"
                 sizes="(max-width: 430px) 100vw, 430px"
                 src={selectedImage}
               />
