@@ -77,6 +77,63 @@ pnpm build
 - 변경 후 `pnpm lint`와 `pnpm build`를 실행합니다.
 - Spring Boot, DB, API 서버, Prisma/ORM, 관리자/로그인/회원가입 기능은 추가하지 않습니다.
 
+## 배포 방법
+
+### Vercel 배포
+
+1. GitHub 저장소를 Vercel에 Import합니다.
+2. Framework Preset은 `Next.js`로 둡니다.
+3. Install Command는 `pnpm install`, Build Command는 `pnpm build`를 사용합니다.
+4. 환경변수가 필요하면 Vercel Project Settings의 Environment Variables에 추가합니다.
+5. 배포 후 발급된 도메인을 `src/data/wedding.ts`의 `meta.url`에 반영합니다.
+6. 다시 배포한 뒤 카카오톡/문자 공유 미리보기를 확인합니다.
+
+### 정적 배포 참고
+
+- 현재 설정은 Vercel의 Next.js 배포를 우선합니다.
+- Cloudflare Pages, GitHub Pages, S3 같은 정적 호스팅을 선택할 경우 `next.config.ts`에 `output: "export"` 전환을 검토해야 합니다.
+- 정적 export 전환 후에는 `pnpm build`로 생성되는 정적 산출물을 배포 대상에 맞게 업로드합니다.
+
+## 환경변수
+
+| 이름 | 필수 여부 | 설명 |
+| --- | --- | --- |
+| `NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY` | 선택 | 카카오톡 공유 버튼 활성화용 JavaScript 키입니다. 값이 없으면 버튼은 비활성 안내 상태로 표시됩니다. |
+
+- 실제 API 키는 코드에 직접 커밋하지 말고 배포 환경변수로만 설정합니다.
+- 키가 없어도 `pnpm build`가 실패하지 않도록 fallback이 구현되어 있습니다.
+
+## 실제 정보 입력 위치
+
+`src/data/wedding.ts`에서 아래 값을 실제 정보로 교체합니다.
+
+- `meta.title`, `meta.description`, `meta.url`, `meta.ogImage`: 공유/검색 미리보기 문구와 이미지
+- `couple.groom`, `couple.bride`: 신랑/신부 이름, 부모님 성함, 연락처
+- `event`: 예식 일시, 장소명, 홀명, 주소, 주차/교통 안내
+- `greeting`: 초대 문구
+- `images.hero`, `images.gallery`: 대표 이미지와 갤러리 이미지 경로
+- `mapLinks`: 카카오맵, 네이버지도, 티맵, 구글맵 링크
+- `accounts`: 신랑측/신부측 계좌 정보
+
+전화번호와 계좌번호는 공개 페이지에 그대로 노출됩니다. 실제 값을 입력하기 전에 공개 가능 여부를 반드시 확인합니다.
+
+## 이미지 교체 방법
+
+1. `public/images` 폴더를 만들고 이미지를 넣습니다.
+2. 대표 이미지는 `public/images/hero.jpg`로 둡니다.
+3. 공유 이미지는 `public/images/og-image.jpg`로 둡니다.
+4. 갤러리는 `public/images/gallery-01.jpg`, `gallery-02.jpg`처럼 연속된 이름을 권장합니다.
+5. 파일명을 바꾸면 `src/data/wedding.ts`의 `images`와 `meta.ogImage` 경로도 함께 수정합니다.
+6. 배포 전 모바일 로딩을 위해 이미지를 압축합니다.
+
+## 공유 미리보기 확인
+
+- `src/data/wedding.ts`의 `meta.url`이 실제 배포 URL인지 확인합니다.
+- `meta.title`, `meta.description`, `meta.ogImage`가 원하는 값인지 확인합니다.
+- `public/images/og-image.jpg` 파일이 실제로 존재하는지 확인합니다.
+- 배포 후 카카오톡 대화방 또는 문자 앱에 URL을 붙여 넣어 제목/설명/이미지가 표시되는지 확인합니다.
+- 미리보기가 이전 값으로 보이면 각 플랫폼의 캐시 갱신 도구를 사용하거나 URL이 최신 배포 주소인지 다시 확인합니다.
+
 ## 핵심 원칙
 
 작게 나누어 구현합니다. 한 번에 전체를 맡기지 말고, 티켓 하나씩 Codex에게 지시합니다.
