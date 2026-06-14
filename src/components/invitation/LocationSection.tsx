@@ -1,0 +1,76 @@
+import { Section } from "@/components/common/Section";
+import { getAvailableMapLinks } from "@/lib/map";
+import type { Wedding } from "@/types/wedding";
+
+type LocationSectionProps = {
+  wedding: Wedding;
+};
+
+type InfoBlockProps = {
+  label: string;
+  value: string;
+};
+
+function InfoBlock({ label, value }: InfoBlockProps) {
+  return (
+    <div className="rounded-[24px] border border-[var(--color-line)] bg-white/55 px-5 py-4 text-left">
+      <p className="text-xs font-semibold tracking-[0.18em] text-[var(--color-accent)]">
+        {label}
+      </p>
+      <p className="mt-2 text-sm leading-7 text-[var(--color-text-muted)]">
+        {value}
+      </p>
+    </div>
+  );
+}
+
+export function LocationSection({ wedding }: LocationSectionProps) {
+  const mapLinks = getAvailableMapLinks(wedding.mapLinks);
+  const locationLabel = `${wedding.event.venueName} ${wedding.event.hallName}`;
+
+  return (
+    <Section
+      className="bg-[var(--color-surface-muted)]"
+      eyebrow="Location"
+      title="오시는 길"
+      description="예식 장소와 이동 정보를 안내드립니다."
+    >
+      <div className="mt-9 overflow-hidden rounded-[32px] border border-[var(--color-line)] bg-white/65 text-left shadow-[0_18px_50px_rgba(91,69,55,0.08)]">
+        <div className="border-b border-[var(--color-line)] px-6 py-6">
+          <p className="text-xs font-semibold tracking-[0.2em] text-[var(--color-accent)]">
+            VENUE
+          </p>
+          <h3 className="mt-3 text-2xl font-semibold leading-tight text-[var(--color-text)]">
+            {wedding.event.venueName}
+          </h3>
+          <p className="mt-2 text-base font-medium text-[var(--color-text)]">
+            {wedding.event.hallName}
+          </p>
+          <p className="mt-4 text-sm leading-7 text-[var(--color-text-muted)]">
+            {wedding.event.address}
+          </p>
+        </div>
+
+        <div className="grid gap-3 px-4 py-4">
+          <InfoBlock label="PARKING" value={wedding.event.parking} />
+          <InfoBlock label="TRANSPORT" value={wedding.event.transport} />
+        </div>
+      </div>
+
+      <div className="mt-6 grid grid-cols-2 gap-3">
+        {mapLinks.map((mapLink) => (
+          <a
+            aria-label={`${locationLabel} ${mapLink.label}에서 보기`}
+            className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--color-line)] bg-[var(--color-surface)] px-4 text-sm font-medium text-[var(--color-text)] shadow-sm transition-colors duration-200 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-strong)]"
+            href={mapLink.href}
+            key={mapLink.key}
+            rel="noreferrer"
+            target="_blank"
+          >
+            {mapLink.label}
+          </a>
+        ))}
+      </div>
+    </Section>
+  );
+}

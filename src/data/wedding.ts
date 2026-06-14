@@ -47,10 +47,11 @@ export const wedding: Wedding = {
     ],
   },
   mapLinks: {
-    kakao: "",
-    naver: "",
-    tmap: "",
-    google: "",
+    kakao: "https://map.kakao.com/link/search/OO%20%EC%9B%A8%EB%94%A9%ED%99%80",
+    naver: "https://map.naver.com/p/search/OO%20%EC%9B%A8%EB%94%A9%ED%99%80",
+    tmap: "tmap://search?name=OO%20%EC%9B%A8%EB%94%A9%ED%99%80",
+    google:
+      "https://www.google.com/maps/search/?api=1&query=OO%20%EC%9B%A8%EB%94%A9%ED%99%80",
   },
   accounts: [
     {

@@ -3,6 +3,7 @@ import { CoupleSection } from "@/components/invitation/CoupleSection";
 import { DateSection } from "@/components/invitation/DateSection";
 import { GreetingSection } from "@/components/invitation/GreetingSection";
 import { HeroSection } from "@/components/invitation/HeroSection";
+import { LocationSection } from "@/components/invitation/LocationSection";
 import { wedding } from "@/data/wedding";
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
       <GreetingSection wedding={wedding} />
       <CoupleSection wedding={wedding} />
       <DateSection wedding={wedding} />
+      <LocationSection wedding={wedding} />
       <ContactSection wedding={wedding} />
     </main>
   );
