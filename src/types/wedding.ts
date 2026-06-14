@@ -7,6 +7,10 @@ export type WeddingMeta = {
   ogImage: string;
 };
 
+export type WeddingIntro = {
+  message: string;
+};
+
 export type WeddingPerson = {
   name: string;
   phone: string;
@@ -51,6 +55,7 @@ export type WeddingAccount = {
 
 export type Wedding = {
   meta: WeddingMeta;
+  intro: WeddingIntro;
   couple: WeddingCouple;
   event: WeddingEvent;
   greeting: string;

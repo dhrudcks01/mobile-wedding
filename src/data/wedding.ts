@@ -20,6 +20,10 @@ export const wedding: Wedding = {
     // 공유 미리보기 이미지입니다. public/images/og-image.jpg 파일을 교체하면 됩니다.
     ogImage: "/images/og-image.jpg",
   },
+  intro: {
+    // 첫 접속 인트로에 표시할 짧은 문구입니다.
+    message: "소중한 분들을 저희의 시작에 초대합니다.",
+  },
   couple: {
     groom: {
       // 예: "민준"

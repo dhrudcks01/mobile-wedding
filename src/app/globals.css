@@ -65,3 +65,36 @@ textarea {
 ::selection {
   background: rgba(141, 102, 82, 0.22);
 }
+
+@keyframes intro-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.995);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes intro-fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .intro-motion {
+    animation: none !important;
+    transition: none !important;
+  }
+}
