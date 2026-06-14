@@ -356,7 +356,7 @@ DB나 서버 저장은 추가하지 마.
 
 ## MW-09. Share와 OG/Kakao 공유
 
-상태: [ ] todo
+상태: [x] done
 
 ### 목표
 
@@ -383,10 +383,10 @@ Next.js metadata/openGraph/twitter 설정도 wedding.ts의 meta 데이터를 사
 
 ### 완료 기준
 
-- [ ] 링크 복사 가능
-- [ ] Web Share API 지원
-- [ ] 카카오톡 공유 fallback 있음
-- [ ] OG metadata 설정
+- [x] 링크 복사 가능
+- [x] Web Share API 지원
+- [x] 카카오톡 공유 fallback 있음
+- [x] OG metadata 설정
 
 ---
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { Button, type ButtonProps } from "@/components/common/Button";
+import { copyTextToClipboard } from "@/lib/share";
 
 type CopyFeedback = {
   message: string;
@@ -16,38 +17,6 @@ type CopyButtonProps = Omit<ButtonProps, "children" | "onClick" | "type"> & {
   successMessage?: string;
   text: string;
 };
-
-async function copyText(text: string) {
-  const trimmedText = text.trim();
-
-  if (!trimmedText) {
-    throw new Error("empty_copy_text");
-  }
-
-  if (navigator.clipboard?.writeText) {
-    await navigator.clipboard.writeText(trimmedText);
-    return;
-  }
-
-  const textArea = document.createElement("textarea");
-  textArea.value = trimmedText;
-  textArea.setAttribute("readonly", "");
-  textArea.style.position = "fixed";
-  textArea.style.left = "-9999px";
-  textArea.style.top = "0";
-  document.body.appendChild(textArea);
-  textArea.select();
-
-  try {
-    const isCopied = document.execCommand("copy");
-
-    if (!isCopied) {
-      throw new Error("fallback_copy_failed");
-    }
-  } finally {
-    document.body.removeChild(textArea);
-  }
-}
 
 export function CopyButton({
   children = "복사",
@@ -64,7 +33,7 @@ export function CopyButton({
     setIsCopying(true);
 
     try {
-      await copyText(text);
+      await copyTextToClipboard(text);
       onFeedback?.({ message: successMessage, tone: "success" });
     } catch {
       onFeedback?.({ message: failureMessage, tone: "error" });
