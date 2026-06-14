@@ -20,3 +20,5 @@ gallery-06.jpg
 - `gallery-*.jpg`: 갤러리 사진입니다.
 
 파일명을 바꾸면 `src/data/wedding.ts`의 `images.hero`, `images.gallery`, `meta.ogImage` 경로도 함께 수정해야 합니다.
+
+현재 포함된 JPG 파일은 배포 전 404를 방지하기 위한 기본 placeholder입니다. 실제 청첩장 배포 전에는 같은 파일명으로 실제 사진을 교체하는 것을 권장합니다.
