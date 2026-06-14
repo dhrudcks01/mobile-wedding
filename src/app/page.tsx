@@ -1,6 +1,7 @@
 import { ContactSection } from "@/components/invitation/ContactSection";
 import { CoupleSection } from "@/components/invitation/CoupleSection";
 import { DateSection } from "@/components/invitation/DateSection";
+import { GallerySection } from "@/components/invitation/GallerySection";
 import { GreetingSection } from "@/components/invitation/GreetingSection";
 import { HeroSection } from "@/components/invitation/HeroSection";
 import { LocationSection } from "@/components/invitation/LocationSection";
@@ -14,6 +15,7 @@ export default function Home() {
       <CoupleSection wedding={wedding} />
       <DateSection wedding={wedding} />
       <LocationSection wedding={wedding} />
+      <GallerySection wedding={wedding} />
       <ContactSection wedding={wedding} />
     </main>
   );
