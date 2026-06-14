@@ -69,7 +69,7 @@ Next.js + TypeScript + Tailwind CSS 기반으로 mobile-wedding 프로젝트를 
 
 ## MW-01. 정적 데이터 모델 작성
 
-상태: [ ] todo
+상태: [x] done
 
 ### 목표
 
@@ -100,10 +100,10 @@ DB, API, 환경변수는 추가하지 마.
 
 ### 완료 기준
 
-- [ ] `src/types/wedding.ts` 존재
-- [ ] `src/data/wedding.ts` 존재
-- [ ] 타입 오류 없음
-- [ ] 개인정보 placeholder 처리
+- [x] `src/types/wedding.ts` 존재
+- [x] `src/data/wedding.ts` 존재
+- [x] 타입 오류 없음
+- [x] 개인정보 placeholder 처리
 
 ---
 
