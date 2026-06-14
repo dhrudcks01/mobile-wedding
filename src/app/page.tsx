@@ -1,3 +1,4 @@
+import { AccountSection } from "@/components/invitation/AccountSection";
 import { ContactSection } from "@/components/invitation/ContactSection";
 import { CoupleSection } from "@/components/invitation/CoupleSection";
 import { DateSection } from "@/components/invitation/DateSection";
@@ -17,6 +18,7 @@ export default function Home() {
       <LocationSection wedding={wedding} />
       <GallerySection wedding={wedding} />
       <ContactSection wedding={wedding} />
+      <AccountSection wedding={wedding} />
     </main>
   );
 }
