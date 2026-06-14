@@ -94,7 +94,7 @@ export function GallerySection({ wedding }: GallerySectionProps) {
             key={`${image}-${index}`}
             type="button"
             onClick={() => setSelectedIndex(index)}
-            className="group relative aspect-[3/4] overflow-hidden rounded-[20px] bg-[linear-gradient(135deg,#f5eee8,#dfcdbd)] shadow-[0_14px_30px_rgba(73,56,44,0.12)] transition duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2"
+            className="group relative aspect-[3/4] overflow-hidden rounded-[14px] bg-[linear-gradient(135deg,#f5eee8,#dfcdbd)] shadow-[0_14px_30px_rgba(73,56,44,0.12)] transition duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2"
             aria-label={`갤러리 이미지 ${index + 1} 크게 보기`}
           >
             <ImageWithFallback

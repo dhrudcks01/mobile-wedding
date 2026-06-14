@@ -30,7 +30,7 @@ export function DateSection({ wedding }: DateSectionProps) {
         </h2>
 
         <div className="mt-8 rounded-[32px] border border-[var(--color-line)] bg-white/60 px-5 py-7 shadow-[0_18px_50px_rgba(91,69,55,0.08)]">
-          <p className="text-4xl font-semibold leading-none text-[var(--color-accent-strong)]">
+          <p className="text-3xl font-semibold leading-none text-[var(--color-accent-strong)]">
             {ddayLabel}
           </p>
           <p className="mt-5 text-lg font-semibold leading-8 text-[var(--color-text)]">

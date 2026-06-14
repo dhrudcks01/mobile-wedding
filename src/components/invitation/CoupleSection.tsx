@@ -52,6 +52,7 @@ export function CoupleSection({ wedding }: CoupleSectionProps) {
     >
       <div className="mt-9 grid gap-4">
         <CoupleCard label="Groom" person={wedding.couple.groom} />
+        &
         <CoupleCard label="Bride" person={wedding.couple.bride} />
       </div>
     </Section>

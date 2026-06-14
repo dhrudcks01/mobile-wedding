@@ -18,7 +18,7 @@ export const wedding: Wedding = {
     // 배포 후 실제 URL로 교체하세요. 예: "https://wedding.example.com"
     url: "https://example.com",
     // 공유 미리보기 이미지입니다. public/images/og-image.jpg 파일을 교체하면 됩니다.
-    ogImage: "/images/og-image.jpg",
+    ogImage: "/images/YSH01676.JPG",
   },
   intro: {
     // 첫 접속 인트로에 표시할 짧은 문구입니다.
@@ -61,25 +61,25 @@ export const wedding: Wedding = {
 더없는 기쁨으로 간직하겠습니다.`,
   images: {
     // 대표 이미지 경로입니다. public/images/hero.jpg 파일을 교체하면 메인 이미지가 바뀝니다.
-    hero: "/images/hero.jpg",
+    hero: "/images/DSCF7280.JPG",
     // public/images에 사진을 넣고 아래 배열에 경로를 추가하면 갤러리에 표시됩니다.
     // 배열이 비어 있으면 Gallery 섹션이 표시되지 않습니다.
     gallery: [
-      "/images/gallery-01.jpg",
-      "/images/gallery-02.jpg",
-      "/images/gallery-03.jpg",
-      "/images/gallery-04.jpg",
-      "/images/gallery-05.jpg",
-      "/images/gallery-06.jpg",
+      "/images/DSCF7172.JPG",
+      "/images/YSH04570.JPG",
+      "/images/DSCF7236.JPG",
+      "/images/YSH03534.JPG",
+      "/images/YSH04202.JPG",
+      "/images/YSH04256.JPG",
     ],
   },
   mapLinks: {
     // 지도 링크가 비어 있으면 해당 지도 버튼이 표시되지 않습니다.
-    kakao: "https://map.kakao.com/link/search/OO%20%EC%9B%A8%EB%94%A9%ED%99%80",
-    naver: "https://map.naver.com/p/search/OO%20%EC%9B%A8%EB%94%A9%ED%99%80",
-    tmap: "tmap://search?name=OO%20%EC%9B%A8%EB%94%A9%ED%99%80",
+    kakao: "https://place.map.kakao.com/1215258511",
+    naver: "https://map.naver.com/p/entry/place/32982104?c=11.00,0,0,0,dh&placePath=/home?from=map&fromPanelNum=1&additionalHeight=76&timestamp=202606142032&locale=ko&svcName=map_pcv5",
+    tmap: "",
     google:
-      "https://www.google.com/maps/search/?api=1&query=OO%20%EC%9B%A8%EB%94%A9%ED%99%80",
+      "",
   },
   accounts: [
     // 계좌 배열이 비어 있으면 Account 섹션이 표시되지 않습니다.

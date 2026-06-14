@@ -17,11 +17,11 @@ export default function Home() {
     <main className="mx-auto min-h-screen w-full max-w-[430px] overflow-hidden bg-[var(--color-surface)] shadow-[0_24px_80px_rgba(70,55,42,0.14)] sm:my-8 sm:min-h-[calc(100vh-4rem)] sm:rounded-[32px]">
       <IntroScreen wedding={wedding} />
       <HeroSection wedding={wedding} />
-      <GreetingSection wedding={wedding} />
+      <GallerySection wedding={wedding} />
+      {/*<GreetingSection wedding={wedding} />*/}
       <CoupleSection wedding={wedding} />
       <DateSection wedding={wedding} />
       <LocationSection wedding={wedding} />
-      <GallerySection wedding={wedding} />
       <ContactSection wedding={wedding} />
       <AccountSection wedding={wedding} />
       <ShareSection

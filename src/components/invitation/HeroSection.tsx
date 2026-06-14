@@ -29,7 +29,7 @@ export function HeroSection({ wedding }: HeroSectionProps) {
   const heroImage = wedding.images.hero.trim() || "/images/hero.jpg";
 
   return (
-    <section className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden px-6 pb-10 pt-12 text-center">
+    <section className="relative flex min-h-[60svh] flex-col justify-between overflow-hidden px-6 pb-10 pt-12 text-center">
       <div className="relative z-10">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
           Wedding Invitation
@@ -40,7 +40,7 @@ export function HeroSection({ wedding }: HeroSectionProps) {
       </div>
 
       <div
-        className="relative my-10 min-h-[360px] overflow-hidden rounded-t-[180px] border border-white/70 bg-[linear-gradient(135deg,#f5eee8,#dfcdbd)] shadow-[0_28px_70px_rgba(68,49,39,0.18)]"
+        className="relative my-10 min-h-[700px] overflow-hidden rounded-t-[180px] border border-white/70 bg-[linear-gradient(135deg,#f5eee8,#dfcdbd)] shadow-[0_28px_70px_rgba(68,49,39,0.18)]"
       >
         <ImageWithFallback
           alt={`${coupleNames} 웨딩 대표 이미지`}
