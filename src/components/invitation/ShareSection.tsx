@@ -160,6 +160,7 @@ export function ShareSection({
           </CopyButton>
 
           <Button
+            aria-label="기본 공유창으로 청첩장 공유하기"
             className="w-full"
             disabled={isNativeSharing}
             onClick={handleNativeShare}
@@ -170,6 +171,11 @@ export function ShareSection({
           </Button>
 
           <Button
+            aria-label={
+              kakaoConfigured
+                ? "카카오톡으로 청첩장 공유하기"
+                : "카카오톡 공유는 JavaScript 키 설정 후 사용할 수 있습니다"
+            }
             className="w-full"
             disabled={!kakaoConfigured || isKakaoSharing}
             onClick={handleKakaoShare}

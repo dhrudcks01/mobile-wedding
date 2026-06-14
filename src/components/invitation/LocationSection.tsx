@@ -11,6 +11,10 @@ type InfoBlockProps = {
   value: string;
 };
 
+function getDisplayText(value: string, fallback: string) {
+  return value.trim() || fallback;
+}
+
 function InfoBlock({ label, value }: InfoBlockProps) {
   return (
     <div className="rounded-[24px] border border-[var(--color-line)] bg-white/55 px-5 py-4 text-left">
@@ -18,7 +22,7 @@ function InfoBlock({ label, value }: InfoBlockProps) {
         {label}
       </p>
       <p className="mt-2 text-sm leading-7 text-[var(--color-text-muted)]">
-        {value}
+        {value.trim() || "안내 문구 입력 예정"}
       </p>
     </div>
   );
@@ -26,7 +30,10 @@ function InfoBlock({ label, value }: InfoBlockProps) {
 
 export function LocationSection({ wedding }: LocationSectionProps) {
   const mapLinks = getAvailableMapLinks(wedding.mapLinks);
-  const locationLabel = `${wedding.event.venueName} ${wedding.event.hallName}`;
+  const venueName = getDisplayText(wedding.event.venueName, "예식장 입력 예정");
+  const hallName = getDisplayText(wedding.event.hallName, "홀 정보 입력 예정");
+  const address = getDisplayText(wedding.event.address, "주소 입력 예정");
+  const locationLabel = `${venueName} ${hallName}`;
 
   return (
     <Section
@@ -41,13 +48,13 @@ export function LocationSection({ wedding }: LocationSectionProps) {
             VENUE
           </p>
           <h3 className="mt-3 text-2xl font-semibold leading-tight text-[var(--color-text)]">
-            {wedding.event.venueName}
+            {venueName}
           </h3>
           <p className="mt-2 text-base font-medium text-[var(--color-text)]">
-            {wedding.event.hallName}
+            {hallName}
           </p>
           <p className="mt-4 text-sm leading-7 text-[var(--color-text-muted)]">
-            {wedding.event.address}
+            {address}
           </p>
         </div>
 
@@ -57,20 +64,26 @@ export function LocationSection({ wedding }: LocationSectionProps) {
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-3">
-        {mapLinks.map((mapLink) => (
-          <a
-            aria-label={`${locationLabel} ${mapLink.label}에서 보기`}
-            className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--color-line)] bg-[var(--color-surface)] px-4 text-sm font-medium text-[var(--color-text)] shadow-sm transition-colors duration-200 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-strong)]"
-            href={mapLink.href}
-            key={mapLink.key}
-            rel="noreferrer"
-            target="_blank"
-          >
-            {mapLink.label}
-          </a>
-        ))}
-      </div>
+      {mapLinks.length > 0 ? (
+        <div className="mt-6 grid grid-cols-2 gap-3">
+          {mapLinks.map((mapLink) => (
+            <a
+              aria-label={`${locationLabel} ${mapLink.label}에서 보기`}
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--color-line)] bg-[var(--color-surface)] px-4 text-sm font-medium text-[var(--color-text)] shadow-sm transition-colors duration-200 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-strong)]"
+              href={mapLink.href}
+              key={mapLink.key}
+              rel="noreferrer"
+              target="_blank"
+            >
+              {mapLink.label}
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-6 rounded-[24px] border border-[var(--color-line)] bg-white/55 px-5 py-5 text-sm leading-7 text-[var(--color-text-muted)]">
+          지도 앱 링크가 입력되면 길찾기 버튼이 표시됩니다.
+        </p>
+      )}
     </Section>
   );
 }

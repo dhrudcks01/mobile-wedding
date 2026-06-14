@@ -16,6 +16,10 @@ type CoupleCardProps = {
   person: Person;
 };
 
+function getDisplayText(value: string, fallback = "입력 예정") {
+  return value.trim() || fallback;
+}
+
 function CoupleCard({ label, person }: CoupleCardProps) {
   return (
     <article className="rounded-[28px] border border-[var(--color-line)] bg-white/55 px-5 py-6 text-center shadow-[0_18px_50px_rgba(91,69,55,0.08)]">
@@ -23,16 +27,16 @@ function CoupleCard({ label, person }: CoupleCardProps) {
         {label}
       </p>
       <h3 className="mt-4 text-3xl font-semibold leading-none text-[var(--color-text)]">
-        {person.name}
+        {getDisplayText(person.name)}
       </h3>
       <dl className="mt-6 space-y-3 text-sm leading-6 text-[var(--color-text-muted)]">
         <div className="flex items-center justify-center gap-3">
           <dt className="text-xs font-medium text-[var(--color-accent)]">아버지</dt>
-          <dd>{person.father}</dd>
+          <dd>{getDisplayText(person.father)}</dd>
         </div>
         <div className="flex items-center justify-center gap-3">
           <dt className="text-xs font-medium text-[var(--color-accent)]">어머니</dt>
-          <dd>{person.mother}</dd>
+          <dd>{getDisplayText(person.mother)}</dd>
         </div>
       </dl>
     </article>

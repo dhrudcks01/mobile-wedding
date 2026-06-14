@@ -3,19 +3,30 @@ import type { ReactNode } from "react";
 import { wedding } from "@/data/wedding";
 import "./globals.css";
 
-const metadataBase = new URL(wedding.meta.url);
+const fallbackUrl = "https://example.com";
+
+function getMetadataBase(url: string) {
+  try {
+    return new URL(url);
+  } catch {
+    return new URL(fallbackUrl);
+  }
+}
+
+const metadataBase = getMetadataBase(wedding.meta.url);
+const canonicalUrl = wedding.meta.url.trim() || fallbackUrl;
 
 export const metadata: Metadata = {
   title: wedding.meta.title,
   description: wedding.meta.description,
   metadataBase,
   alternates: {
-    canonical: wedding.meta.url,
+    canonical: canonicalUrl,
   },
   openGraph: {
     title: wedding.meta.title,
     description: wedding.meta.description,
-    url: wedding.meta.url,
+    url: canonicalUrl,
     siteName: wedding.meta.title,
     images: [
       {

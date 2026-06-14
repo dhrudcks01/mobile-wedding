@@ -1,18 +1,33 @@
-import type { Wedding } from "@/data/wedding";
+import Image from "next/image";
+
+import type { Wedding } from "@/types/wedding";
 
 type HeroSectionProps = {
   wedding: Wedding;
 };
 
+function getDisplayText(value: string, fallback: string) {
+  return value.trim() || fallback;
+}
+
 function getCoupleNames(wedding: Wedding) {
-  return `${wedding.couple.groom.name} · ${wedding.couple.bride.name}`;
+  const groomName = getDisplayText(wedding.couple.groom.name, "신랑");
+  const brideName = getDisplayText(wedding.couple.bride.name, "신부");
+
+  return `${groomName} · ${brideName}`;
 }
 
 export function HeroSection({ wedding }: HeroSectionProps) {
   const coupleNames = getCoupleNames(wedding);
   const eventPlace = [wedding.event.venueName, wedding.event.hallName]
+    .map((value) => value.trim())
     .filter(Boolean)
     .join(" ");
+  const displayDate = getDisplayText(
+    wedding.event.displayDate,
+    "예식 일시 입력 예정",
+  );
+  const heroImage = wedding.images.hero.trim() || "/images/hero.jpg";
 
   return (
     <section className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden px-6 pb-10 pt-12 text-center">
@@ -26,18 +41,20 @@ export function HeroSection({ wedding }: HeroSectionProps) {
       </div>
 
       <div
-        aria-label={`${coupleNames} 웨딩 대표 이미지`}
-        className="relative my-10 min-h-[430px] overflow-hidden rounded-t-[180px] border border-white/70 bg-[var(--color-surface-muted)] shadow-[0_28px_70px_rgba(68,49,39,0.18)]"
-        role="img"
-        style={{
-          backgroundImage: `linear-gradient(180deg, rgba(255,250,242,0.08), rgba(73,52,42,0.3)), url("${wedding.images.hero}")`,
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-        }}
+        className="relative my-10 min-h-[360px] overflow-hidden rounded-t-[180px] border border-white/70 bg-[linear-gradient(135deg,#f5eee8,#dfcdbd)] shadow-[0_28px_70px_rgba(68,49,39,0.18)]"
       >
+        <Image
+          alt={`${coupleNames} 웨딩 대표 이미지`}
+          className="object-cover"
+          fill
+          priority
+          sizes="(max-width: 430px) 100vw, 430px"
+          src={heroImage}
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,250,242,0.08),rgba(73,52,42,0.3))]" />
         <div className="absolute inset-x-8 bottom-8 rounded-full border border-white/70 bg-white/75 px-5 py-4 text-sm leading-6 text-[var(--color-text-muted)] shadow-sm backdrop-blur">
-          <p>{wedding.event.displayDate}</p>
-          <p>{eventPlace}</p>
+          <p>{displayDate}</p>
+          <p>{eventPlace || "예식 장소 입력 예정"}</p>
         </div>
       </div>
 

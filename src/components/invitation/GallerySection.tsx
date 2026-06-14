@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 
 import { Section } from "@/components/common/Section";
 import type { Wedding } from "@/types/wedding";
@@ -96,9 +97,13 @@ export function GallerySection({ wedding }: GallerySectionProps) {
             className="group relative aspect-[3/4] overflow-hidden rounded-[20px] bg-[linear-gradient(135deg,#f5eee8,#dfcdbd)] shadow-[0_14px_30px_rgba(73,56,44,0.12)] transition duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2"
             aria-label={`갤러리 이미지 ${index + 1} 크게 보기`}
           >
-            <span
-              className="absolute inset-0 bg-cover bg-center transition duration-500 group-hover:scale-105"
-              style={{ backgroundImage: `url(${image})` }}
+            <Image
+              alt={`갤러리 이미지 ${index + 1}`}
+              className="object-cover transition duration-500 group-hover:scale-105"
+              fill
+              loading="lazy"
+              sizes="(max-width: 430px) 30vw, 126px"
+              src={image}
             />
             <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(63,44,31,0.18))]" />
           </button>
@@ -122,9 +127,12 @@ export function GallerySection({ wedding }: GallerySectionProps) {
               role="img"
               aria-label={selectedLabel}
             >
-              <div
-                className="absolute inset-0 bg-contain bg-center bg-no-repeat"
-                style={{ backgroundImage: `url(${selectedImage})` }}
+              <Image
+                alt={selectedLabel}
+                className="object-contain"
+                fill
+                sizes="(max-width: 430px) 100vw, 430px"
+                src={selectedImage}
               />
               <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-stone-950/55 to-transparent px-5 pb-5 pt-14 text-xs font-medium text-white/90">
                 <span>{selectedLabel}</span>

@@ -27,6 +27,10 @@ export function getDaysUntil(targetDateTime: string, baseDate = new Date()) {
 export function getDdayLabel(targetDateTime: string, baseDate = new Date()) {
   const daysUntil = getDaysUntil(targetDateTime, baseDate);
 
+  if (Number.isNaN(daysUntil)) {
+    return "날짜 입력 예정";
+  }
+
   if (daysUntil > 0) {
     return `D-${daysUntil}`;
   }

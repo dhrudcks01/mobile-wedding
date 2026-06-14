@@ -55,6 +55,28 @@ pnpm lint
 pnpm build
 ```
 
+## 현재 구현 범위
+
+- 모바일 단일 페이지 청첩장 UI
+- Hero, Greeting, Couple, Date/Calendar, Location, Gallery, Contact, Account, Share 섹션
+- 정적 데이터 기반 렌더링과 빈 값 fallback
+- 링크 복사, Web Share API, 카카오톡 공유 fallback
+- `wedding.ts` 기반 OG metadata
+
+## 데이터와 이미지
+
+- 청첩장 문구, 예식 정보, 지도 링크, 계좌번호는 `src/data/wedding.ts`에서 관리합니다.
+- 실제 전화번호와 계좌번호는 공개 페이지에 노출되므로 커밋 전 공개 가능 여부를 확인해야 합니다.
+- 이미지는 `public/images` 아래의 `hero.jpg`, `og-image.jpg`, `gallery-*.jpg` 경로를 사용합니다.
+- 실제 이미지 파일이 없어도 빌드는 깨지지 않지만, 배포 전에는 이미지 파일 존재와 용량 압축을 확인해야 합니다.
+
+## QA 기준
+
+- 모바일 360px~430px 화면을 우선으로 확인합니다.
+- 데스크톱에서는 중앙 모바일 폭 컨테이너로 표시되는지 확인합니다.
+- 변경 후 `pnpm lint`와 `pnpm build`를 실행합니다.
+- Spring Boot, DB, API 서버, Prisma/ORM, 관리자/로그인/회원가입 기능은 추가하지 않습니다.
+
 ## 핵심 원칙
 
 작게 나누어 구현합니다. 한 번에 전체를 맡기지 말고, 티켓 하나씩 Codex에게 지시합니다.

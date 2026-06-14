@@ -18,6 +18,10 @@ type CopyFeedback = {
 
 const TOAST_VISIBLE_MS = 2400;
 
+function getDisplayText(value: string, fallback = "입력 예정") {
+  return value.trim() || fallback;
+}
+
 function getAccountDescription(account: WeddingAccount) {
   return `${account.bank} ${account.number} ${account.holder}`.trim();
 }
@@ -42,7 +46,7 @@ function AccountCard({
             {account.label}
           </p>
           <h3 className="mt-2 text-lg font-semibold text-[var(--color-text)]">
-            {account.bank}
+            {getDisplayText(account.bank, "은행명 입력 예정")}
           </h3>
         </div>
         <CopyButton
@@ -62,7 +66,7 @@ function AccountCard({
         <div className="flex items-center justify-between gap-4 border-t border-[var(--color-line)] pt-4">
           <dt className="shrink-0 text-[var(--color-text-muted)]">예금주</dt>
           <dd className="font-medium text-[var(--color-text)]">
-            {account.holder}
+            {getDisplayText(account.holder, "예금주 입력 예정")}
           </dd>
         </div>
         <div className="flex items-start justify-between gap-4">

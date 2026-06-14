@@ -8,8 +8,16 @@ type DateSectionProps = {
   wedding: Wedding;
 };
 
+function getDisplayText(value: string, fallback: string) {
+  return value.trim() || fallback;
+}
+
 export function DateSection({ wedding }: DateSectionProps) {
   const ddayLabel = getDdayLabel(wedding.event.dateTime);
+  const eventPlace = [wedding.event.venueName, wedding.event.hallName]
+    .map((value) => value.trim())
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <section className="px-6 py-16 text-center">
@@ -26,10 +34,10 @@ export function DateSection({ wedding }: DateSectionProps) {
             {ddayLabel}
           </p>
           <p className="mt-5 text-lg font-semibold leading-8 text-[var(--color-text)]">
-            {wedding.event.displayDate}
+            {getDisplayText(wedding.event.displayDate, "예식 일시 입력 예정")}
           </p>
           <p className="mt-3 text-sm leading-7 text-[var(--color-text-muted)]">
-            {wedding.event.venueName} {wedding.event.hallName}
+            {eventPlace || "예식 장소 입력 예정"}
           </p>
         </div>
 
