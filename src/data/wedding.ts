@@ -2,9 +2,15 @@ export const wedding = {
   couple: {
     groom: {
       name: "민준",
+      phone: "",
+      father: "홍길동",
+      mother: "김영희",
     },
     bride: {
       name: "소연",
+      phone: "",
+      father: "박길동",
+      mother: "이영희",
     },
   },
   event: {
