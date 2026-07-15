@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#171a18" />
+  <rect
+    x="18"
+    y="18"
+    width="476"
+    height="476"
+    rx="96"
+    fill="none"
+    stroke="#d8cdbd"
+    stroke-width="6"
+  />
+  <path
+    d="M256 398C226 373 142 314 112 257C82 201 108 139 166 126C205 117 237 137 256 166C275 137 307 117 346 126C404 139 430 201 400 257C370 314 286 373 256 398Z"
+    fill="#f1e9dc"
+  />
+</svg>

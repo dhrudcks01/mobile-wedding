@@ -74,7 +74,8 @@ export function ShareSection({
   const sharePayload = useMemo(
     () => ({
       imageUrl: getOptimizedShareImageUrl(wedding.meta.ogImage, shareUrl),
-      locationUrl: getUrlWithHash(shareUrl, "location"),
+      locationUrl:
+        wedding.mapLinks.kakao.trim() || getUrlWithHash(shareUrl, "location"),
       text: wedding.meta.description,
       title: wedding.meta.title,
       url: shareUrl,
@@ -84,6 +85,7 @@ export function ShareSection({
       wedding.meta.description,
       wedding.meta.ogImage,
       wedding.meta.title,
+      wedding.mapLinks.kakao,
     ],
   );
 

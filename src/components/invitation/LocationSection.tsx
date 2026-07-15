@@ -1,9 +1,10 @@
-import { ImageWithFallback } from "@/components/common/ImageWithFallback";
 import { Section } from "@/components/common/Section";
+import { KakaoMap } from "@/components/invitation/KakaoMap";
 import { getAvailableMapLinks } from "@/lib/map";
 import type { Wedding } from "@/types/wedding";
 
 type LocationSectionProps = {
+  kakaoJavaScriptKey?: string;
   wedding: Wedding;
 };
 
@@ -37,7 +38,10 @@ function InfoBlock({ label, title, value }: InfoBlockProps) {
   );
 }
 
-export function LocationSection({ wedding }: LocationSectionProps) {
+export function LocationSection({
+  kakaoJavaScriptKey,
+  wedding,
+}: LocationSectionProps) {
   const mapLinks = getAvailableMapLinks(wedding.mapLinks);
   const venueName = getDisplayText(wedding.event.venueName, "예식장 입력 예정");
   const hallName = wedding.event.hallName.trim();
@@ -66,19 +70,15 @@ export function LocationSection({ wedding }: LocationSectionProps) {
       </div>
 
       <div
-        className="relative mt-12 aspect-[820/595] overflow-hidden border border-white/40 bg-white/70 shadow-[0_18px_45px_rgba(47,45,42,0.1)]"
+        className="mt-12"
         data-reveal="fade"
         data-reveal-duration="1400"
       >
-        <ImageWithFallback
-          alt={`${locationLabel} 약도`}
-          className="object-contain"
-          fallbackDescription="public/images/location.jpg 파일을 확인해 주세요."
-          fallbackTitle="약도 준비 중"
-          fill
-          loading="lazy"
-          sizes="(max-width: 430px) 88vw, 360px"
-          src="/images/location.jpg"
+        <KakaoMap
+          address={wedding.event.address}
+          javaScriptKey={kakaoJavaScriptKey}
+          mapUrl={wedding.mapLinks.kakao}
+          venueName={locationLabel}
         />
       </div>
 

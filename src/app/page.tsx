@@ -23,7 +23,10 @@ export default function Home() {
       <DateSection wedding={wedding} />
       <CoupleSection wedding={wedding} />
       <GallerySection wedding={wedding} />
-      <LocationSection wedding={wedding} />
+      <LocationSection
+        kakaoJavaScriptKey={kakaoJavaScriptKey}
+        wedding={wedding}
+      />
       <ContactSection wedding={wedding} />
       <AccountSection wedding={wedding} />
       <ShareSection
