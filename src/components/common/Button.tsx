@@ -15,11 +15,11 @@ export type ButtonProps = ButtonBaseProps &
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "border-transparent bg-[var(--color-accent-strong)] text-white shadow-sm hover:bg-[var(--color-accent)]",
+    "border-transparent bg-[#242726] text-white shadow-sm hover:bg-[#3b3f3d]",
   secondary:
-    "border-[var(--color-line)] bg-[var(--color-surface)] text-[var(--color-text)] hover:bg-[var(--color-surface-muted)]",
+    "border-[var(--color-line)] bg-white/35 text-[var(--color-text)] hover:bg-white/60",
   ghost:
-    "border-transparent bg-transparent text-[var(--color-accent-strong)] hover:bg-[var(--color-surface-muted)]",
+    "border-transparent bg-transparent text-[var(--color-accent-strong)] hover:bg-black/5",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -42,7 +42,7 @@ export function Button(props: ButtonProps) {
   } = props;
 
   const buttonClassName = joinClassNames(
-    "inline-flex items-center justify-center rounded-full border font-medium transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-strong)] disabled:cursor-not-allowed disabled:opacity-50",
+    "inline-flex items-center justify-center rounded-full border font-medium tracking-[-0.01em] transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-strong)] disabled:cursor-not-allowed disabled:opacity-50",
     variantClasses[variant],
     sizeClasses[size],
     className,

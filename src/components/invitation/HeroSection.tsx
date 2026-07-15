@@ -9,15 +9,9 @@ function getDisplayText(value: string, fallback: string) {
   return value.trim() || fallback;
 }
 
-function getCoupleNames(wedding: Wedding) {
-  const groomName = getDisplayText(wedding.couple.groom.name, "신랑");
-  const brideName = getDisplayText(wedding.couple.bride.name, "신부");
-
-  return `${groomName} · ${brideName}`;
-}
-
 export function HeroSection({ wedding }: HeroSectionProps) {
-  const coupleNames = getCoupleNames(wedding);
+  const groomName = getDisplayText(wedding.intro.groom.name, "Groom");
+  const brideName = getDisplayText(wedding.intro.bride.name, "Bride");
   const eventPlace = [wedding.event.venueName, wedding.event.hallName]
     .map((value) => value.trim())
     .filter(Boolean)
@@ -29,40 +23,64 @@ export function HeroSection({ wedding }: HeroSectionProps) {
   const heroImage = wedding.images.hero.trim() || "/images/hero.jpg";
 
   return (
-    <section className="relative flex min-h-[60svh] flex-col justify-between overflow-hidden px-6 pb-10 pt-12 text-center">
-      <div className="relative z-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
-          Wedding Invitation
-        </p>
-        <h1 className="mt-5 text-[2.7rem] font-semibold leading-none text-[var(--color-text)]">
-          {coupleNames}
-        </h1>
-      </div>
+    <section className="film-grain relative min-h-[100svh] overflow-hidden bg-[#080c0b] text-white">
+      <ImageWithFallback
+        alt={`${groomName}과 ${brideName} 웨딩 대표 이미지`}
+        className="movie-hero-image object-cover object-[center_44%]"
+        fill
+        fallbackClassName="bg-[#080c0b] text-white/70"
+        fallbackDescription="대표 사진을 public/images/hero.jpg로 넣으면 자동으로 표시됩니다."
+        fallbackTitle="대표 사진 준비 중"
+        priority
+        sizes="(max-width: 430px) 100vw, 430px"
+        src={heroImage}
+      />
 
-      <div
-        className="relative my-10 min-h-[700px] overflow-hidden rounded-t-[180px] border border-white/70 bg-[linear-gradient(135deg,#f5eee8,#dfcdbd)] shadow-[0_28px_70px_rgba(68,49,39,0.18)]"
-      >
-        <ImageWithFallback
-          alt={`${coupleNames} 웨딩 대표 이미지`}
-          className="object-cover"
-          fill
-          fallbackDescription="대표 사진을 public/images/hero.jpg로 넣으면 자동으로 표시됩니다."
-          fallbackTitle="대표 사진 준비 중"
-          priority
-          sizes="(max-width: 430px) 100vw, 430px"
-          src={heroImage}
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,250,242,0.08),rgba(73,52,42,0.3))]" />
-        <div className="absolute inset-x-8 bottom-8 rounded-full border border-white/70 bg-white/75 px-5 py-4 text-sm leading-6 text-[var(--color-text-muted)] shadow-sm backdrop-blur">
-          <p>{displayDate}</p>
-          <p>{eventPlace || "예식 장소 입력 예정"}</p>
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,8,0.48)_0%,rgba(5,8,8,0.04)_34%,rgba(5,8,8,0.08)_54%,rgba(5,8,8,0.92)_100%)]" />
+      <div className="absolute inset-0 shadow-[inset_0_0_92px_18px_rgba(0,0,0,0.48)]" />
+
+      <div className="cinema-rise relative z-10 flex min-h-[100svh] flex-col px-7 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-[max(4rem,env(safe-area-inset-top))]">
+        <div className="flex flex-col items-center text-center drop-shadow-[0_2px_14px_rgba(0,0,0,0.72)]">
+          <p className="font-title-en text-[2.1rem] leading-[0.86] tracking-[0.02em]">
+            THE
+          </p>
+          <p className="font-script -mb-1 mt-1 text-[4.3rem] leading-[0.78]">
+            Grandest
+          </p>
+          <p className="font-title-en text-[2.85rem] leading-[0.9]">SHOW</p>
+          <p className="font-title-en mt-1 text-[2.55rem] leading-[0.92]">
+            OF OUR
+          </p>
+          <p className="mt-1 flex items-center font-title-en text-[3.25rem] leading-none">
+            <span aria-hidden="true">&#123;</span>
+            <span className="font-script -mx-1 translate-y-1 text-[4.7rem]">
+              love
+            </span>
+            <span aria-hidden="true">&#125;</span>
+          </p>
         </div>
-      </div>
 
-      <div className="relative z-10">
-        <p className="text-sm leading-7 text-[var(--color-text-muted)]">
-          소중한 분들을 모시고 새로운 시작을 함께 나누려 합니다.
-        </p>
+        <div className="mt-auto">
+          <div className="mb-14 flex items-end justify-between px-1 font-title-en text-[10px] uppercase tracking-[0.08em] text-white/85">
+            <span>{brideName}</span>
+            <span>{groomName}</span>
+          </div>
+
+          <div className="space-y-2 border-t border-white/20 pt-5 text-[12px] leading-5 text-white/92">
+            <p className="flex items-start gap-2">
+              <span aria-hidden="true" className="mt-[1px] text-[10px]">
+                □
+              </span>
+              <span>{displayDate}</span>
+            </p>
+            <p className="flex items-start gap-2">
+              <span aria-hidden="true" className="mt-[1px] text-[10px]">
+                ◆
+              </span>
+              <span>{eventPlace || "예식 장소 입력 예정"}</span>
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );

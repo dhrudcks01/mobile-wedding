@@ -8,8 +8,8 @@ type MapLinkMeta = {
 };
 
 const MAP_LINKS: MapLinkMeta[] = [
-  { key: "kakao", label: "카카오맵" },
   { key: "naver", label: "네이버지도" },
+  { key: "kakao", label: "카카오맵" },
   { key: "tmap", label: "티맵" },
   { key: "google", label: "구글맵" },
 ];

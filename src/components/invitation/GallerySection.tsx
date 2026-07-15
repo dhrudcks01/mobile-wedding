@@ -23,9 +23,7 @@ export function GallerySection({ wedding }: GallerySectionProps) {
     return `갤러리 이미지 ${selectedIndex + 1} / ${gallery.length}`;
   }, [gallery.length, selectedIndex]);
 
-  const closeModal = useCallback(() => {
-    setSelectedIndex(null);
-  }, []);
+  const closeModal = useCallback(() => setSelectedIndex(null), []);
 
   const showPrevious = useCallback(() => {
     setSelectedIndex((currentIndex) => {
@@ -56,17 +54,9 @@ export function GallerySection({ wedding }: GallerySectionProps) {
     document.body.style.overflow = "hidden";
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        closeModal();
-      }
-
-      if (event.key === "ArrowLeft") {
-        showPrevious();
-      }
-
-      if (event.key === "ArrowRight") {
-        showNext();
-      }
+      if (event.key === "Escape") closeModal();
+      if (event.key === "ArrowLeft") showPrevious();
+      if (event.key === "ArrowRight") showNext();
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -83,73 +73,87 @@ export function GallerySection({ wedding }: GallerySectionProps) {
 
   return (
     <Section
-      eyebrow="Gallery"
-      title="우리의 순간들"
-      description="사진을 눌러 크게 볼 수 있어요."
-      className="bg-white"
+      className="movie-paper-muted overflow-hidden px-6 pb-28 pt-24"
+      description="좌우로 넘기거나 사진을 눌러 크게 감상해 주세요."
+      eyebrow="Scenes"
+      title="Gallery"
     >
-      <div className="grid grid-cols-3 gap-2.5">
+      <div
+        className="film-strip -mx-6 mt-14 flex snap-x snap-mandatory gap-2 overflow-x-auto bg-[#080b0a] px-4 py-4"
+        data-reveal="fade-up"
+        data-reveal-duration="1400"
+      >
         {gallery.map((image, index) => (
           <button
-            key={`${image}-${index}`}
-            type="button"
-            onClick={() => setSelectedIndex(index)}
-            className="group relative aspect-[3/4] overflow-hidden rounded-[14px] bg-[linear-gradient(135deg,#f5eee8,#dfcdbd)] shadow-[0_14px_30px_rgba(73,56,44,0.12)] transition duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2"
             aria-label={`갤러리 이미지 ${index + 1} 크게 보기`}
+            className="group relative aspect-[3/4] w-[76%] shrink-0 snap-center overflow-hidden border border-white/20 bg-[#171a19] text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            key={`${image}-${index}`}
+            onClick={() => setSelectedIndex(index)}
+            type="button"
           >
+            <div className="absolute inset-x-0 top-0 z-10 flex h-5 items-center justify-between border-b border-white/20 bg-[#070909] px-2 font-title-en text-[7px] tracking-[0.08em] text-white/58">
+              <span>WEDDING FILM</span>
+              <span>{String(index + 1).padStart(2, "0")}A</span>
+            </div>
             <ImageWithFallback
               alt={`갤러리 이미지 ${index + 1}`}
-              className="object-cover transition duration-500 group-hover:scale-105"
+              className="object-cover pt-5 transition duration-700 group-hover:scale-[1.03]"
               fill
-              fallbackDescription="이미지를 public/images에 추가하거나 경로를 확인해 주세요."
-              fallbackTitle="사진 준비 중"
+              fallbackClassName="bg-[#171a19] text-white/70"
+              fallbackDescription="이미지 경로를 확인해 주세요."
+              fallbackTitle="Wedding Film"
               loading="lazy"
-              sizes="(max-width: 430px) 30vw, 126px"
+              sizes="(max-width: 430px) 76vw, 320px"
               src={image}
             />
-            <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(63,44,31,0.18))]" />
+            <span className="absolute inset-0 bg-[linear-gradient(180deg,transparent_65%,rgba(0,0,0,0.22))]" />
+            <span className="absolute inset-x-0 bottom-0 z-10 h-4 border-t border-white/20 bg-[#070909]" />
           </button>
         ))}
       </div>
 
+      <p
+        className="mt-8 text-[11px] tracking-[0.02em] text-[var(--section-muted)]"
+        data-reveal="fade-up"
+        data-reveal-delay="180"
+      >
+        Film {String(gallery.length).padStart(2, "0")} frames · tap to enlarge
+      </p>
+
       {selectedImage ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/80 px-4 py-6 backdrop-blur-sm"
-          role="dialog"
-          aria-modal="true"
           aria-label={selectedLabel}
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#050706]/95 px-4 py-6 backdrop-blur-sm"
           onClick={closeModal}
+          role="dialog"
         >
           <div
             className="relative flex w-full max-w-[430px] flex-col gap-4"
             onClick={(event) => event.stopPropagation()}
           >
-            <div
-              className="relative min-h-[68vh] overflow-hidden rounded-[28px] bg-[linear-gradient(135deg,#f7f0ea,#d8c2af)] shadow-[0_28px_90px_rgba(0,0,0,0.32)]"
-              role="img"
-              aria-label={selectedLabel}
-            >
+            <div className="relative min-h-[72svh] overflow-hidden border border-white/18 bg-[#111] shadow-[0_28px_90px_rgba(0,0,0,0.48)]">
               <ImageWithFallback
                 alt={selectedLabel}
                 className="object-contain"
                 fill
-                fallbackClassName="text-white/80"
-                fallbackDescription="이미지를 public/images에 추가하거나 경로를 확인해 주세요."
-                fallbackTitle="사진 준비 중"
+                fallbackClassName="bg-[#111] text-white/80"
+                fallbackDescription="이미지 경로를 확인해 주세요."
+                fallbackTitle="Wedding Film"
                 sizes="(max-width: 430px) 100vw, 430px"
                 src={selectedImage}
               />
-              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-stone-950/55 to-transparent px-5 pb-5 pt-14 text-xs font-medium text-white/90">
+              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/70 to-transparent px-5 pb-5 pt-14 text-[10px] tracking-[0.06em] text-white/80">
                 <span>{selectedLabel}</span>
-                <span>← → 키로 이동</span>
+                <span>WEDDING FILM</span>
               </div>
             </div>
 
             <button
-              type="button"
-              onClick={closeModal}
-              className="absolute right-3 top-3 grid size-10 place-items-center rounded-full bg-white/90 text-lg text-stone-700 shadow-lg transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-white"
               aria-label="갤러리 닫기"
+              className="absolute right-3 top-3 grid size-11 place-items-center rounded-full border border-white/20 bg-black/55 text-xl text-white backdrop-blur focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+              onClick={closeModal}
+              type="button"
             >
               ×
             </button>
@@ -157,18 +161,18 @@ export function GallerySection({ wedding }: GallerySectionProps) {
             {gallery.length > 1 ? (
               <div className="pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-between px-2">
                 <button
-                  type="button"
-                  onClick={showPrevious}
-                  className="pointer-events-auto grid size-11 place-items-center rounded-full bg-white/90 text-xl text-stone-700 shadow-lg transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-white"
                   aria-label="이전 사진 보기"
+                  className="pointer-events-auto grid size-11 place-items-center rounded-full border border-white/20 bg-black/55 text-xl text-white backdrop-blur focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+                  onClick={showPrevious}
+                  type="button"
                 >
                   ‹
                 </button>
                 <button
-                  type="button"
-                  onClick={showNext}
-                  className="pointer-events-auto grid size-11 place-items-center rounded-full bg-white/90 text-xl text-stone-700 shadow-lg transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-white"
                   aria-label="다음 사진 보기"
+                  className="pointer-events-auto grid size-11 place-items-center rounded-full border border-white/20 bg-black/55 text-xl text-white backdrop-blur focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+                  onClick={showNext}
+                  type="button"
                 >
                   ›
                 </button>

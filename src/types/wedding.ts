@@ -6,9 +6,14 @@ export type WeddingMeta = {
   url: string;
   ogImage: string;
 };
+export type WeddingIntroPerson = {
+  name: string;
+};
 
 export type WeddingIntro = {
   message: string;
+  groom: WeddingIntroPerson;
+  bride: WeddingIntroPerson;
 };
 
 export type WeddingPerson = {
@@ -35,6 +40,9 @@ export type WeddingEvent = {
 
 export type WeddingImages = {
   hero: string;
+  poster: string;
+  film: string[];
+  ending: string[];
   gallery: string[];
 };
 

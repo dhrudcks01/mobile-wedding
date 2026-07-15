@@ -27,24 +27,31 @@ export function Section({
 
   return (
     <section
-      className={joinClassNames("w-full px-6 py-16", className)}
+      className={joinClassNames(
+        "w-full px-6 py-24 text-[var(--section-text,var(--color-text))]",
+        className,
+      )}
       {...sectionProps}
     >
       <div className={joinClassNames("mx-auto max-w-sm", alignmentClassName)}>
-        {eyebrow ? (
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
-            {eyebrow}
-          </p>
-        ) : null}
-        {title ? (
-          <h2 className="mt-4 text-2xl font-semibold leading-tight text-[var(--color-text)]">
-            {title}
-          </h2>
-        ) : null}
-        {description ? (
-          <p className="mt-4 text-sm leading-7 text-[var(--color-text-muted)]">
-            {description}
-          </p>
+        {eyebrow || title || description ? (
+          <div data-reveal="fade-up" data-reveal-duration="1100">
+            {eyebrow ? (
+              <span className="font-title-en inline-flex min-h-7 items-center justify-center rounded-[50%] border border-[var(--section-line,var(--color-line))] px-3 text-[10px] italic tracking-[0.08em] text-[var(--section-muted,var(--color-text-muted))]">
+                {eyebrow}
+              </span>
+            ) : null}
+            {title ? (
+              <h2 className="font-title-en mt-4 text-[1.65rem] font-semibold uppercase leading-none tracking-[-0.02em] text-[var(--section-text,var(--color-text))]">
+                {title}
+              </h2>
+            ) : null}
+            {description ? (
+              <p className="mt-5 whitespace-pre-line text-[13px] leading-7 text-[var(--section-muted,var(--color-text-muted))]">
+                {description}
+              </p>
+            ) : null}
+          </div>
         ) : null}
         {children}
       </div>

@@ -1,59 +1,74 @@
 import { Section } from "@/components/common/Section";
-import type { Wedding } from "@/data/wedding";
+import type { Wedding, WeddingPerson } from "@/types/wedding";
 
 type CoupleSectionProps = {
   wedding: Wedding;
 };
 
-type Person = {
-  father: string;
-  mother: string;
-  name: string;
-};
-
-type CoupleCardProps = {
+type CastPersonProps = {
+  englishName: string;
   label: string;
-  person: Person;
+  person: WeddingPerson;
 };
 
-function getDisplayText(value: string, fallback = "입력 예정") {
-  return value.trim() || fallback;
+function getFamilyLine(person: WeddingPerson, relation: string) {
+  const parents = [person.father, person.mother]
+    .map((name) => name.trim())
+    .filter(Boolean)
+    .join(" · ");
+
+  return parents ? `${parents}의 ${relation}` : "";
 }
 
-function CoupleCard({ label, person }: CoupleCardProps) {
+function CastPerson({ englishName, label, person }: CastPersonProps) {
+  const relation = label === "GROOM" ? "아들" : "딸";
+  const familyLine = getFamilyLine(person, relation);
+
   return (
-    <article className="rounded-[28px] border border-[var(--color-line)] bg-white/55 px-5 py-6 text-center shadow-[0_18px_50px_rgba(91,69,55,0.08)]">
-      <p className="text-xs font-semibold tracking-[0.22em] text-[var(--color-accent)]">
-        {label}
-      </p>
-      <h3 className="mt-4 text-3xl font-semibold leading-none text-[var(--color-text)]">
-        {getDisplayText(person.name)}
+    <article
+      className="py-9 text-center"
+      data-reveal="fade-up"
+      data-reveal-delay={label === "GROOM" ? "0" : "140"}
+      data-reveal-duration="1200"
+    >
+      {familyLine ? (
+        <p className="text-[13px] leading-6 text-[var(--section-muted)]">
+          {familyLine}
+        </p>
+      ) : null}
+      <h3 className="font-korean-serif mt-4 text-[1.8rem] font-bold leading-none text-[var(--section-text)]">
+        {person.name.trim() || "이름 입력 예정"}
       </h3>
-      <dl className="mt-6 space-y-3 text-sm leading-6 text-[var(--color-text-muted)]">
-        <div className="flex items-center justify-center gap-3">
-          <dt className="text-xs font-medium text-[var(--color-accent)]">아버지</dt>
-          <dd>{getDisplayText(person.father)}</dd>
-        </div>
-        <div className="flex items-center justify-center gap-3">
-          <dt className="text-xs font-medium text-[var(--color-accent)]">어머니</dt>
-          <dd>{getDisplayText(person.mother)}</dd>
-        </div>
-      </dl>
+      <p className="font-title-en mt-4 text-[0.95rem] font-semibold tracking-[0.05em] text-[#b7aa9c]">
+        {englishName.trim() || label}
+      </p>
     </article>
   );
 }
 
 export function CoupleSection({ wedding }: CoupleSectionProps) {
   return (
-    <Section
-      eyebrow="Bride & Groom"
-      title="두 사람을 소개합니다"
-      description="서로의 가족과 함께 감사한 마음으로 인사드립니다."
-    >
-      <div className="mt-9 grid gap-4">
-        <CoupleCard label="Groom" person={wedding.couple.groom} />
-        &
-        <CoupleCard label="Bride" person={wedding.couple.bride} />
+    <Section className="movie-paper-muted pb-28 pt-24" eyebrow="Actors" title="Cast">
+      <div className="mt-9 divide-y divide-[var(--section-line)]/55">
+        <CastPerson
+          englishName={wedding.intro.groom.name}
+          label="GROOM"
+          person={wedding.couple.groom}
+        />
+        <CastPerson
+          englishName={wedding.intro.bride.name}
+          label="BRIDE"
+          person={wedding.couple.bride}
+        />
+      </div>
+
+      <div
+        className="mt-8 border-t border-[var(--section-line)] pt-8 text-[12px] leading-6 text-[var(--section-muted)]"
+        data-reveal="fade-up"
+        data-reveal-delay="180"
+      >
+        <p>{wedding.event.displayDate}</p>
+        <p>{[wedding.event.venueName, wedding.event.hallName].filter(Boolean).join(" ")}</p>
       </div>
     </Section>
   );

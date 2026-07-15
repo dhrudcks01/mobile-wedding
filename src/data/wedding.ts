@@ -18,11 +18,19 @@ export const wedding: Wedding = {
     // 배포 후 실제 URL로 교체하세요. 예: "https://wedding.example.com"
     url: "https://example.com",
     // 공유 미리보기 이미지입니다. public/images/og-image.jpg 파일을 교체하면 됩니다.
-    ogImage: "/images/YSH01676.JPG",
+    ogImage: "/images/000021560006.jpg",
   },
   intro: {
     // 첫 접속 인트로에 표시할 짧은 문구입니다.
     message: "소중한 분들을 저희의 시작에 초대합니다.",
+    groom: {
+      // 예: "민준"
+      name: "Gyeong Chan",
+    },
+    bride: {
+      // 예: "소연"
+      name: "Ji Yeon",
+    },
   },
   couple: {
     groom: {
@@ -56,12 +64,33 @@ export const wedding: Wedding = {
   },
   greeting: `서로가 마주 보며 다져온 사랑을
 이제 함께 한 곳을 바라보며 걸어가고자 합니다.
-
 귀한 걸음으로 축복해 주시면
 더없는 기쁨으로 간직하겠습니다.`,
   images: {
     // 대표 이미지 경로입니다. public/images/hero.jpg 파일을 교체하면 메인 이미지가 바뀝니다.
     hero: "/images/DSCF7280.JPG",
+    // Invitation 위 포스터에 사용할 세로 사진입니다.
+    // 비어 있으면 hero 사진을 대신 사용합니다.
+    poster: "/images/000021560006.jpg",
+    // Invitation 섹션의 움직이는 필름에만 사용할 사진입니다.
+    // public/images에 사진을 넣고 원하는 순서대로 경로를 작성하세요.
+    // 배열이 비어 있으면 아래 gallery 사진을 대신 사용합니다.
+    film: [
+      "/images/DSCF7172.JPG",
+      "/images/YSH04570.JPG",
+      "/images/YSH04570.JPG",
+      "/images/DSCF7236.JPG",
+      "/images/YSH03534.JPG",
+      "/images/YSH03534.JPG",
+    ],
+    // Share 섹션 위 엔딩 필름에 순서대로 재생할 사진입니다. 최대 4장을 사용합니다.
+    // 빈 배열로 두면 gallery 사진을 대신 사용합니다.
+    ending: [
+      "/images/DSCF7212.JPG",
+      "/images/YSH04202.JPG",
+      "/images/YSH01676.JPG",
+      "/images/000021560006.jpg",
+    ],
     // public/images에 사진을 넣고 아래 배열에 경로를 추가하면 갤러리에 표시됩니다.
     // 배열이 비어 있으면 Gallery 섹션이 표시되지 않습니다.
     gallery: [
@@ -75,8 +104,8 @@ export const wedding: Wedding = {
   },
   mapLinks: {
     // 지도 링크가 비어 있으면 해당 지도 버튼이 표시되지 않습니다.
-    kakao: "https://place.map.kakao.com/1215258511",
     naver: "https://map.naver.com/p/entry/place/32982104?c=11.00,0,0,0,dh&placePath=/home?from=map&fromPanelNum=1&additionalHeight=76&timestamp=202606142032&locale=ko&svcName=map_pcv5",
+    kakao: "https://place.map.kakao.com/1215258511",
     tmap: "",
     google:
       "",
@@ -94,37 +123,37 @@ export const wedding: Wedding = {
     {
       side: "bride",
       label: "신부측",
-      bank: "은행명",
-      holder: "예금주명",
-      number: "",
+      bank: "국민",
+      holder: "유지연",
+      number: "76290201340014",
     },
     {
       side: "groom",
       label: "신랑측",
       bank: "",
       holder: "오종오",
-      number: "",
+      number: "123123",
     },
     {
       side: "groom",
       label: "신랑측",
       bank: "",
       holder: "박관순",
-      number: "",
+      number: "123123",
     },
     {
       side: "bride",
       label: "신부측",
       bank: "은행명",
       holder: "유상희",
-      number: "",
+      number: "123123",
     },
     {
       side: "bride",
       label: "신부측",
       bank: "은행명",
       holder: "이채원",
-      number: "",
+      number: "123123",
     },
   ],
 };

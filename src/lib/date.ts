@@ -41,3 +41,36 @@ export function getDdayLabel(targetDateTime: string, baseDate = new Date()) {
 
   return `D+${Math.abs(daysUntil)}`;
 }
+
+export function getWeddingCountdownText(
+  targetDateTime: string,
+  baseDate = new Date(),
+) {
+  const daysUntil = getDaysUntil(targetDateTime, baseDate);
+
+  if (Number.isNaN(daysUntil)) {
+    return {
+      daysUntil: null,
+      message: "예식 일시를 입력해 주세요.",
+    };
+  }
+
+  if (daysUntil > 0) {
+    return {
+      daysUntil,
+      message: "until",
+    };
+  }
+
+  if (daysUntil === 0) {
+    return {
+      daysUntil: 0,
+      message: "today",
+    };
+  }
+
+  return {
+    daysUntil: Math.abs(daysUntil),
+    message: "past",
+  };
+}

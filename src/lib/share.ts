@@ -1,5 +1,6 @@
 export type SharePayload = {
   imageUrl?: string;
+  locationUrl?: string;
   text: string;
   title: string;
   url: string;
@@ -63,6 +64,45 @@ export function getAbsoluteUrl(pathOrUrl: string, baseUrl: string) {
     return new URL(pathOrUrl, baseUrl).toString();
   } catch {
     return pathOrUrl;
+  }
+}
+
+export function getUrlWithHash(url: string, hash: string) {
+  try {
+    const sectionUrl = new URL(url);
+    sectionUrl.hash = hash;
+    return sectionUrl.toString();
+  } catch {
+    const urlWithoutHash = url.split("#", 1)[0];
+    return `${urlWithoutHash}#${hash}`;
+  }
+}
+
+export function getOptimizedShareImageUrl(
+  pathOrUrl: string,
+  baseUrl: string,
+) {
+  const absoluteImageUrl = getAbsoluteUrl(pathOrUrl, baseUrl);
+
+  try {
+    const imageUrl = new URL(absoluteImageUrl);
+    const siteUrl = new URL(baseUrl);
+
+    if (imageUrl.origin !== siteUrl.origin) {
+      return absoluteImageUrl;
+    }
+
+    const optimizedImageUrl = new URL("/_next/image", siteUrl);
+    optimizedImageUrl.searchParams.set(
+      "url",
+      `${imageUrl.pathname}${imageUrl.search}`,
+    );
+    optimizedImageUrl.searchParams.set("w", "1200");
+    optimizedImageUrl.searchParams.set("q", "80");
+
+    return optimizedImageUrl.toString();
+  } catch {
+    return absoluteImageUrl;
   }
 }
 
@@ -211,6 +251,11 @@ export async function shareWithKakao(
     mobileWebUrl: payload.url,
     webUrl: payload.url,
   };
+  const locationUrl = payload.locationUrl ?? payload.url;
+  const locationLink = {
+    mobileWebUrl: locationUrl,
+    webUrl: locationUrl,
+  };
 
   shareApi.sendDefault({
     objectType: "feed",
@@ -224,6 +269,10 @@ export async function shareWithKakao(
       {
         title: "청첩장 보기",
         link,
+      },
+      {
+        title: "위치 보기",
+        link: locationLink,
       },
     ],
   });

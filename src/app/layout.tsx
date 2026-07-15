@@ -1,9 +1,47 @@
 import type { Metadata, Viewport } from "next";
+import {
+  Gowun_Batang,
+  Gowun_Dodum,
+  Great_Vibes,
+  Playfair_Display,
+} from "next/font/google";
 import type { ReactNode } from "react";
 import { wedding } from "@/data/wedding";
 import "./globals.css";
 
 const fallbackUrl = "https://example.com";
+
+const gowunDodum = Gowun_Dodum({
+  weight: "400",
+  variable: "--font-gowun-dodum",
+  display: "swap",
+  preload: false,
+  fallback: ["Apple SD Gothic Neo", "Malgun Gothic", "sans-serif"],
+});
+
+const gowunBatang = Gowun_Batang({
+  weight: ["400", "700"],
+  variable: "--font-gowun-batang",
+  display: "swap",
+  preload: false,
+  fallback: ["Nanum Myeongjo", "Batang", "serif"],
+});
+
+const playfairDisplay = Playfair_Display({
+  weight: ["400", "500", "600"],
+  subsets: ["latin"],
+  variable: "--font-playfair-display",
+  display: "swap",
+  fallback: ["Times New Roman", "serif"],
+});
+
+const greatVibes = Great_Vibes({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-great-vibes",
+  display: "swap",
+  fallback: ["cursive"],
+});
 
 function getMetadataBase(url: string) {
   try {
@@ -51,7 +89,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#eee7dc",
+  themeColor: "#080c0b",
 };
 
 type RootLayoutProps = Readonly<{
@@ -60,7 +98,15 @@ type RootLayoutProps = Readonly<{
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="ko">
+    <html
+      lang="ko"
+      className={[
+        gowunDodum.variable,
+        gowunBatang.variable,
+        playfairDisplay.variable,
+        greatVibes.variable,
+      ].join(" ")}
+    >
       <body>{children}</body>
     </html>
   );

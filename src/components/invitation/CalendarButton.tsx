@@ -37,16 +37,16 @@ export function CalendarButton({ wedding }: CalendarButtonProps) {
   }
 
   return (
-    <div className="mt-8">
+    <div className="mt-7">
       <Button
         aria-label="예식 일정을 캘린더 파일로 저장하기"
-        className="w-full"
+        className="w-full bg-[#282b2a] text-white"
         onClick={handleDownload}
       >
         캘린더에 저장하기
       </Button>
       {message ? (
-        <p className="mt-3 text-sm leading-6 text-[var(--color-text-muted)]">
+        <p className="mt-3 text-xs leading-6 text-[var(--section-muted,var(--color-text-muted))]">
           {message}
         </p>
       ) : null}

@@ -1,3 +1,4 @@
+import { ImageWithFallback } from "@/components/common/ImageWithFallback";
 import { Section } from "@/components/common/Section";
 import { getAvailableMapLinks } from "@/lib/map";
 import type { Wedding } from "@/types/wedding";
@@ -8,6 +9,7 @@ type LocationSectionProps = {
 
 type InfoBlockProps = {
   label: string;
+  title: string;
   value: string;
 };
 
@@ -15,14 +17,21 @@ function getDisplayText(value: string, fallback: string) {
   return value.trim() || fallback;
 }
 
-function InfoBlock({ label, value }: InfoBlockProps) {
+function InfoBlock({ label, title, value }: InfoBlockProps) {
+  if (!value.trim()) {
+    return null;
+  }
+
   return (
-    <div className="rounded-[24px] border border-[var(--color-line)] bg-white/55 px-5 py-4 text-left">
-      <p className="text-xs font-semibold tracking-[0.18em] text-[var(--color-accent)]">
+    <div className="border-t border-[var(--section-line)] py-6 text-left">
+      <p className="font-title-en text-[10px] font-semibold tracking-[0.14em] text-[var(--section-muted)]">
         {label}
       </p>
-      <p className="mt-2 text-sm leading-7 text-[var(--color-text-muted)]">
-        {value.trim() || "안내 문구 입력 예정"}
+      <p className="mt-3 text-sm font-semibold text-[var(--section-text)]">
+        {title}
+      </p>
+      <p className="mt-2 text-[13px] leading-7 text-[var(--section-muted)]">
+        {value}
       </p>
     </div>
   );
@@ -31,45 +40,58 @@ function InfoBlock({ label, value }: InfoBlockProps) {
 export function LocationSection({ wedding }: LocationSectionProps) {
   const mapLinks = getAvailableMapLinks(wedding.mapLinks);
   const venueName = getDisplayText(wedding.event.venueName, "예식장 입력 예정");
-  const hallName = getDisplayText(wedding.event.hallName, "홀 정보 입력 예정");
+  const hallName = wedding.event.hallName.trim();
   const address = getDisplayText(wedding.event.address, "주소 입력 예정");
-  const locationLabel = `${venueName} ${hallName}`;
+  const locationLabel = `${venueName} ${hallName}`.trim();
 
   return (
     <Section
-      className="bg-[var(--color-surface-muted)]"
-      eyebrow="Location"
-      title="오시는 길"
-      description="예식 장소와 이동 정보를 안내드립니다."
+      className="movie-paper pb-28 pt-24"
+      eyebrow="Place"
+      id="location"
+      title="Location"
     >
-      <div className="mt-9 overflow-hidden rounded-[32px] border border-[var(--color-line)] bg-white/65 text-left shadow-[0_18px_50px_rgba(91,69,55,0.08)]">
-        <div className="border-b border-[var(--color-line)] px-6 py-6">
-          <p className="text-xs font-semibold tracking-[0.2em] text-[var(--color-accent)]">
-            VENUE
-          </p>
-          <h3 className="mt-3 text-2xl font-semibold leading-tight text-[var(--color-text)]">
-            {venueName}
-          </h3>
-          <p className="mt-2 text-base font-medium text-[var(--color-text)]">
-            {hallName}
-          </p>
-          <p className="mt-4 text-sm leading-7 text-[var(--color-text-muted)]">
-            {address}
-          </p>
-        </div>
+      <div
+        className="mt-12 text-center"
+        data-reveal="fade-up"
+        data-reveal-duration="1200"
+      >
+        <h3 className="font-korean-serif text-[1.15rem] font-bold leading-7 text-[var(--section-text)]">
+          {venueName}
+          {hallName ? <span className="block">{hallName}</span> : null}
+        </h3>
+        <p className="mt-4 text-[12px] leading-6 text-[var(--section-muted)]">
+          {address}
+        </p>
+      </div>
 
-        <div className="grid gap-3 px-4 py-4">
-          <InfoBlock label="PARKING" value={wedding.event.parking} />
-          <InfoBlock label="TRANSPORT" value={wedding.event.transport} />
-        </div>
+      <div
+        className="relative mt-12 aspect-[820/595] overflow-hidden border border-white/40 bg-white/70 shadow-[0_18px_45px_rgba(47,45,42,0.1)]"
+        data-reveal="fade"
+        data-reveal-duration="1400"
+      >
+        <ImageWithFallback
+          alt={`${locationLabel} 약도`}
+          className="object-contain"
+          fallbackDescription="public/images/location.jpg 파일을 확인해 주세요."
+          fallbackTitle="약도 준비 중"
+          fill
+          loading="lazy"
+          sizes="(max-width: 430px) 88vw, 360px"
+          src="/images/location.jpg"
+        />
       </div>
 
       {mapLinks.length > 0 ? (
-        <div className="mt-6 grid grid-cols-2 gap-3">
+        <div
+          className="mt-4 grid grid-cols-2 gap-2"
+          data-reveal="fade-up"
+          data-reveal-delay="120"
+        >
           {mapLinks.map((mapLink) => (
             <a
               aria-label={`${locationLabel} ${mapLink.label}에서 보기`}
-              className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--color-line)] bg-[var(--color-surface)] px-4 text-sm font-medium text-[var(--color-text)] shadow-sm transition-colors duration-200 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-strong)]"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--section-line)] bg-white/30 px-3 text-[12px] font-medium text-[var(--section-text)] transition hover:bg-white/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4b504e]"
               href={mapLink.href}
               key={mapLink.key}
               rel="noreferrer"
@@ -79,11 +101,20 @@ export function LocationSection({ wedding }: LocationSectionProps) {
             </a>
           ))}
         </div>
-      ) : (
-        <p className="mt-6 rounded-[24px] border border-[var(--color-line)] bg-white/55 px-5 py-5 text-sm leading-7 text-[var(--color-text-muted)]">
-          지도 앱 링크가 입력되면 길찾기 버튼이 표시됩니다.
-        </p>
-      )}
+      ) : null}
+
+      <div className="mt-14" data-reveal="fade-up" data-reveal-duration="1200">
+        <InfoBlock
+          label="PUBLIC TRANSPORT"
+          title="대중교통 이용 시"
+          value={wedding.event.transport}
+        />
+        <InfoBlock
+          label="PARKING"
+          title="자가용 이용 시"
+          value={wedding.event.parking}
+        />
+      </div>
     </Section>
   );
 }
