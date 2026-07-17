@@ -31,7 +31,7 @@ function InfoBlock({ label, title, value }: InfoBlockProps) {
       <p className="mt-3 text-sm font-semibold text-[var(--section-text)]">
         {title}
       </p>
-      <p className="mt-2 text-[13px] leading-7 text-[var(--section-muted)]">
+      <p className="mt-2 whitespace-pre-line text-[13px] leading-7 text-[var(--section-muted)]">
         {value}
       </p>
     </div>
