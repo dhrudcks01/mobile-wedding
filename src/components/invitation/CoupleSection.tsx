@@ -49,7 +49,7 @@ function CastPerson({ englishName, label, person }: CastPersonProps) {
 export function CoupleSection({ wedding }: CoupleSectionProps) {
   return (
     <Section className="movie-paper-muted pb-28 pt-24" eyebrow="Actors" title="Cast">
-      <div className="mt-9 divide-y divide-[var(--section-line)]/55">
+      <div className="mt-9">
         <CastPerson
           englishName={wedding.intro.groom.name}
           label="GROOM"
@@ -60,15 +60,6 @@ export function CoupleSection({ wedding }: CoupleSectionProps) {
           label="BRIDE"
           person={wedding.couple.bride}
         />
-      </div>
-
-      <div
-        className="mt-8 border-t border-[var(--section-line)] pt-8 text-[12px] leading-6 text-[var(--section-muted)]"
-        data-reveal="fade-up"
-        data-reveal-delay="180"
-      >
-        <p>{wedding.event.displayDate}</p>
-        <p>{[wedding.event.venueName, wedding.event.hallName].filter(Boolean).join(" ")}</p>
       </div>
     </Section>
   );
