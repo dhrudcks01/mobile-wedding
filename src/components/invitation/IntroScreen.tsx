@@ -12,7 +12,7 @@ const introCoupleScriptFont = Great_Vibes({
   display: "swap",
 });
 
-const INTRO_DISPLAY_MS = 4000;
+const INTRO_DISPLAY_MS = 3000;
 const INTRO_FADE_OUT_MS = 500;
 
 type IntroScreenProps = {
@@ -86,10 +86,10 @@ export function IntroScreen({ wedding }: IntroScreenProps) {
   return (
     <div
       className={[
-        "intro-motion film-grain fixed inset-0 z-[100] flex items-center justify-center bg-black",
+        "intro-motion film-grain fixed inset-0 z-[100] flex items-center justify-center bg-black opacity-100",
         phase === "leaving"
           ? "animate-[intro-fade-out_500ms_ease-in_forwards]"
-          : "animate-[intro-fade-in_700ms_ease-out_both]",
+          : "",
       ].join(" ")}
       role="status"
       aria-live="polite"
