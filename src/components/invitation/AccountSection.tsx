@@ -52,10 +52,10 @@ function AccountRow({
   const accountRole = getAccountRole(account, wedding);
 
   return (
-    <article className="py-6 text-left first:pt-2">
+    <article className="rounded-[6px] bg-[#f0e9e6] p-4 text-left shadow-[0_12px_32px_rgba(65,55,50,0.08)]">
       <div className="flex items-center justify-between gap-4 px-1">
         <div className="flex items-center gap-3">
-          <span className="rounded-full border border-[var(--section-line)] px-3 py-1 text-[10px] text-[var(--section-muted)]">
+          <span className="rounded-full bg-[#ded3ce] px-3 py-1 text-[10px] text-[#756a65]">
             {accountRole}
           </span>
           <strong className="font-korean-serif text-[15px] text-[var(--section-text)]">
@@ -64,7 +64,7 @@ function AccountRow({
         </div>
       </div>
 
-      <div className="mt-3 flex min-h-12 items-center justify-between gap-3 rounded-[4px] bg-[#ddd5d1] px-4">
+      <div className="mt-4 flex min-h-12 items-center justify-between gap-3 rounded-[4px] bg-[#dfd5d0] px-4">
         <p className="min-w-0 text-[12px] leading-5 text-[#4f4a47]">
           <span>{account.bank}</span>{" "}
           <span className="break-all">{account.number}</span>
@@ -160,7 +160,7 @@ export function AccountSection({ wedding }: AccountSectionProps) {
 
         <div
           aria-labelledby={`account-tab-${activeSide}`}
-          className="divide-y divide-[var(--section-line)]"
+          className="mt-5 grid gap-4"
           id={`account-panel-${activeSide}`}
           role="tabpanel"
         >
