@@ -396,14 +396,14 @@ textarea {
 
 .ending-credits-window {
   position: relative;
-  height: clamp(560px, 82svh, 700px);
+  height: clamp(390px, 52svh, 460px);
   overflow: hidden;
 }
 
 .ending-credits-roll {
   position: relative;
   z-index: 1;
-  padding-block: 160px 260px;
+  padding-block: 110px 180px;
   transform: translate3d(0, 42%, 0);
   will-change: transform;
 }
