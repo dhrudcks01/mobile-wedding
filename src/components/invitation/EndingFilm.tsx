@@ -42,6 +42,9 @@ export function EndingFilm({ images }: EndingFilmProps) {
       role="img"
       style={endingFilmStyle}
     >
+      <span aria-hidden="true" className="ending-film-perforations ending-film-perforations-top" />
+      <span aria-hidden="true" className="ending-film-perforations ending-film-perforations-bottom" />
+
       <div className="ending-film-window">
         {frames.map((image, index) => {
           const frameStyle: EndingFrameStyle = {
@@ -61,7 +64,7 @@ export function EndingFilm({ images }: EndingFilmProps) {
             >
               <ImageWithFallback
                 alt={`웨딩 엔딩 사진 ${index + 1}`}
-                className="object-cover"
+                className="ending-film-image object-cover"
                 fallbackDescription="wedding.ts의 images.ending 경로를 확인해 주세요."
                 fallbackTitle="엔딩 사진 준비 중"
                 fill
@@ -74,12 +77,14 @@ export function EndingFilm({ images }: EndingFilmProps) {
         })}
 
         <div aria-hidden="true" className="ending-film-vignette" />
+        <div aria-hidden="true" className="ending-film-light-leak" />
+        <div aria-hidden="true" className="ending-film-scratches" />
+        <div aria-hidden="true" className="ending-film-flicker" />
         <p className="ending-film-copy" lang="en">
           <span>To Be</span>
           <span>Continued</span>
         </p>
       </div>
-
     </div>
   );
 }

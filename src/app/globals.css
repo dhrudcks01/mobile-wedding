@@ -218,6 +218,30 @@ textarea {
     0 28px 70px rgba(0, 0, 0, 0.42);
 }
 
+.ending-film-perforations {
+  position: absolute;
+  z-index: 4;
+  right: 14px;
+  left: 14px;
+  height: 10px;
+  pointer-events: none;
+  opacity: 0.42;
+  background: radial-gradient(
+      ellipse at center,
+      rgba(238, 232, 214, 0.72) 0 42%,
+      transparent 47%
+    )
+    0 0 / 23px 10px repeat-x;
+}
+
+.ending-film-perforations-top {
+  top: 13px;
+}
+
+.ending-film-perforations-bottom {
+  bottom: 13px;
+}
+
 .ending-film-window {
   position: absolute;
   z-index: 5;
@@ -252,6 +276,11 @@ textarea {
     radial-gradient(circle at center, transparent 52%, rgba(3, 7, 6, 0.25) 100%);
 }
 
+.ending-film-image {
+  filter: contrast(1.06) saturate(0.86) sepia(0.06);
+  will-change: filter, opacity;
+}
+
 .ending-film.is-revealed .ending-film-frame:not(.ending-film-frame-final) {
   animation: ending-frame-pass 2.1s cubic-bezier(0.64, 0, 0.36, 1)
     var(--ending-frame-delay) both;
@@ -271,6 +300,62 @@ textarea {
   box-shadow:
     inset 0 0 34px rgba(0, 0, 0, 0.48),
     inset 0 0 5px rgba(255, 255, 255, 0.42);
+}
+
+.ending-film-light-leak,
+.ending-film-scratches,
+.ending-film-flicker {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.ending-film-light-leak {
+  z-index: 9;
+  inset: -18%;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(circle at 8% 48%, rgba(255, 178, 105, 0.72), transparent 22%),
+    linear-gradient(90deg, rgba(255, 224, 175, 0.42), transparent 36%);
+  transform: translate3d(-35%, 0, 0) rotate(5deg);
+}
+
+.ending-film-scratches {
+  z-index: 10;
+  inset: 0;
+  mix-blend-mode: screen;
+  background-image:
+    linear-gradient(90deg, transparent 17%, rgba(255, 255, 255, 0.26) 17.2%, transparent 17.5%),
+    linear-gradient(90deg, transparent 64%, rgba(255, 255, 255, 0.18) 64.15%, transparent 64.4%),
+    linear-gradient(90deg, transparent 83%, rgba(255, 255, 255, 0.14) 83.1%, transparent 83.3%);
+  background-size: 140% 100%, 170% 100%, 120% 100%;
+}
+
+.ending-film-flicker {
+  z-index: 11;
+  inset: 0;
+  background: rgba(244, 232, 204, 0.3);
+  mix-blend-mode: screen;
+}
+
+.ending-film.is-revealed .ending-film-window {
+  animation: ending-gate-jitter 180ms steps(2, end) infinite;
+}
+
+.ending-film.is-revealed .ending-film-image {
+  animation: ending-image-flicker 240ms steps(2, end) infinite;
+}
+
+.ending-film.is-revealed .ending-film-light-leak {
+  animation: ending-light-leak 2.4s ease-in-out infinite;
+}
+
+.ending-film.is-revealed .ending-film-scratches {
+  animation: ending-scratches 1.3s steps(3, end) infinite;
+}
+
+.ending-film.is-revealed .ending-film-flicker {
+  animation: ending-projector-flicker 2.2s steps(1, end) infinite;
 }
 
 .ending-film-copy {
@@ -302,6 +387,44 @@ textarea {
 
 .ending-film.is-revealed .ending-film-copy {
   animation: ending-copy-rotate 1.5s var(--ending-copy-delay) forwards;
+}
+
+.ending-credits {
+  position: relative;
+  margin-top: 2rem;
+}
+
+.ending-credits-window {
+  position: relative;
+  height: clamp(560px, 82svh, 700px);
+  overflow: hidden;
+}
+
+.ending-credits-roll {
+  position: relative;
+  z-index: 1;
+  padding-block: 160px 260px;
+  transform: translate3d(0, 42%, 0);
+  will-change: transform;
+}
+
+.ending-credits.is-revealed .ending-credits-roll {
+  animation: ending-credits-roll 28s linear 250ms forwards;
+}
+
+.ending-credits-shade {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    #080c0b 0%,
+    rgba(8, 12, 11, 0.92) 5%,
+    transparent 18% 78%,
+    rgba(8, 12, 11, 0.94) 94%,
+    #080c0b 100%
+  );
 }
 
 .reveal-ready[data-reveal] {
@@ -453,6 +576,96 @@ textarea {
   }
 }
 
+@keyframes ending-gate-jitter {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  35% {
+    transform: translate3d(-0.45px, 0.25px, 0);
+  }
+
+  70% {
+    transform: translate3d(0.35px, -0.35px, 0);
+  }
+}
+
+@keyframes ending-image-flicker {
+  0%,
+  100% {
+    opacity: 1;
+    filter: contrast(1.06) saturate(0.86) sepia(0.06) brightness(1);
+  }
+
+  50% {
+    opacity: 0.96;
+    filter: contrast(1.1) saturate(0.82) sepia(0.08) brightness(1.04);
+  }
+}
+
+@keyframes ending-light-leak {
+  0%,
+  64%,
+  100% {
+    opacity: 0;
+    transform: translate3d(-35%, 0, 0) rotate(5deg);
+  }
+
+  72% {
+    opacity: 0.36;
+  }
+
+  84% {
+    opacity: 0.12;
+    transform: translate3d(42%, 0, 0) rotate(5deg);
+  }
+}
+
+@keyframes ending-scratches {
+  0%,
+  100% {
+    opacity: 0.16;
+    background-position: 0 0, 0 0, 0 0;
+  }
+
+  42% {
+    opacity: 0.05;
+    background-position: 14px 0, -18px 0, 8px 0;
+  }
+
+  70% {
+    opacity: 0.22;
+    background-position: -11px 0, 12px 0, -16px 0;
+  }
+}
+
+@keyframes ending-projector-flicker {
+  0%,
+  92%,
+  100% {
+    opacity: 0;
+  }
+
+  94% {
+    opacity: 0.11;
+  }
+
+  96% {
+    opacity: 0.03;
+  }
+}
+
+@keyframes ending-credits-roll {
+  from {
+    transform: translate3d(0, 42%, 0);
+  }
+
+  to {
+    transform: translate3d(0, -68%, 0);
+  }
+}
+
 @keyframes movie-hero-zoom {
   from {
     transform: scale(1.045);
@@ -503,6 +716,12 @@ textarea {
   .cinema-rise,
   .ending-film-copy,
   .ending-film-frame,
+  .ending-film-image,
+  .ending-film-light-leak,
+  .ending-film-scratches,
+  .ending-film-flicker,
+  .ending-film-window,
+  .ending-credits-roll,
   .film-reel-track,
   .movie-hero-image,
   .show-light {
@@ -522,6 +741,26 @@ textarea {
 
   .ending-film-copy {
     transform: translate(-50%, -50%) rotate(-12deg) !important;
+  }
+
+  .ending-film-light-leak,
+  .ending-film-scratches,
+  .ending-film-flicker {
+    opacity: 0 !important;
+  }
+
+  .ending-credits-window {
+    height: auto;
+    overflow: visible;
+  }
+
+  .ending-credits-roll {
+    padding-block: 80px 40px;
+    transform: none !important;
+  }
+
+  .ending-credits-shade {
+    display: none;
   }
 
   .reveal-ready[data-reveal] {

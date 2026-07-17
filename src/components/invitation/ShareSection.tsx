@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/common/Button";
 import { CopyButton } from "@/components/common/CopyButton";
@@ -30,6 +30,7 @@ type ShareFeedback = {
 };
 
 type CreditRowProps = {
+  englishName?: string;
   koreanLabel: string;
   koreanName: string;
   role: string;
@@ -37,7 +38,12 @@ type CreditRowProps = {
 
 const TOAST_VISIBLE_MS = 2400;
 
-function CreditRow({ koreanLabel, koreanName, role }: CreditRowProps) {
+function CreditRow({
+  englishName = "",
+  koreanLabel,
+  koreanName,
+  role,
+}: CreditRowProps) {
   if (!koreanName.trim()) {
     return null;
   }
@@ -50,10 +56,28 @@ function CreditRow({ koreanLabel, koreanName, role }: CreditRowProps) {
         </p>
         <p className="mt-1 text-[10px] text-white/38">{koreanLabel}</p>
       </div>
-      <p className="font-korean-serif text-[12px] font-bold leading-8 text-white/82">
-        {koreanName}
-      </p>
+      <div>
+        <p className="font-korean-serif text-[12px] font-bold leading-7 text-white/82">
+          {koreanName}
+        </p>
+        {englishName.trim() ? (
+          <p className="font-title-en mt-1 text-[9px] tracking-[0.05em] text-white/38">
+            {englishName}
+          </p>
+        ) : null}
+      </div>
     </div>
+  );
+}
+
+function CreditGroup({ children, title }: { children: ReactNode; title: string }) {
+  return (
+    <section className="mt-20">
+      <h3 className="font-title-en text-center text-[11px] font-semibold tracking-[0.2em] text-white/74">
+        {title}
+      </h3>
+      <div className="mt-9 space-y-5">{children}</div>
+    </section>
   );
 }
 
@@ -70,6 +94,10 @@ export function ShareSection({
   const endingImages = wedding.images.ending.length
     ? wedding.images.ending
     : wedding.images.gallery;
+  const venue = [wedding.event.venueName, wedding.event.hallName]
+    .map((value) => value.trim())
+    .filter(Boolean)
+    .join(" ");
 
   const sharePayload = useMemo(
     () => ({
@@ -160,46 +188,105 @@ export function ShareSection({
   };
 
   return (
-    <Section className="movie-dark min-h-[100svh] !px-0 !pb-16 !pt-0">
+    <Section className="movie-dark min-h-[100svh] !px-0 !pb-16 pt-8">
       <EndingFilm images={endingImages} />
 
       <div
-        className="mt-12 px-6"
-        data-reveal="fade-up"
-        data-reveal-duration="1100"
+        className="ending-credits px-6"
+        data-reveal="fade"
+        data-reveal-duration="900"
+        data-reveal-threshold="0.18"
       >
-        <h2 className="font-title-en text-[13px] font-semibold uppercase leading-none tracking-[0.02em] text-white">
-          Cast
-        </h2>
-      </div>
+        <div
+          aria-label="웨딩 영화 엔딩 크레딧"
+          className="ending-credits-window"
+          role="region"
+        >
+          <div className="ending-credits-roll">
+            <header className="text-center">
+              <p className="font-title-en text-[9px] tracking-[0.32em] text-white/42">
+                A WEDDING FILM
+              </p>
+              <h2 className="font-title-en mt-5 text-[1.65rem] font-semibold uppercase tracking-[0.08em] text-white">
+                Cast &amp; Crew
+              </h2>
+              <p className="font-title-en mt-5 text-[10px] tracking-[0.08em] text-white/42">
+                {wedding.intro.groom.name} &amp; {wedding.intro.bride.name}
+              </p>
+            </header>
 
-      <div
-        className="mt-10 space-y-4 px-6"
-        data-reveal="fade-up"
-        data-reveal-duration="1400"
-      >
-        <CreditRow koreanLabel="신랑" koreanName={wedding.couple.groom.name} role="GROOM" />
-        <CreditRow koreanLabel="신부" koreanName={wedding.couple.bride.name} role="BRIDE" />
-        <CreditRow
-          koreanLabel="신랑 아버지"
-          koreanName={wedding.couple.groom.father}
-          role="GROOM'S FATHER"
-        />
-        <CreditRow
-          koreanLabel="신랑 어머니"
-          koreanName={wedding.couple.groom.mother}
-          role="GROOM'S MOTHER"
-        />
-        <CreditRow
-          koreanLabel="신부 아버지"
-          koreanName={wedding.couple.bride.father}
-          role="BRIDE'S FATHER"
-        />
-        <CreditRow
-          koreanLabel="신부 어머니"
-          koreanName={wedding.couple.bride.mother}
-          role="BRIDE'S MOTHER"
-        />
+            <CreditGroup title="STARRING">
+              <CreditRow
+                englishName={wedding.intro.groom.name}
+                koreanLabel="신랑"
+                koreanName={wedding.couple.groom.name}
+                role="GROOM"
+              />
+              <CreditRow
+                englishName={wedding.intro.bride.name}
+                koreanLabel="신부"
+                koreanName={wedding.couple.bride.name}
+                role="BRIDE"
+              />
+            </CreditGroup>
+
+            <CreditGroup title="FAMILY CAST">
+              <CreditRow
+                koreanLabel="신랑 아버지"
+                koreanName={wedding.couple.groom.father}
+                role="GROOM'S FATHER"
+              />
+              <CreditRow
+                koreanLabel="신랑 어머니"
+                koreanName={wedding.couple.groom.mother}
+                role="GROOM'S MOTHER"
+              />
+              <CreditRow
+                koreanLabel="신부 아버지"
+                koreanName={wedding.couple.bride.father}
+                role="BRIDE'S FATHER"
+              />
+              <CreditRow
+                koreanLabel="신부 어머니"
+                koreanName={wedding.couple.bride.mother}
+                role="BRIDE'S MOTHER"
+              />
+            </CreditGroup>
+
+            <CreditGroup title="PRODUCTION">
+              <CreditRow
+                koreanLabel="예식 일시"
+                koreanName={wedding.event.displayDate}
+                role="WEDDING DAY"
+              />
+              <CreditRow
+                koreanLabel="예식 장소"
+                koreanName={venue}
+                role="FILM LOCATION"
+              />
+            </CreditGroup>
+
+            <div className="mt-24 text-center">
+              <p className="font-title-en text-[10px] tracking-[0.24em] text-white/48">
+                SPECIAL THANKS
+              </p>
+              <p className="font-korean-serif mt-7 text-[13px] leading-7 text-white/78">
+                우리의 가족과 친구들,
+                <br />
+                그리고 이 순간을 함께해 주신 모든 분들
+              </p>
+              <span className="mx-auto my-10 block h-px w-10 bg-white/28" />
+              <p className="font-title-en text-[10px] tracking-[0.12em] text-white/42">
+                {wedding.intro.groom.name} &amp; {wedding.intro.bride.name}
+              </p>
+              <p className="font-title-en mt-12 text-[1.35rem] tracking-[0.3em] text-white">
+                THE END
+              </p>
+            </div>
+          </div>
+
+          <span aria-hidden="true" className="ending-credits-shade" />
+        </div>
       </div>
 
       <div
