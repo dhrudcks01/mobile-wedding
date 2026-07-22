@@ -13,6 +13,7 @@ import { wedding } from "@/data/wedding";
 
 export default function Home() {
   const kakaoJavaScriptKey = process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY ?? "";
+  const kakaoMapScriptKey = process.env.NEXT_PUBLIC_KAKAO_MAP_JAVASCRIPT_KEY ?? "";
 
   return (
     <main className="invitation-page mx-auto min-h-screen w-full max-w-[430px] overflow-hidden bg-[var(--color-dark)] shadow-[0_0_90px_rgba(0,0,0,0.55)]">
@@ -24,7 +25,7 @@ export default function Home() {
       <CoupleSection wedding={wedding} />
       <GallerySection wedding={wedding} />
       <LocationSection
-        kakaoJavaScriptKey={kakaoJavaScriptKey}
+        kakaoJavaScriptKey={kakaoMapScriptKey}
         wedding={wedding}
       />
       <ContactSection wedding={wedding} />
