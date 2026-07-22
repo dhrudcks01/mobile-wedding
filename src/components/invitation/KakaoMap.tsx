@@ -14,8 +14,14 @@ type KakaoMapStatus = "idle" | "loading" | "ready" | "error";
 type KakaoLatLng = object;
 
 type KakaoMapInstance = {
+  getLevel: () => number;
   relayout: () => void;
   setCenter: (position: KakaoLatLng) => void;
+  setLevel: (level: number) => void;
+};
+
+type KakaoCustomOverlayInstance = {
+  setMap: (map: KakaoMapInstance | null) => void;
 };
 
 type KakaoGeocoderResult = {
@@ -29,10 +35,13 @@ type KakaoMapsApi = {
     container: HTMLElement,
     options: { center: KakaoLatLng; level: number },
   ) => KakaoMapInstance;
-  Marker: new (options: {
+  CustomOverlay: new (options: {
+    clickable: boolean;
+    content: HTMLElement;
     map: KakaoMapInstance;
     position: KakaoLatLng;
-  }) => object;
+    yAnchor: number;
+  }) => KakaoCustomOverlayInstance;
   load: (callback: () => void) => void;
   services: {
     Geocoder: new () => {
@@ -57,11 +66,48 @@ declare global {
 
 const KAKAO_MAP_SDK_ID = "kakao-map-sdk";
 const ADDRESS_DETAIL_PATTERN = /\s*\([^)]*\)\s*$/;
+const MIN_MAP_LEVEL = 1;
+const MAX_MAP_LEVEL = 8;
 
 let kakaoMapSdkPromise: Promise<KakaoMapsApi> | null = null;
 
 function getMapSearchAddress(address: string) {
   return address.replace(ADDRESS_DETAIL_PATTERN, "").trim();
+}
+
+function createVenueOverlayContent(venueName: string, mapUrl: string) {
+  const container = document.createElement("div");
+  const label = document.createElement(mapUrl ? "a" : "div");
+  const title = document.createElement("strong");
+  const description = document.createElement("span");
+  const pin = document.createElement("span");
+  const pinCenter = document.createElement("span");
+
+  container.className = "wedding-map-marker";
+  label.className = "wedding-map-label";
+  title.className = "wedding-map-label-title";
+  description.className = "wedding-map-label-description";
+  pin.className = "wedding-map-pin";
+  pinCenter.className = "wedding-map-pin-center";
+
+  title.textContent = venueName;
+  description.textContent = mapUrl
+    ? "예식장 · 카카오맵에서 보기"
+    : "예식장 위치";
+
+  if (mapUrl) {
+    label.setAttribute("aria-label", `${venueName} 카카오맵에서 위치 보기`);
+    label.setAttribute("href", mapUrl);
+    label.setAttribute("rel", "noreferrer");
+    label.setAttribute("target", "_blank");
+  }
+
+  pin.setAttribute("aria-hidden", "true");
+  label.append(title, description);
+  pin.append(pinCenter);
+  container.append(label, pin);
+
+  return container;
 }
 
 function resolveKakaoMaps() {
@@ -126,6 +172,7 @@ export function KakaoMap({
 }: KakaoMapProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<KakaoMapInstance | null>(null);
   const [shouldLoad, setShouldLoad] = useState(false);
   const [status, setStatus] = useState<KakaoMapStatus>("idle");
 
@@ -174,6 +221,11 @@ export function KakaoMap({
     }
 
     let isCancelled = false;
+    let customOverlay: KakaoCustomOverlayInstance | null = null;
+    let mapInstance: KakaoMapInstance | null = null;
+
+    mapInstanceRef.current = null;
+    mapContainer.replaceChildren();
     setStatus("loading");
 
     loadKakaoMapSdk(trimmedKey)
@@ -203,7 +255,15 @@ export function KakaoMap({
               level: 3,
             });
 
-            new maps.Marker({ map, position });
+            mapInstance = map;
+            mapInstanceRef.current = map;
+            customOverlay = new maps.CustomOverlay({
+              clickable: true,
+              content: createVenueOverlayContent(venueName, trimmedMapUrl),
+              map,
+              position,
+              yAnchor: 1,
+            });
 
             window.requestAnimationFrame(() => {
               map.relayout();
@@ -221,8 +281,33 @@ export function KakaoMap({
 
     return () => {
       isCancelled = true;
+      customOverlay?.setMap(null);
+
+      if (mapInstanceRef.current === mapInstance) {
+        mapInstanceRef.current = null;
+      }
     };
-  }, [shouldLoad, trimmedAddress, trimmedKey]);
+  }, [shouldLoad, trimmedAddress, trimmedKey, trimmedMapUrl, venueName]);
+
+  const handleZoomIn = () => {
+    const map = mapInstanceRef.current;
+
+    if (!map) {
+      return;
+    }
+
+    map.setLevel(Math.max(MIN_MAP_LEVEL, map.getLevel() - 1));
+  };
+
+  const handleZoomOut = () => {
+    const map = mapInstanceRef.current;
+
+    if (!map) {
+      return;
+    }
+
+    map.setLevel(Math.min(MAX_MAP_LEVEL, map.getLevel() + 1));
+  };
 
   const statusMessage =
     status === "error"
@@ -231,7 +316,7 @@ export function KakaoMap({
 
   return (
     <div
-      className="relative h-[310px] overflow-hidden border border-white/40 bg-[#ebe8df] shadow-[0_18px_45px_rgba(47,45,42,0.1)]"
+      className="relative h-[310px] overflow-hidden rounded-[24px] border border-white/55 bg-[#ebe8df] shadow-[0_18px_45px_rgba(47,45,42,0.14)]"
       ref={wrapperRef}
     >
       <div
@@ -240,6 +325,32 @@ export function KakaoMap({
         ref={mapRef}
         role="region"
       />
+
+      {status === "ready" ? (
+        <div
+          aria-label="지도 확대 및 축소"
+          className="absolute right-3 top-3 z-20 overflow-hidden rounded-full border border-white/70 bg-[#f7f2eb]/95 shadow-[0_8px_24px_rgba(33,39,36,0.2)] backdrop-blur-sm"
+          role="group"
+        >
+          <button
+            aria-label="지도 확대"
+            className="flex size-11 items-center justify-center text-[20px] font-light leading-none text-[#27302d] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[#27302d]"
+            onClick={handleZoomIn}
+            type="button"
+          >
+            +
+          </button>
+          <span aria-hidden="true" className="mx-auto block h-px w-5 bg-[#27302d]/16" />
+          <button
+            aria-label="지도 축소"
+            className="flex size-11 items-center justify-center text-[22px] font-light leading-none text-[#27302d] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[#27302d]"
+            onClick={handleZoomOut}
+            type="button"
+          >
+            −
+          </button>
+        </div>
+      ) : null}
 
       {status !== "ready" ? (
         <div
