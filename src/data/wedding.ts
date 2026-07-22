@@ -106,7 +106,7 @@ export const wedding: Wedding = {
   mapLinks: {
     // 지도 링크가 비어 있으면 해당 지도 버튼이 표시되지 않습니다.
     naver: "https://map.naver.com/p/entry/place/32982104?c=11.00,0,0,0,dh&placePath=/home?from=map&fromPanelNum=1&additionalHeight=76&timestamp=202606142032&locale=ko&svcName=map_pcv5",
-    kakao: "https://place.map.kakao.com/1215258511",
+    kakao: "https://place.map.kakao.com/768355207",
     tmap: "",
     google:
       "",
