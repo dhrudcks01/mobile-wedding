@@ -7,9 +7,12 @@ import { GallerySection } from "@/components/invitation/GallerySection";
 import { GreetingSection } from "@/components/invitation/GreetingSection";
 import { IntroScreen } from "@/components/invitation/IntroScreen";
 import { LocationSection } from "@/components/invitation/LocationSection";
+import { PhotoBoothSection } from "@/components/invitation/PhotoBoothSection";
 import { PosterSection } from "@/components/invitation/PosterSection";
 import { ShareSection } from "@/components/invitation/ShareSection";
 import { wedding } from "@/data/wedding";
+
+const USE_PHOTO_BOOTH_SECTION = true;
 
 export default function Home() {
   const kakaoJavaScriptKey = process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY ?? "";
@@ -19,7 +22,11 @@ export default function Home() {
     <main className="invitation-page mx-auto min-h-screen w-full max-w-[430px] overflow-hidden bg-[var(--color-dark)] shadow-[0_0_90px_rgba(0,0,0,0.55)]">
       <ScrollRevealController />
       <IntroScreen wedding={wedding} />
-      <PosterSection wedding={wedding} />
+      {USE_PHOTO_BOOTH_SECTION ? (
+        <PhotoBoothSection wedding={wedding} />
+      ) : (
+        <PosterSection wedding={wedding} />
+      )}
       <GreetingSection wedding={wedding} />
       <DateSection wedding={wedding} />
       <CoupleSection wedding={wedding} />
