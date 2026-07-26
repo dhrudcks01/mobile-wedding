@@ -16,7 +16,7 @@ export const wedding: Wedding = {
     // 예: "2026년 10월 24일 토요일 오후 1시, OO 웨딩홀"
     description: "2026년 10월 9일 금요일 오후 3시, 라비두스",
     // 배포 후 실제 URL로 교체하세요. 예: "https://wedding.example.com"
-    url: "https://example.com",
+    url: "https://ournewday.kr",
     // 공유 미리보기 이미지입니다. public/images/og-image.jpg 파일을 교체하면 됩니다.
     ogImage: "/images/000021560006.jpg",
   },
@@ -131,16 +131,16 @@ export const wedding: Wedding = {
     {
       side: "groom",
       label: "신랑측",
-      bank: "",
+      bank: "농협",
       holder: "오종오",
-      number: "123123",
+      number: "3020190417321",
     },
     {
       side: "groom",
       label: "신랑측",
-      bank: "",
+      bank: "농협",
       holder: "박관순",
-      number: "123123",
+      number: "17734456085653",
     },
     {
       side: "bride",
