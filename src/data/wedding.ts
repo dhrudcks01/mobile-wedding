@@ -145,16 +145,16 @@ export const wedding: Wedding = {
     {
       side: "bride",
       label: "신부측",
-      bank: "은행명",
+      bank: "전북",
       holder: "유상희",
-      number: "123123",
+      number: "501220384579",
     },
     {
       side: "bride",
       label: "신부측",
-      bank: "은행명",
+      bank: "전북",
       holder: "이채원",
-      number: "123123",
+      number: "542210314769",
     },
   ],
 };
