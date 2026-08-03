@@ -91,7 +91,7 @@ export function LocationSection({
           {mapLinks.map((mapLink) => (
             <a
               aria-label={`${locationLabel} ${mapLink.label}에서 보기`}
-              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--section-line)] bg-white/30 px-3 text-[12px] font-medium text-[var(--section-text)] transition hover:bg-white/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4b504e]"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--section-line)] bg-white/30 px-3 text-[12px] font-medium text-[var(--section-text)] transition hover:bg-white/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-strong)]"
               href={mapLink.href}
               key={mapLink.key}
               rel="noreferrer"

@@ -79,19 +79,19 @@ export function GallerySection({ wedding }: GallerySectionProps) {
       title="Gallery"
     >
       <div
-        className="film-strip -mx-6 mt-14 flex snap-x snap-mandatory gap-2 overflow-x-auto bg-[#080b0a] px-4 py-4"
+        className="film-strip -mx-6 mt-14 flex snap-x snap-mandatory gap-2 overflow-x-auto bg-[var(--color-dark)] px-4 py-4"
         data-reveal="fade-up"
         data-reveal-duration="1400"
       >
         {gallery.map((image, index) => (
           <button
             aria-label={`갤러리 이미지 ${index + 1} 크게 보기`}
-            className="group relative aspect-[3/4] w-[76%] shrink-0 snap-center overflow-hidden border border-white/20 bg-[#171a19] text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="group relative aspect-[3/4] w-[76%] shrink-0 snap-center overflow-hidden border border-white/20 bg-[var(--color-dark-raised)] text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             key={`${image}-${index}`}
             onClick={() => setSelectedIndex(index)}
             type="button"
           >
-            <div className="absolute inset-x-0 top-0 z-10 flex h-5 items-center justify-between border-b border-white/20 bg-[#070909] px-2 font-title-en text-[7px] tracking-[0.08em] text-white/58">
+            <div className="absolute inset-x-0 top-0 z-10 flex h-5 items-center justify-between border-b border-white/20 bg-[var(--color-dark)] px-2 font-title-en text-[7px] tracking-[0.08em] text-white/58">
               <span>WEDDING FILM</span>
               <span>{String(index + 1).padStart(2, "0")}A</span>
             </div>
@@ -99,7 +99,7 @@ export function GallerySection({ wedding }: GallerySectionProps) {
               alt={`갤러리 이미지 ${index + 1}`}
               className="object-cover pt-5 transition duration-700 group-hover:scale-[1.03]"
               fill
-              fallbackClassName="bg-[#171a19] text-white/70"
+              fallbackClassName="bg-[var(--color-dark-raised)] text-white/70"
               fallbackDescription="이미지 경로를 확인해 주세요."
               fallbackTitle="Wedding Film"
               loading="lazy"
@@ -107,7 +107,7 @@ export function GallerySection({ wedding }: GallerySectionProps) {
               src={image}
             />
             <span className="absolute inset-0 bg-[linear-gradient(180deg,transparent_65%,rgba(0,0,0,0.22))]" />
-            <span className="absolute inset-x-0 bottom-0 z-10 h-4 border-t border-white/20 bg-[#070909]" />
+            <span className="absolute inset-x-0 bottom-0 z-10 h-4 border-t border-white/20 bg-[var(--color-dark)]" />
           </button>
         ))}
       </div>
@@ -124,7 +124,7 @@ export function GallerySection({ wedding }: GallerySectionProps) {
         <div
           aria-label={selectedLabel}
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#050706]/95 px-4 py-6 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--color-overlay)] px-4 py-6 backdrop-blur-sm"
           onClick={closeModal}
           role="dialog"
         >

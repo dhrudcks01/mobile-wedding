@@ -3,8 +3,10 @@ import {
   Gowun_Batang,
   Gowun_Dodum,
   Great_Vibes,
+  Pinyon_Script,
   Playfair_Display,
 } from "next/font/google";
+import localFont from "next/font/local";
 import type { ReactNode } from "react";
 import { wedding } from "@/data/wedding";
 import "./globals.css";
@@ -41,6 +43,22 @@ const greatVibes = Great_Vibes({
   variable: "--font-great-vibes",
   display: "swap",
   fallback: ["cursive"],
+});
+
+const pinyonScript = Pinyon_Script({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-pinyon-script",
+  display: "swap",
+  fallback: ["cursive"],
+});
+
+const californication = localFont({
+  src: "../fonts/The Californication.ttf",
+  weight: "400",
+  variable: "--font-californication",
+  display: "swap",
+  fallback: ["Great Vibes", "cursive"],
 });
 
 function getMetadataBase(url: string) {
@@ -105,6 +123,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
         gowunBatang.variable,
         playfairDisplay.variable,
         greatVibes.variable,
+        pinyonScript.variable,
+        californication.variable,
       ].join(" ")}
     >
       <body>{children}</body>

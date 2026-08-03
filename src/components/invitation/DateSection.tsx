@@ -114,13 +114,13 @@ function CountdownClock({ dateTime }: { dateTime: string }) {
     >
       {values.map((item) => (
         <div
-          className="rounded-[3px] bg-[#2e3130] px-1 py-4 text-center text-white shadow-[0_8px_20px_rgba(35,34,32,0.12)]"
+          className="bg-[var(--color-calendar)] px-1 py-4 text-center"
           key={item.label}
         >
-          <strong className="font-title-en block text-[1.55rem] font-normal leading-none">
+          <strong className="font-title-en block text-[1.55rem] font-normal leading-none text-[var(--color-text)]">
             {item.value === undefined ? "--" : String(item.value).padStart(2, "0")}
           </strong>
-          <span className="mt-2 block text-[9px] tracking-[0.04em] text-white/64">
+          <span className="font-title-en mt-2 block text-[9px] uppercase tracking-[0.14em] text-[var(--section-muted)]">
             {item.label}
           </span>
         </div>
@@ -163,12 +163,16 @@ export function DateSection({ wedding }: DateSectionProps) {
   const posterTime = getPosterTime(wedding.event.dateTime);
 
   return (
-    <Section className="movie-paper pb-10 pt-24" eyebrow="When" title="Our Day">
+    <Section
+      className="movie-paper-muted pb-28 pt-24"
+      eyebrow="When"
+      title="Our Day"
+    >
       <CountdownClock dateTime={wedding.event.dateTime} />
       <CountdownSentence wedding={wedding} />
 
       <article
-        className="relative mt-20 overflow-hidden bg-[var(--color-calendar)] px-7 pb-14 pt-11 text-center shadow-[0_22px_60px_rgba(74,61,54,0.11)]"
+        className="relative mt-14 overflow-hidden bg-[var(--color-calendar)] px-7 pb-14 pt-11 text-center"
         data-reveal="fade-up"
         data-reveal-duration="1300"
       >
@@ -183,10 +187,10 @@ export function DateSection({ wedding }: DateSectionProps) {
         />
 
         <div className="relative z-10">
-          <p className="font-title-en text-[1.02rem] font-semibold leading-none tracking-[-0.01em] text-[#2d2927]">
+          <p className="font-title-en text-[1.02rem] font-semibold leading-none tracking-[-0.01em] text-[var(--color-text)]">
             {posterDate}
           </p>
-          <p className="font-title-en mt-2 text-[0.82rem] font-semibold leading-none text-[#2d2927]">
+          <p className="font-title-en mt-2 text-[0.82rem] font-semibold leading-none text-[var(--color-text)]">
             {posterTime}
           </p>
         </div>
@@ -195,7 +199,7 @@ export function DateSection({ wedding }: DateSectionProps) {
           <div className="grid grid-cols-7 gap-y-3.5 text-center">
             {WEEKDAY_LABELS.map((label, index) => (
               <span
-                className="font-title-en text-[8px] font-semibold tracking-[0.08em] text-[#514743]"
+                className="font-title-en text-[8px] font-semibold tracking-[0.08em] text-[var(--color-text-muted)]"
                 key={`weekday-${index}`}
               >
                 {label}
@@ -206,10 +210,10 @@ export function DateSection({ wedding }: DateSectionProps) {
                 className={[
                   "mx-auto flex size-7 items-center justify-center text-[10px]",
                   cell.isWeddingDay
-                    ? "rounded-full bg-[#302b29] font-semibold text-white shadow-[0_5px_14px_rgba(48,43,41,0.18)]"
+                    ? "rounded-full bg-[var(--color-button)] font-semibold text-white"
                     : cell.isSunday
-                      ? "text-[#a06961]"
-                      : "text-[#443b37]",
+                      ? "text-[var(--color-sunday)]"
+                      : "text-[var(--color-text)]",
                 ].join(" ")}
                 key={`day-${index}`}
               >

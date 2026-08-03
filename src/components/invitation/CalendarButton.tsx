@@ -40,7 +40,7 @@ export function CalendarButton({ wedding }: CalendarButtonProps) {
     <div className="mt-7">
       <Button
         aria-label="예식 일정을 캘린더 파일로 저장하기"
-        className="w-full bg-[#282b2a] text-white"
+        className="w-full bg-[var(--color-button)] text-white"
         onClick={handleDownload}
       >
         캘린더에 저장하기

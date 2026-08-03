@@ -52,10 +52,10 @@ function AccountRow({
   const accountRole = getAccountRole(account, wedding);
 
   return (
-    <article className="rounded-[6px] bg-[#f0e9e6] p-4 text-left shadow-[0_12px_32px_rgba(65,55,50,0.08)]">
+    <article className="rounded-[6px] bg-[var(--color-surface-raised)] p-4 text-left shadow-[0_12px_32px_rgba(65,55,50,0.08)]">
       <div className="flex items-center justify-between gap-4 px-1">
         <div className="flex items-center gap-3">
-          <span className="rounded-full bg-[#ded3ce] px-3 py-1 text-[10px] text-[#756a65]">
+          <span className="rounded-full bg-[var(--color-surface-sunken)] px-3 py-1 text-[10px] text-[var(--color-text-muted)]">
             {accountRole}
           </span>
           <strong className="font-korean-serif text-[15px] text-[var(--section-text)]">
@@ -64,16 +64,16 @@ function AccountRow({
         </div>
       </div>
 
-      <div className="mt-4 flex min-h-12 items-center justify-between gap-3 rounded-[4px] bg-[#dfd5d0] px-4">
-        <p className="min-w-0 text-[12px] leading-5 text-[#4f4a47]">
+      <div className="mt-4 flex min-h-12 items-center justify-between gap-3 rounded-[4px] bg-[var(--color-surface-sunken)] px-4">
+        <p className="min-w-0 text-[12px] leading-5 text-[var(--color-text)]">
           <span>{account.bank}</span>{" "}
           <span className="break-all">{account.number}</span>
         </p>
         <CopyButton
           aria-label={`${accountRole} ${account.holder} 계좌번호 복사`}
-          className="min-h-8 shrink-0 border-0 bg-transparent px-2 text-[10px] text-[#625b57] shadow-none hover:bg-black/5"
+          className="min-h-8 shrink-0 border-0 bg-transparent px-2 text-[10px] text-[var(--color-text-muted)] shadow-none hover:bg-black/5"
           onFeedback={onFeedback}
-          successMessage={`${account.holder} 계좌번호를 복사했습니다.`}
+          successMessage={`${account.holder}님의 계좌번호를 복사했습니다.`}
           text={account.number}
         >
           계좌복사
@@ -141,9 +141,9 @@ export function AccountSection({ wedding }: AccountSectionProps) {
                 aria-controls={`account-panel-${side}`}
                 aria-selected={isActive}
                 className={[
-                  "relative min-h-12 text-[13px] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#393d3b]",
+                  "relative min-h-12 text-[13px] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent-strong)]",
                   isActive
-                    ? "font-semibold text-[var(--section-text)] after:absolute after:inset-x-0 after:-bottom-px after:h-[2px] after:bg-[#393d3b]"
+                    ? "font-semibold text-[var(--section-text)] after:absolute after:inset-x-0 after:-bottom-px after:h-[2px] after:bg-[var(--color-accent-strong)]"
                     : "text-[var(--section-muted)]",
                 ].join(" ")}
                 id={`account-tab-${side}`}

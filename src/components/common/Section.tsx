@@ -42,7 +42,10 @@ export function Section({
               </span>
             ) : null}
             {title ? (
-              <h2 className="font-title-en mt-4 text-[1.65rem] font-semibold uppercase leading-none tracking-[-0.02em] text-[var(--section-text,var(--color-text))]">
+              <h2
+                className="font-heading mt-3 text-[var(--section-text,var(--color-text))]"
+                style={{ fontSize: "44px", lineHeight: 1.3 }}
+              >
                 {title}
               </h2>
             ) : null}

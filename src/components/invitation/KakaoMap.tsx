@@ -316,7 +316,7 @@ export function KakaoMap({
 
   return (
     <div
-      className="relative h-[310px] overflow-hidden rounded-[24px] border border-white/55 bg-[#ebe8df] shadow-[0_18px_45px_rgba(47,45,42,0.14)]"
+      className="relative h-[310px] overflow-hidden rounded-[24px] border border-white/55 bg-[var(--color-surface-muted)] shadow-[0_18px_45px_rgba(47,45,42,0.14)]"
       ref={wrapperRef}
     >
       <div
@@ -329,21 +329,21 @@ export function KakaoMap({
       {status === "ready" ? (
         <div
           aria-label="지도 확대 및 축소"
-          className="absolute right-3 top-3 z-20 overflow-hidden rounded-full border border-white/70 bg-[#f7f2eb]/95 shadow-[0_8px_24px_rgba(33,39,36,0.2)] backdrop-blur-sm"
+          className="absolute right-3 top-3 z-20 overflow-hidden rounded-full border border-white/70 bg-[var(--color-surface-glass)] shadow-[0_8px_24px_rgba(33,39,36,0.2)] backdrop-blur-sm"
           role="group"
         >
           <button
             aria-label="지도 확대"
-            className="flex size-11 items-center justify-center text-[20px] font-light leading-none text-[#27302d] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[#27302d]"
+            className="flex size-11 items-center justify-center text-[20px] font-light leading-none text-[var(--color-accent-strong)] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[var(--color-accent-strong)]"
             onClick={handleZoomIn}
             type="button"
           >
             +
           </button>
-          <span aria-hidden="true" className="mx-auto block h-px w-5 bg-[#27302d]/16" />
+          <span aria-hidden="true" className="mx-auto block h-px w-5 bg-[var(--color-line)]" />
           <button
             aria-label="지도 축소"
-            className="flex size-11 items-center justify-center text-[22px] font-light leading-none text-[#27302d] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[#27302d]"
+            className="flex size-11 items-center justify-center text-[22px] font-light leading-none text-[var(--color-accent-strong)] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[var(--color-accent-strong)]"
             onClick={handleZoomOut}
             type="button"
           >
@@ -355,13 +355,13 @@ export function KakaoMap({
       {status !== "ready" ? (
         <div
           aria-live="polite"
-          className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[#ebe8df] px-8 text-center"
+          className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[var(--color-surface-muted)] px-8 text-center"
         >
-          <p className="text-[12px] leading-6 text-[#65635d]">{statusMessage}</p>
+          <p className="text-[12px] leading-6 text-[var(--color-text-muted)]">{statusMessage}</p>
           {status === "error" && trimmedMapUrl ? (
             <a
               aria-label={`${venueName} 카카오맵에서 위치 보기`}
-              className="inline-flex min-h-10 items-center rounded-full bg-[#191d1b] px-5 text-[11px] font-medium text-white shadow-[0_8px_20px_rgba(30,33,31,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="inline-flex min-h-10 items-center rounded-full bg-[var(--color-button)] px-5 text-[11px] font-medium text-white shadow-[0_8px_20px_rgba(30,33,31,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               href={trimmedMapUrl}
               rel="noreferrer"
               target="_blank"

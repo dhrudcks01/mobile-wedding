@@ -23,12 +23,12 @@ export function HeroSection({ wedding }: HeroSectionProps) {
   const heroImage = wedding.images.hero.trim() || "/images/hero.jpg";
 
   return (
-    <section className="film-grain relative min-h-[100svh] overflow-hidden bg-[#080c0b] text-white">
+    <section className="film-grain relative min-h-[100svh] overflow-hidden bg-[var(--color-dark)] text-white">
       <ImageWithFallback
         alt={`${groomName}과 ${brideName} 웨딩 대표 이미지`}
         className="movie-hero-image object-cover object-[center_44%]"
         fill
-        fallbackClassName="bg-[#080c0b] text-white/70"
+        fallbackClassName="bg-[var(--color-dark)] text-white/70"
         fallbackDescription="대표 사진을 public/images/hero.jpg로 넣으면 자동으로 표시됩니다."
         fallbackTitle="대표 사진 준비 중"
         priority

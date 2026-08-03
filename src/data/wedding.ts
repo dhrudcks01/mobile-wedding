@@ -73,24 +73,27 @@ export const wedding: Wedding = {
     // Invitation 위 포스터에 사용할 세로 사진입니다.
     // 비어 있으면 hero 사진을 대신 사용합니다.
     poster: "/images/000021560006.jpg",
+    // Cast 섹션에 표시할 신랑·신부 개별 사진입니다.
+    // 지금은 갤러리 사진을 임시로 넣어 두었으니 각자 사진으로 교체하세요.
+    // 비워 두면 해당 인물의 사진 영역이 표시되지 않습니다.
+    groom: "/images/fix1.jpg",
+    bride: "/images/fix11.jpg",
     // Invitation 섹션의 움직이는 필름에만 사용할 사진입니다.
     // public/images에 사진을 넣고 원하는 순서대로 경로를 작성하세요.
     // 배열이 비어 있으면 아래 gallery 사진을 대신 사용합니다.
     film: [
-      "/images/DSCF7172.JPG",
-      "/images/YSH04570.JPG",
-      "/images/YSH04570.JPG",
-      "/images/DSCF7236.JPG",
-      "/images/YSH03534.JPG",
-      "/images/YSH03534.JPG",
+      "/images/fix8.jpg",
+      "/images/fix5.jpg",
+      "/images/fix9.jpg",
+      "/images/fix7.jpg",
+      "/images/fix3.jpg",
+      "/images/fix10.jpg",
     ],
     // Share 섹션 위 엔딩 필름에 순서대로 재생할 사진입니다. 최대 4장을 사용합니다.
     // 빈 배열로 두면 gallery 사진을 대신 사용합니다.
     ending: [
       "/images/DSCF7212.JPG",
       "/images/YSH04202.JPG",
-      "/images/YSH01676.JPG",
-      "/images/000021560006.jpg",
     ],
     // public/images에 사진을 넣고 아래 배열에 경로를 추가하면 갤러리에 표시됩니다.
     // 배열이 비어 있으면 Gallery 섹션이 표시되지 않습니다.

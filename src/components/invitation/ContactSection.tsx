@@ -31,14 +31,14 @@ function ContactActions({ label, name, phone }: ContactPerson) {
       <div className="flex shrink-0 gap-2">
         <a
           aria-label={`${name}에게 전화하기`}
-          className="inline-flex size-11 items-center justify-center rounded-full bg-[#303432] text-[11px] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#303432]"
+          className="inline-flex size-11 items-center justify-center rounded-full bg-[var(--color-button)] text-[11px] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-strong)]"
           href={`tel:${phoneNumber}`}
         >
           전화
         </a>
         <a
           aria-label={`${name}에게 문자 보내기`}
-          className="inline-flex size-11 items-center justify-center rounded-full border border-[var(--section-line)] bg-white/35 text-[11px] text-[var(--section-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#303432]"
+          className="inline-flex size-11 items-center justify-center rounded-full border border-[var(--section-line)] bg-white/35 text-[11px] text-[var(--section-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-strong)]"
           href={`sms:${phoneNumber}`}
         >
           문자

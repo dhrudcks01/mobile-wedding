@@ -207,7 +207,10 @@ export function ShareSection({
               <p className="font-title-en text-[9px] tracking-[0.32em] text-white/42">
                 A WEDDING FILM
               </p>
-              <h2 className="font-title-en mt-5 text-[1.65rem] font-semibold uppercase tracking-[0.08em] text-white">
+              <h2
+                className="font-heading mt-4 text-white"
+                style={{ fontSize: "44px", lineHeight: 1.3 }}
+              >
                 Cast &amp; Crew
               </h2>
               <p className="font-title-en mt-5 text-[10px] tracking-[0.08em] text-white/42">
@@ -299,7 +302,7 @@ export function ShareSection({
         </p>
         <div className="mt-7 grid gap-3">
           <CopyButton
-            className="w-full !border-white !bg-white !text-[#111514] hover:!bg-white/90"
+            className="w-full !border-white !bg-white !text-[var(--color-dark)] hover:!bg-white/90"
             onFeedback={setFeedback}
             size="md"
             successMessage="청첩장 링크를 복사했습니다."

@@ -51,12 +51,12 @@ export function PosterSection({ wedding }: PosterSectionProps) {
             />
           </div>
 
-          <div className="absolute left-[11.2%] top-[17.2%] z-10 h-[74.9%] w-[77.5%] overflow-hidden bg-[#111514] text-white">
+          <div className="absolute left-[11.2%] top-[17.2%] z-10 h-[74.9%] w-[77.5%] overflow-hidden bg-[var(--color-dark-soft)] text-white">
             <ImageWithFallback
               alt={`${groomName}과 ${brideName} 웨딩 포스터`}
               className="object-cover object-center"
               fill
-              fallbackClassName="bg-[#111514] text-white/65"
+              fallbackClassName="bg-[var(--color-dark-soft)] text-white/65"
               fallbackDescription="wedding.ts의 images.poster 경로를 확인해 주세요."
               fallbackTitle="Wedding Poster"
               loading="lazy"

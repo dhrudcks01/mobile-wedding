@@ -21,12 +21,12 @@ function FilmReel({ images, reverse = false }: FilmReelProps) {
       >
         {reelImages.map((image, index) => (
           <div className="film-reel-frame" key={`${image}-${index}`}>
-            <div className="relative aspect-[16/10] overflow-hidden bg-[#191c1b]">
+            <div className="relative aspect-[16/10] overflow-hidden bg-[var(--color-dark-raised)]">
               <ImageWithFallback
                 alt=""
                 className="object-cover grayscale-[8%]"
                 fill
-                fallbackClassName="bg-[#191c1b] text-white/60"
+                fallbackClassName="bg-[var(--color-dark-raised)] text-white/60"
                 fallbackDescription=""
                 fallbackTitle="Wedding Film"
                 loading="lazy"
@@ -65,7 +65,7 @@ export function GreetingSection({ wedding }: GreetingSectionProps) {
 
   return (
     <Section
-      className="movie-paper overflow-hidden px-6 pb-10 pt-6"
+      className="movie-paper overflow-hidden px-6 pb-28 pt-24"
       description="우리의 가장 빛나는 장면에 소중한 분들을 초대합니다."
       eyebrow="Opening"
       title="Invitation"

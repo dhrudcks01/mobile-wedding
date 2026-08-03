@@ -15,7 +15,7 @@ export type ButtonProps = ButtonBaseProps &
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "border-transparent bg-[#242726] text-white shadow-sm hover:bg-[#3b3f3d]",
+    "border-transparent bg-[var(--color-button)] text-white shadow-sm hover:bg-[var(--color-button-hover)]",
   secondary:
     "border-[var(--color-line)] bg-white/35 text-[var(--color-text)] hover:bg-white/60",
   ghost:

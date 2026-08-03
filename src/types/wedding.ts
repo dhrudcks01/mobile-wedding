@@ -41,6 +41,8 @@ export type WeddingEvent = {
 export type WeddingImages = {
   hero: string;
   poster: string;
+  groom: string;
+  bride: string;
   film: string[];
   ending: string[];
   gallery: string[];

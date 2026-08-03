@@ -86,7 +86,7 @@ export function IntroScreen({ wedding }: IntroScreenProps) {
   return (
     <div
       className={[
-        "intro-motion film-grain fixed inset-0 z-[100] flex items-center justify-center bg-black opacity-100",
+        "intro-motion fixed inset-0 z-[100] flex items-center justify-center opacity-100",
         phase === "leaving"
           ? "animate-[intro-fade-out_500ms_ease-in_forwards]"
           : "",
@@ -95,15 +95,18 @@ export function IntroScreen({ wedding }: IntroScreenProps) {
       aria-live="polite"
       aria-label="청첩장 인트로"
     >
-      <div className="relative h-[100svh] w-full overflow-hidden bg-[#080c0b] text-center">
+      {/* 대표 사진이 가로(1.5:1)라 본문과 같은 430px로 묶으면 좌우가 크게 잘립니다.
+          데스크톱에서만 600px까지 넓혀 잘림을 줄이되, 화면 전체로는 퍼지지 않게 합니다.
+          모바일은 뷰포트가 이보다 좁아 w-full로 동작하므로 영향이 없습니다. */}
+      <div className="film-grain relative h-[100svh] w-full max-w-[600px] overflow-hidden bg-[var(--color-dark)] text-center shadow-[0_0_90px_rgba(0,0,0,0.55)]">
         <ImageWithFallback
           src={introImage}
           alt={`${coupleNames} 웨딩 대표 이미지`}
           fill
           priority
-          sizes="100vw"
+          sizes="(max-width: 600px) 100vw, 600px"
           className="intro-image-motion object-cover object-[center_44%] sm:object-[center_18%]"
-          fallbackClassName="bg-[#080c0b] text-white/70"
+          fallbackClassName="bg-[var(--color-dark)] text-white/70"
           fallbackTitle="대표 사진 준비 중"
           fallbackDescription="대표 사진을 public/images/hero.jpg로 넣으면 자동으로 표시됩니다."
         />
