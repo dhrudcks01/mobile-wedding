@@ -56,8 +56,11 @@ export function PhotoBoothSection({ wedding }: PhotoBoothSectionProps) {
   const displayDate = formatDotDate(weddingDate);
   const displayTime = formatWeekdayTime(wedding.event.dateTime, weddingDate);
 
+  // 프레임 비율은 aspect-[9/16] 하나로만 정합니다. max-height를 같이 걸면 폭은 그대로인 채
+  // 높이만 잘려서 실제 비율이 뷰포트 높이에 따라 달라집니다.
+  // container-type은 내부 글자 크기를 뷰포트가 아닌 이 섹션 폭(cqw) 기준으로 잡기 위한 것입니다.
   return (
-    <section className="film-grain relative aspect-[9/16] max-h-[88svh] overflow-hidden bg-[var(--color-dark)] text-white">
+    <section className="film-grain relative aspect-[9/16] w-full overflow-hidden bg-[var(--color-dark)] text-white [container-type:inline-size]">
       <ImageWithFallback
         alt={`${groomName}과 ${brideName} 웨딩 사진`}
         className="object-cover object-center"
@@ -87,10 +90,12 @@ export function PhotoBoothSection({ wedding }: PhotoBoothSectionProps) {
         <div className="my-auto text-center">
           <h2
             className="font-display"
-            // 폰트 실측 폭이 5.879em이라 60px 고정이면 뷰포트 409px 미만에서 줄바꿈됩니다.
+            // 폰트 실측 폭이 5.879em이라 60px 고정이면 섹션 폭 409px 미만에서 줄바꿈됩니다.
             // 좌우 패딩 56px을 뺀 가용 폭의 94%에 맞춰 따라 줄어들게 합니다.
+            // 기준은 vw가 아니라 cqw(섹션 폭)입니다. vw는 스크롤바 폭을 포함하고
+            // max-w-[430px]로 잘린 실제 섹션 폭과도 어긋나서 경계 부근에서 줄바꿈이 났습니다.
             style={{
-              fontSize: "min(60px, calc(16vw - 9px))",
+              fontSize: "min(60px, calc(16cqw - 9px))",
               lineHeight: 1.25,
             }}
           >
