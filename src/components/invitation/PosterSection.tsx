@@ -20,7 +20,7 @@ export function PosterSection({ wedding }: PosterSectionProps) {
     .join(" ");
 
   return (
-    <section className="movie-paper-muted overflow-hidden px-6 py-24">
+    <section className="movie-paper overflow-hidden px-6 py-24">
       <div
         className="mx-auto max-w-sm"
         data-reveal="fade-up"

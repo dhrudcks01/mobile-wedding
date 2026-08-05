@@ -7,6 +7,7 @@ import { Button } from "@/components/common/Button";
 import { CopyButton } from "@/components/common/CopyButton";
 import { Section } from "@/components/common/Section";
 import { Toast } from "@/components/common/Toast";
+import { TornEdge } from "@/components/common/TornEdge";
 import {
   EndingFilm,
   getEndingFilmPlaySeconds,
@@ -197,9 +198,14 @@ export function ShareSection({
 
   return (
     <Section
-      className="movie-dark min-h-[100svh] !px-0 !pb-16 pt-8"
+      // pt는 TornEdge 높이(64px)보다 커야 합니다. 그보다 작으면 찢긴 종이가
+      // 엔딩 필름 위쪽을 덮습니다.
+      className="movie-dark min-h-[100svh] !px-0 !pb-16 pt-20"
       style={endingSectionStyle}
     >
+      {/* 위쪽 밝은 섹션에서 이 어두운 엔딩으로 넘어오는 경계입니다. */}
+      <TornEdge flip id="share" />
+
       <EndingFilm images={endingImages} />
 
       {/* 별도의 data-reveal을 두지 않습니다. 크레딧이 스크롤로 노출되기를 기다리면
@@ -215,12 +221,7 @@ export function ShareSection({
               <p className="font-title-en text-[9px] tracking-[0.32em] text-white/42">
                 A WEDDING FILM
               </p>
-              <h2
-                className="font-heading mt-4 text-white"
-                style={{ fontSize: "44px", lineHeight: 1.3 }}
-              >
-                Cast &amp; Crew
-              </h2>
+              <h2 className="section-title mt-4 text-white">Cast &amp; Crew</h2>
               <p className="font-title-en mt-5 text-[10px] tracking-[0.08em] text-white/42">
                 {wedding.intro.groom.name} &amp; {wedding.intro.bride.name}
               </p>

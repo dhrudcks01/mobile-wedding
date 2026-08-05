@@ -117,6 +117,14 @@ textarea {
   font-family: var(--font-heading);
 }
 
+/* 섹션 제목. 필기체는 x-height가 낮아 같은 px에서도 작아 보이므로,
+   레퍼런스의 산세리프 20px과 같은 시각 크기가 되도록 32px로 잡았습니다. */
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  line-height: 1.3;
+}
+
 .invitation-page {
   isolation: isolate;
 }
@@ -125,22 +133,18 @@ textarea {
   position: relative;
 }
 
+/* 밝은 섹션은 이 한 톤만 씁니다. 두 톤을 번갈아 쓰면 대비가 1.1:1 남짓이라
+   '다른 섹션'이 아니라 인쇄 얼룩으로 읽힙니다. 톤 차이는 배경이 아니라
+   카드·필름 스트립 같은 요소로 만듭니다.
+
+   그라디언트를 두지 않는 이유: 섹션마다 다시 그려지기 때문에 같은 빛 번짐이
+   섹션 수만큼 반복돼 '이어진 종이 한 장'이 아니라 '같은 무늬 종이 여러 장'이
+   됩니다. TornEdge의 종이 색과도 정확히 맞아야 경계가 이어져 보입니다. */
 .movie-paper {
   --section-text: var(--color-text);
   --section-muted: var(--color-text-muted);
   --section-line: var(--color-line);
-  background:
-    radial-gradient(circle at 20% 20%, rgba(255, 252, 244, 0.42), transparent 34%),
-    var(--color-surface);
-}
-
-.movie-paper-muted {
-  --section-text: var(--color-text);
-  --section-muted: var(--color-text-muted);
-  --section-line: var(--color-line);
-  background:
-    linear-gradient(180deg, rgba(255, 252, 244, 0.26), transparent 26%),
-    var(--color-surface-muted);
+  background: var(--color-surface);
 }
 
 .movie-dark {
@@ -151,6 +155,31 @@ textarea {
     radial-gradient(circle at 50% -10%, rgba(120, 114, 100, 0.24), transparent 34%),
     var(--color-dark);
   color: var(--section-text);
+}
+
+/* 어두운 섹션과 밝은 섹션의 경계. 레퍼런스의 pattern01.png와 같은 역할을
+   SVG로 만든 것이라, 이미지에 색이 구워지지 않고 팔레트를 따라갑니다.
+   어두운 섹션 안에 두면 투명한 쪽으로 그 섹션 배경이 그대로 비칩니다. */
+.torn-edge {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 64px;
+  pointer-events: none;
+}
+
+.torn-edge-flip {
+  top: 0;
+  bottom: auto;
+  transform: scaleY(-1);
+}
+
+.torn-edge-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .film-grain::after {

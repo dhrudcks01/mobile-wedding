@@ -73,7 +73,7 @@ export function GallerySection({ wedding }: GallerySectionProps) {
 
   return (
     <Section
-      className="movie-paper-muted overflow-hidden px-6 pb-28 pt-24"
+      className="movie-paper overflow-hidden px-6 pb-28 pt-24"
       description="좌우로 넘기거나 사진을 눌러 크게 감상해 주세요."
       eyebrow="Scenes"
       title="Gallery"

@@ -37,15 +37,12 @@ export function Section({
         {eyebrow || title || description ? (
           <div data-reveal="fade-up" data-reveal-duration="1100">
             {eyebrow ? (
-              <span className="font-title-en inline-flex min-h-7 items-center justify-center rounded-[50%] border border-[var(--section-line,var(--color-line))] px-3 text-[10px] italic tracking-[0.08em] text-[var(--section-muted,var(--color-text-muted))]">
+              <span className="font-title-en inline-flex min-h-7 items-center justify-center rounded-full border border-[var(--section-line,var(--color-line))] px-3 text-[10px] italic tracking-[0.08em] text-[var(--section-muted,var(--color-text-muted))]">
                 {eyebrow}
               </span>
             ) : null}
             {title ? (
-              <h2
-                className="font-heading mt-3 text-[var(--section-text,var(--color-text))]"
-                style={{ fontSize: "44px", lineHeight: 1.3 }}
-              >
+              <h2 className="section-title mt-3 text-[var(--section-text,var(--color-text))]">
                 {title}
               </h2>
             ) : null}

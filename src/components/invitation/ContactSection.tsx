@@ -68,7 +68,7 @@ export function ContactSection({ wedding }: ContactSectionProps) {
 
   return (
     <Section
-      className="movie-paper-muted pb-28 pt-24"
+      className="movie-paper pb-28 pt-24"
       description="축하와 문의가 필요할 때 연락해 주세요."
       eyebrow="Call Sheet"
       title="Contact"

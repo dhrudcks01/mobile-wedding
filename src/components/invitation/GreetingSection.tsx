@@ -1,5 +1,6 @@
 import { ImageWithFallback } from "@/components/common/ImageWithFallback";
 import { Section } from "@/components/common/Section";
+import { TornEdge } from "@/components/common/TornEdge";
 import type { Wedding } from "@/types/wedding";
 
 type GreetingSectionProps = {
@@ -65,7 +66,7 @@ export function GreetingSection({ wedding }: GreetingSectionProps) {
 
   return (
     <Section
-      className="movie-paper overflow-hidden px-6 pb-28 pt-24"
+      className="movie-dark overflow-hidden px-6 pb-28 pt-24"
       description="우리의 가장 빛나는 장면에 소중한 분들을 초대합니다."
       eyebrow="Opening"
       title="Invitation"
@@ -103,6 +104,9 @@ export function GreetingSection({ wedding }: GreetingSectionProps) {
           />
         </div>
       </div>
+
+      {/* 어두운 이 섹션이 아래 밝은 섹션과 직선으로 만나지 않게 합니다. */}
+      <TornEdge id="greeting" />
     </Section>
   );
 }

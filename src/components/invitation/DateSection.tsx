@@ -114,13 +114,13 @@ function CountdownClock({ dateTime }: { dateTime: string }) {
     >
       {values.map((item) => (
         <div
-          className="bg-[var(--color-calendar)] px-1 py-4 text-center"
+          className="bg-[var(--color-accent-strong)] px-1 py-4 text-center"
           key={item.label}
         >
-          <strong className="font-title-en block text-[1.55rem] font-normal leading-none text-[var(--color-text)]">
+          <strong className="font-title-en block text-[1.55rem] font-normal leading-none text-[var(--color-on-dark)]">
             {item.value === undefined ? "--" : String(item.value).padStart(2, "0")}
           </strong>
-          <span className="font-title-en mt-2 block text-[9px] uppercase tracking-[0.14em] text-[var(--section-muted)]">
+          <span className="font-title-en mt-2 block text-[9px] uppercase tracking-[0.14em] text-[var(--color-on-dark-muted)]">
             {item.label}
           </span>
         </div>
@@ -164,7 +164,7 @@ export function DateSection({ wedding }: DateSectionProps) {
 
   return (
     <Section
-      className="movie-paper-muted pb-28 pt-24"
+      className="movie-paper pb-28 pt-24"
       eyebrow="When"
       title="Our Day"
     >
@@ -172,7 +172,10 @@ export function DateSection({ wedding }: DateSectionProps) {
       <CountdownSentence wedding={wedding} />
 
       <article
-        className="relative mt-14 overflow-hidden bg-[var(--color-calendar)] px-7 pb-14 pt-11 text-center"
+        // 카드 배경(#e0d9c6)과 섹션 배경(#f1eee7)의 대비는 1.2:1뿐이라
+        // 색만으로는 경계가 잡히지 않습니다. 종이 질감은 그대로 두고
+        // 테두리와 그림자로 '얹힌 카드'라는 걸 만듭니다.
+        className="relative mt-14 overflow-hidden border border-[var(--color-line)] bg-[var(--color-calendar)] px-7 pb-14 pt-11 text-center shadow-[0_14px_36px_rgba(65,55,50,0.12)]"
         data-reveal="fade-up"
         data-reveal-duration="1300"
       >
