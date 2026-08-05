@@ -23,9 +23,9 @@ export default function Home() {
   return (
     <main className="invitation-page mx-auto min-h-screen w-full max-w-[430px] overflow-hidden bg-[var(--color-dark)] shadow-[0_0_90px_rgba(0,0,0,0.55)]">
       <ScrollRevealController />
-      {/*<IntroScreen wedding={wedding} />*/}
+      <IntroScreen wedding={wedding} />
       {/* <HeroSection wedding={wedding} /> */}
-      <PhotoBoothSection wedding={wedding} />
+      {/*<PhotoBoothSection wedding={wedding} />*/}
       <GreetingSection wedding={wedding} />
         <PosterSection wedding={wedding} />
       <DateSection wedding={wedding} />

@@ -151,10 +151,26 @@ textarea {
   --section-text: var(--color-on-dark);
   --section-muted: var(--color-on-dark-muted);
   --section-line: var(--color-line-dark);
+  /* 기본은 레이어 없음. 위 섹션과 색을 이어야 할 때만 아래 클래스로 채웁니다. */
+  --section-top-blend: linear-gradient(transparent, transparent);
   background:
+    var(--section-top-blend),
     radial-gradient(circle at 50% -10%, rgba(120, 114, 100, 0.24), transparent 34%),
     var(--color-dark);
   color: var(--section-text);
+}
+
+/* 상단 글로우는 섹션 맨 윗줄에서 이미 밝기가 최대라, 앞 섹션이 같은 어두운
+   색으로 끝나도 경계에 밝은 띠 한 줄이 생깁니다. 위 168px 동안 섹션 바닥색을
+   덮어 글로우가 서서히 올라오게 만듭니다. TornEdge로 잘린 경계가 아니라
+   두 어두운 면이 직접 맞닿는 곳에만 씁니다. */
+.movie-dark-blend-top {
+  --section-top-blend: linear-gradient(
+    180deg,
+    var(--color-dark) 0,
+    rgba(12, 12, 11, 0.62) 64px,
+    transparent 168px
+  );
 }
 
 /* 어두운 섹션과 밝은 섹션의 경계. 레퍼런스의 pattern01.png와 같은 역할을
@@ -661,38 +677,39 @@ textarea {
 
 
 
-@keyframes intro-fade-in {
+/* 인트로 사진을 가운데 원에서 열어 둥근 프레임을 드러내는 아이리스입니다.
+
+   inset()이 아니라 circle()을 쓰는 이유: inset()은 상하 여백과 좌우 여백이 같은
+   속도로 줄어드는데, 세로로 긴 프레임에서는 줄여야 할 양이 상하가 훨씬 큽니다.
+   그래서 중간에 원이 아니라 세로로 눌린 모서리 사각형을 지납니다.
+   circle()은 반지름 하나만 커지므로 끝까지 정확히 원입니다.
+
+   최종 둥근 모서리는 이 애니메이션이 아니라 요소 자신의 border-radius +
+   overflow:hidden이 만듭니다. 원이 프레임을 다 덮으면 그 모양만 남습니다.
+
+   퍼센트 반지름의 기준은 sqrt(w²+h²)/sqrt(2)라, 프레임을 완전히 덮는 값은
+   비율과 무관하게 항상 70.71%입니다. 78%면 어떤 화면 높이에서도 덮습니다. */
+@keyframes intro-iris-open {
+  from {
+    clip-path: circle(15% at 50% 50%);
+  }
+
+  to {
+    clip-path: circle(78% at 50% 50%);
+  }
+}
+
+@keyframes intro-copy-in {
   from {
     opacity: 0;
-    transform: scale(1.01);
+    transform: translateY(12px);
   }
 
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: none;
   }
 }
-
-@keyframes intro-fade-out {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes intro-image-reveal {
-  from {
-    transform: scale(1.07);
-  }
-
-  to {
-    transform: scale(1.015);
-  }
-}
-
 
 @keyframes film-reel-scroll {
   from {
@@ -893,20 +910,47 @@ textarea {
   animation: ShowLight 1.5s infinite linear alternate;
 }
 
-.intro-image-motion {
-  animation: intro-image-reveal 3.2s ease-out both;
+/* both를 쓰는 이유: 지연 200ms 동안에도 시작 원이 유지돼야 사진이 사각형으로
+   한 프레임 번쩍이지 않습니다. 모션을 끄면 clip-path가 사라지지만,
+   같은 요소의 border-radius + overflow:hidden이 최종 모양을 그대로 냅니다. */
+.intro-frame {
+  animation: intro-iris-open 1600ms cubic-bezier(0.22, 0.61, 0.36, 1) 200ms both;
 }
 
+/* 반지름은 가로 62%·세로 60%라, 프레임 변 한가운데는 정규화 거리 0.81~0.83으로
+   6~7할쯤 어두워지고, 모서리는 sqrt(0.81² + 0.83²) = 1.16으로 1을 넘어 완전히
+   섹션 바닥색이 됩니다. 그래서 네 모서리가 배경에 녹아 둥글게 읽힙니다. */
+.intro-vignette {
+  background: radial-gradient(
+    ellipse 62% 60% at 50% 50%,
+    rgba(12, 12, 11, 0) 0%,
+    rgba(12, 12, 11, 0) 45%,
+    rgba(12, 12, 11, 0.42) 72%,
+    rgba(12, 12, 11, 0.86) 90%,
+    var(--color-dark) 100%
+  );
+}
 
+/* 문구는 아이리스(200~1800ms)가 끝나기 전에 겹쳐 들어옵니다. 다 열린 뒤에
+   시작하면 사진이 멈춘 채 한 박자 비고, 그게 '안 이어지는' 느낌의 원인입니다.
+   원이 위아래 끝에 거의 닿는 시점부터 위·아래 문구를 200ms 차이로 올려서
+   원이 열리는 흐름을 그대로 물려받게 합니다. 이징도 아이리스와 같습니다. */
+.intro-copy-top {
+  animation: intro-copy-in 1000ms cubic-bezier(0.22, 0.61, 0.36, 1) 1250ms both;
+}
 
+.intro-copy-bottom {
+  animation: intro-copy-in 1000ms cubic-bezier(0.22, 0.61, 0.36, 1) 1450ms both;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  .intro-motion,
-  .intro-image-motion,
+  .intro-frame,
+  .intro-copy-top,
+  .intro-copy-bottom,
   .cinema-rise,
   .ending-film-copy,
   .ending-film-frame,

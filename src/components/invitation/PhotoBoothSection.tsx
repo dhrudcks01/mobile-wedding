@@ -73,7 +73,10 @@ export function PhotoBoothSection({ wedding }: PhotoBoothSectionProps) {
         src={backgroundImage}
       />
 
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,7,6,0.62)_0%,rgba(4,7,6,0.12)_32%,rgba(4,7,6,0.18)_56%,rgba(4,7,6,0.86)_100%)]" />
+      {/* 마지막 스톱은 반투명이 아니라 var(--color-dark)입니다. 반투명으로 끝내면
+          바닥 색이 사진에 따라 달라져서, 같은 색으로 시작하는 다음 섹션과
+          경계에 미세한 색 단차가 생깁니다. */}
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,7,6,0.62)_0%,rgba(4,7,6,0.12)_32%,rgba(4,7,6,0.18)_56%,rgba(12,12,11,0.88)_86%,var(--color-dark)_100%)]" />
       <div className="absolute inset-0 shadow-[inset_0_0_92px_18px_rgba(0,0,0,0.42)]" />
 
       <div

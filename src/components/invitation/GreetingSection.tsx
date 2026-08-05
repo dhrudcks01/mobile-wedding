@@ -66,7 +66,9 @@ export function GreetingSection({ wedding }: GreetingSectionProps) {
 
   return (
     <Section
-      className="movie-dark overflow-hidden px-6 pb-28 pt-24"
+      // 바로 위 포토부스 섹션이 같은 var(--color-dark)로 끝나므로,
+      // 상단 글로우만 서서히 올라오게 해서 경계가 보이지 않게 합니다.
+      className="movie-dark movie-dark-blend-top overflow-hidden px-6 pb-28 pt-24"
       description="우리의 가장 빛나는 장면에 소중한 분들을 초대합니다."
       eyebrow="Opening"
       title="Invitation"
