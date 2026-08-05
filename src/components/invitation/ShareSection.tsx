@@ -1,12 +1,16 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/common/Button";
 import { CopyButton } from "@/components/common/CopyButton";
 import { Section } from "@/components/common/Section";
 import { Toast } from "@/components/common/Toast";
-import { EndingFilm } from "@/components/invitation/EndingFilm";
+import {
+  EndingFilm,
+  getEndingFilmPlaySeconds,
+} from "@/components/invitation/EndingFilm";
 import {
   canUseWebShare,
   copyTextToClipboard,
@@ -94,6 +98,10 @@ export function ShareSection({
   const endingImages = wedding.images.ending.length
     ? wedding.images.ending
     : wedding.images.gallery;
+  // 엔딩 필름의 마지막 사진이 자리를 잡는 시점에 크레딧이 올라오도록 맞춥니다.
+  const endingSectionStyle = {
+    "--credits-start-delay": `${getEndingFilmPlaySeconds(endingImages)}s`,
+  } as CSSProperties;
   const venue = [wedding.event.venueName, wedding.event.hallName]
     .map((value) => value.trim())
     .filter(Boolean)
@@ -188,15 +196,15 @@ export function ShareSection({
   };
 
   return (
-    <Section className="movie-dark min-h-[100svh] !px-0 !pb-16 pt-8">
+    <Section
+      className="movie-dark min-h-[100svh] !px-0 !pb-16 pt-8"
+      style={endingSectionStyle}
+    >
       <EndingFilm images={endingImages} />
 
-      <div
-        className="ending-credits px-6"
-        data-reveal="fade"
-        data-reveal-duration="900"
-        data-reveal-threshold="0.18"
-      >
+      {/* 별도의 data-reveal을 두지 않습니다. 크레딧이 스크롤로 노출되기를 기다리면
+          필름 재생이 끝난 뒤 한참 있다가 시작합니다. 등장 연출은 롤 애니메이션이 맡습니다. */}
+      <div className="ending-credits px-6">
         <div
           aria-label="웨딩 영화 엔딩 크레딧"
           className="ending-credits-window"

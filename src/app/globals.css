@@ -425,26 +425,34 @@ textarea {
 }
 
 .ending-credits {
+  --credits-window-height: clamp(390px, 52svh, 460px);
   position: relative;
   margin-top: 2rem;
 }
 
 .ending-credits-window {
   position: relative;
-  height: clamp(390px, 52svh, 460px);
+  height: var(--credits-window-height);
   overflow: hidden;
 }
 
 .ending-credits-roll {
   position: relative;
   z-index: 1;
-  padding-block: 110px 180px;
-  transform: translate3d(0, 42%, 0);
+  padding-block: 24px 180px;
+  /* 시작 위치는 롤 자기 높이(%)가 아니라 창 높이 기준입니다.
+     %로 잡으면 크레딧 내용이 길수록 창 밖에서 대기하는 시간이 같이 길어져
+     한참 동안 빈 화면만 보이게 됩니다. */
+  transform: translate3d(0, var(--credits-window-height), 0);
   will-change: transform;
 }
 
-.ending-credits.is-revealed .ending-credits-roll {
-  animation: ending-credits-roll 28s linear 250ms forwards;
+/* 크레딧은 엔딩 필름과 같은 시계를 씁니다. 필름이 화면에 들어와 재생을 시작하면
+   마지막 사진이 자리를 잡는 시점(--credits-start-delay)에 맞춰 크레딧이 올라옵니다.
+   크레딧 자신의 스크롤 진입을 기다리면 필름이 끝난 한참 뒤에야 시작됩니다. */
+.ending-film.is-revealed ~ .ending-credits .ending-credits-roll {
+  animation: ending-credits-roll 24s linear var(--credits-start-delay, 2.65s)
+    forwards;
 }
 
 .ending-credits-shade {
@@ -796,11 +804,12 @@ textarea {
 
 @keyframes ending-credits-roll {
   from {
-    transform: translate3d(0, 42%, 0);
+    transform: translate3d(0, var(--credits-window-height), 0);
   }
 
+  /* 롤 아래쪽이 창 바닥에 맞춰 멈춥니다. 내용 길이와 무관하게 THE END가 창 안에 남습니다. */
   to {
-    transform: translate3d(0, -68%, 0);
+    transform: translate3d(0, calc(-100% + var(--credits-window-height)), 0);
   }
 }
 

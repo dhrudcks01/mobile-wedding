@@ -16,12 +16,30 @@ type EndingFrameStyle = CSSProperties & {
 
 const MAX_ENDING_FRAMES = 4;
 const FRAME_STAGGER_SECONDS = 1.2;
+/** globals.css의 ending-frame-settle 재생 시간과 같아야 합니다. */
+const FRAME_SETTLE_SECONDS = 1.45;
 
-export function EndingFilm({ images }: EndingFilmProps) {
-  const frames = images
+function toFrames(images: string[]) {
+  return images
     .map((image) => image.trim())
     .filter(Boolean)
     .slice(0, MAX_ENDING_FRAMES);
+}
+
+/**
+ * 마지막 사진이 자리를 잡기까지 걸리는 시간(초)입니다.
+ * ShareSection이 이 값을 엔딩 크레딧 시작 시점으로 넘겨서 사진이 끝나면 크레딧이 바로 올라옵니다.
+ */
+export function getEndingFilmPlaySeconds(images: string[]) {
+  const frameCount = toFrames(images).length;
+
+  return frameCount === 0
+    ? 0
+    : (frameCount - 1) * FRAME_STAGGER_SECONDS + FRAME_SETTLE_SECONDS;
+}
+
+export function EndingFilm({ images }: EndingFilmProps) {
+  const frames = toFrames(images);
 
   if (frames.length === 0) {
     return null;
