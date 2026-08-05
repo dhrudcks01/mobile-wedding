@@ -38,6 +38,8 @@
   --font-korean-serif: var(--font-gowun-batang), "Nanum Myeongjo",
     "KoPub Batang", "AppleMyungjo", "Batang", serif;
   --font-title-en: var(--font-playfair-display), "Times New Roman", serif;
+  /* 레퍼런스가 영문에 쓰는 산세리프. 깔끔한 대문자 라벨·이름용입니다. */
+  --font-sans-en: var(--font-montserrat), "Helvetica Neue", Arial, sans-serif;
   --font-script: var(--font-great-vibes), cursive;
   /* display = 히어로 대표 문구(붓터치), heading = 섹션 제목(동판 캘리그라피) */
   --font-display: var(--font-californication), var(--font-great-vibes), cursive;
@@ -103,6 +105,14 @@ textarea {
 .font-title-en,
 .invitation-page .uppercase {
   font-family: var(--font-title-en);
+}
+
+/* 위 .invitation-page .uppercase 규칙이 대문자 요소를 전부 Playfair로 끌고
+   갑니다(특이도 0,2,0). 산세리프를 쓰려는 대문자에도 걸리므로 같은 특이도로
+   한 번 더 적어 이 선언이 이기게 합니다. 순서상 뒤에 있어야 합니다. */
+.font-sans-en,
+.invitation-page .font-sans-en {
+  font-family: var(--font-sans-en);
 }
 
 .font-script {
@@ -935,6 +945,16 @@ textarea {
    시작하면 사진이 멈춘 채 한 박자 비고, 그게 '안 이어지는' 느낌의 원인입니다.
    원이 위아래 끝에 거의 닿는 시점부터 위·아래 문구를 200ms 차이로 올려서
    원이 열리는 흐름을 그대로 물려받게 합니다. 이징도 아이리스와 같습니다. */
+/* 어두운 사진 위 흰 글자는 브라우저 기본 렌더링에서 글자 주변으로 밝은 픽셀이
+   번져 실제 굵기보다 두껍게 나옵니다. 인트로는 흰 글자만 있는 화면이라
+   여기서만 안티에일리어싱을 켜 획을 얇게 잡습니다. Safari·iOS에서 차이가
+   크고 Chrome/Firefox에는 영향이 없습니다. */
+.intro-copy-top,
+.intro-copy-bottom {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .intro-copy-top {
   animation: intro-copy-in 1000ms cubic-bezier(0.22, 0.61, 0.36, 1) 1250ms both;
 }

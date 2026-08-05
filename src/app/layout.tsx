@@ -3,6 +3,7 @@ import {
   Gowun_Batang,
   Gowun_Dodum,
   Great_Vibes,
+  Montserrat,
   Pinyon_Script,
   Playfair_Display,
 } from "next/font/google";
@@ -35,6 +36,16 @@ const playfairDisplay = Playfair_Display({
   variable: "--font-playfair-display",
   display: "swap",
   fallback: ["Times New Roman", "serif"],
+});
+
+// 레퍼런스(repocu 무비 템플릿)가 영문에 쓰는 유일한 폰트입니다.
+// weight를 지정하지 않는 이유: Montserrat은 가변 폰트라 축을 통째로 담은
+// 파일 하나만 받습니다. 굵기를 나열하면 정적 인스턴스가 그 수만큼 받아집니다.
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  display: "swap",
+  fallback: ["Helvetica Neue", "Arial", "sans-serif"],
 });
 
 const greatVibes = Great_Vibes({
@@ -122,6 +133,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         gowunDodum.variable,
         gowunBatang.variable,
         playfairDisplay.variable,
+        montserrat.variable,
         greatVibes.variable,
         pinyonScript.variable,
         californication.variable,

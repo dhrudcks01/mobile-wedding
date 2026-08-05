@@ -1,13 +1,15 @@
-import { Great_Vibes } from "next/font/google";
+import Image from "next/image";
 
 import type { Wedding } from "@/types/wedding";
 import { ImageWithFallback } from "@/components/common/ImageWithFallback";
 
-const introCoupleScriptFont = Great_Vibes({
-  weight: "400",
-  subsets: ["latin"],
-  display: "swap",
-});
+// 폰트는 전부 layout.tsx에서 싣고 CSS 변수로 씁니다. 여기서 next/font를 다시
+// 부르면 같은 폰트가 두 벌 받아집니다(예전에 Great Vibes가 그랬습니다).
+// 이 화면이 쓰는 서체는 .font-sans-en(Montserrat) 하나뿐입니다.
+
+/** 레퍼런스 .img-tit의 표시 크기입니다(원본 466×414의 절반). */
+const TITLE_WIDTH = 233;
+const TITLE_HEIGHT = 207;
 
 type IntroScreenProps = {
   wedding: Wedding;
@@ -87,51 +89,38 @@ export function IntroScreen({ wedding }: IntroScreenProps) {
             className="intro-copy-top flex flex-col items-center text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.48)]"
             aria-hidden="true"
           >
-            <p className="font-title-en text-[2rem] font-normal leading-[0.88] tracking-[0.04em]">
-              THE
-            </p>
-            <p
-              className={`${introCoupleScriptFont.className} -mb-1 mt-1 text-[4.15rem] font-normal leading-[0.9]`}
-              style={introCoupleScriptFont.style}
-            >
-              Grandest
-            </p>
-            <p className="font-title-en text-[2.55rem] font-normal leading-[0.92] tracking-[0.02em]">
-              SHOW
-            </p>
-            <p className="font-title-en mt-1 text-[2.45rem] font-normal leading-[0.92] tracking-[0.02em]">
-              OF OUR
-            </p>
-            <div className="mt-1 flex items-center leading-none">
-              <span className="font-title-en text-[3.5rem] font-normal">&#123;</span>
-              <span
-                className={`${introCoupleScriptFont.className} -mx-1 translate-y-1 text-[4.6rem] font-normal`}
-                style={introCoupleScriptFont.style}
-              >
-                love
-              </span>
-              <span className="font-title-en text-[3.5rem] font-normal">&#125;</span>
-            </div>
+            {/* 레퍼런스는 이 로고를 글자가 아니라 흰색 투명 PNG 한 장으로
+                넣습니다(.img-tit, width 233px). 웹폰트로는 그 필기체를 똑같이
+                낼 수 없어 같은 방식으로 바꿨습니다. 원본이 466×414라 표시
+                크기의 정확히 2배여서 고해상도 화면에서도 선명합니다.
+                max-w-full은 좁은 화면에서 좌우 패딩을 넘지 않게 하는 안전장치라
+                h-auto와 함께 두어야 비율이 유지됩니다. */}
+            <Image
+              alt=""
+              className="h-auto max-w-full"
+              height={TITLE_HEIGHT}
+              priority
+              src="/images/tit-cover.png"
+              width={TITLE_WIDTH}
+            />
           </div>
 
-          <div className="intro-copy-bottom mt-auto flex flex-col items-center text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)]">
-            {/* "Gyeong Chan & Ji Yeon"의 실측 폭은 Great Vibes에서 8.494em입니다.
-                2.4rem이면 326px이 필요한데, 좌우 패딩 48px을 뺀 가용 폭은 뷰포트
-                390px에서 318px뿐이라 두 줄로 접혔습니다. 흔한 폰(360~400px)이
-                전부 여기 걸립니다.
-                그래서 프레임 폭에 비례해 줄어들게 하고 nowrap으로 못 박습니다.
-                9.5cqw인 이유: 한 줄에 들어가는 한계 계수가 가장 좁은 320px에서
-                9.86이라, 커닝 차이를 감안해 4%쯤 여유를 둔 값입니다.
-                이름을 바꿔 더 길어지면 이 계수를 다시 잡아야 합니다. */}
-            <h1
-              // text-[2.4rem]은 cqw를 모르는 브라우저용 대비값입니다. 지원하면
-              // 아래 인라인 fontSize가 이깁니다.
-              className={`${introCoupleScriptFont.className} whitespace-nowrap text-[2.4rem] font-normal leading-none`}
-              style={{
-                ...introCoupleScriptFont.style,
-                fontSize: "min(2.4rem, 9.5cqw)",
-              }}
-            >
+          {/* 그림자를 줄인 이유: 이름이 38px에서 13px로 작아졌는데 번짐 8px에
+              투명도 0.75를 그대로 두면 글자 획보다 후광이 굵어서 실제보다
+              두껍고 뭉개져 보입니다. 작은 글자에 맞춰 낮췄습니다. */}
+          <div className="intro-copy-bottom mt-auto flex flex-col items-center text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)]">
+            {/* 레퍼런스 .tit-name 그대로입니다 — Montserrat 13px 대문자.
+                굵기는 400이 아니라 300입니다. 레퍼런스는 .tit-name에만
+                font-weight를 안 적어 400으로 두지만, 어두운 사진 위 흰 글자는
+                실제보다 두껍게 보여 한 단계 낮췄습니다.
+                Montserrat에서 "GYEONG CHAN & JI YEON"은 12.826em이고 자간
+                0.08em × 21자를 더해 14.51em, 13px이면 189px입니다. 가장 좁은
+                320px 뷰포트의 가용 폭 248px에도 들어가서 크기를 화면 폭에 따라
+                줄일 필요가 없습니다.
+
+                uppercase 클래스를 안 쓰는 이유: globals.css의
+                .invitation-page .uppercase가 Playfair를 물립니다. */}
+            <h1 className="font-sans-en whitespace-nowrap text-[13px] font-light uppercase leading-none tracking-[0.08em]">
               {coupleNames}
             </h1>
             <span className="my-4 h-px w-10 bg-white/65" />
