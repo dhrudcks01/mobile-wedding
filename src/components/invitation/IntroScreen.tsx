@@ -11,6 +11,35 @@ import { ImageWithFallback } from "@/components/common/ImageWithFallback";
 const TITLE_WIDTH = 233;
 const TITLE_HEIGHT = 207;
 
+/*
+ * 인트로 높이를 첫 페인트 전에 픽셀로 못 박습니다.
+ *
+ * 카카오톡 같은 인앱 브라우저는 스크롤로 상단 URL 바를 접었다 펴는데, 그때마다
+ * 뷰포트 높이가 바뀝니다. 원래 이걸 막으라고 있는 단위가 svh("URL 바가 펴진
+ * 상태의 높이"로 고정)인데, 일부 WebView는 svh를 dvh처럼 매번 다시 계산합니다.
+ * 그러면 이 섹션 높이가 스크롤 중에 흔들리고, 안의 사진은 object-cover에
+ * object-position이 %(center 44%)라 높이가 바뀔 때마다 잘리는 위치가 달라져서
+ * 위아래로 튀어 보입니다.
+ *
+ * 그래서 로드 시점의 innerHeight를 한 번 재서 --intro-vh에 넣고, 그 뒤로는
+ * URL 바 여닫힘에 반응하지 않게 합니다. 다시 재는 경우는 두 가지뿐입니다.
+ *   - 가로 폭이 바뀔 때(화면 회전, 데스크톱 창 크기 조절)
+ *   - 높이가 25% 넘게 달라질 때(URL 바는 보통 10% 안팎이라 걸리지 않습니다)
+ *
+ * <script>로 넣는 이유: 클라이언트 컴포넌트의 effect는 하이드레이션 뒤에
+ * 돌아서, svh가 깨진 브라우저에서는 첫 화면이 한 번 튄 뒤에 고쳐집니다.
+ * 동기 인라인 스크립트는 아래 마크업이 그려지기 전에 실행됩니다.
+ */
+const LOCK_INTRO_HEIGHT = `(function(){
+var el=document.documentElement,w=0,h=0;
+function lock(){w=window.innerWidth;h=window.innerHeight;el.style.setProperty('--intro-vh',h+'px');}
+lock();
+addEventListener('resize',function(){
+if(window.innerWidth===w&&Math.abs(window.innerHeight-h)<=h*0.25)return;
+lock();
+},{passive:true});
+})();`;
+
 type IntroScreenProps = {
   wedding: Wedding;
 };
@@ -35,9 +64,11 @@ export function IntroScreen({ wedding }: IntroScreenProps) {
   // 프레임에만 clip-path를 걸어야 여백은 그대로 둔 채 사진만 원에서 열립니다.
   return (
     <section
-      className="relative h-[100svh] w-full overflow-hidden bg-[var(--color-dark)] p-3 text-center"
+      className="relative h-[var(--intro-vh,100svh)] w-full overflow-hidden bg-[var(--color-dark)] p-3 text-center"
       aria-label="청첩장 인트로"
     >
+      {/* 스크립트가 막히거나 실패해도 위 100svh 폴백으로 지금과 같게 동작합니다. */}
+      <script dangerouslySetInnerHTML={{ __html: LOCK_INTRO_HEIGHT }} />
       {/* film-grain은 일부러 빼 두었습니다. 5·7·9px 타일 반복이라 넓고 매끈한
           이 사진 위에서는 입자가 아니라 점 격자로 보입니다. */}
       {/* container-type은 아래 이름 글자 크기를 뷰포트가 아닌 이 프레임 폭(cqw)
