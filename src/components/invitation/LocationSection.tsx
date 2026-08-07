@@ -60,7 +60,7 @@ export function LocationSection({
         data-reveal="fade-up"
         data-reveal-duration="1200"
       >
-        <h3 className="font-korean-serif text-[1.15rem] font-bold leading-7 text-[var(--section-text)]">
+        <h3 className="font-korean text-[1.15rem] font-bold leading-7 text-[var(--section-text)]">
           {venueName}
           {hallName ? <span className="block">{hallName}</span> : null}
         </h3>

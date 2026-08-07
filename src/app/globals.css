@@ -2,6 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Pretendard (SIL Open Font License 1.1)
+ * Copyright (c) 2021 Kil Hyung-jin, https://github.com/orioncactus/pretendard
+ *
+ * Google Fonts에 없어서 next/font/google로 못 받습니다. 레퍼런스와 같이
+ * 굵기별 woff2를 public/fonts에 직접 두고 씁니다. layout에 <link>를 넣는
+ * 방법은 React가 head의 스타일시트를 리소스로 가로채면서 태그가 통째로
+ * 사라지므로, 여기 @font-face로 직접 선언합니다.
+ * local()이 앞에 있어서 기기에 Pretendard가 깔려 있으면 받지 않습니다.
+ */
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    local("Pretendard Regular"),
+    url("/fonts/pretendard/Pretendard-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src:
+    local("Pretendard Medium"),
+    url("/fonts/pretendard/Pretendard-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src:
+    local("Pretendard SemiBold"),
+    url("/fonts/pretendard/Pretendard-SemiBold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src:
+    local("Pretendard Bold"),
+    url("/fonts/pretendard/Pretendard-Bold.woff2") format("woff2");
+}
+
 :root {
   color-scheme: light;
   /* 팔레트: 필름 블랙 + 본 화이트 + 앤틱 골드.
@@ -33,9 +83,13 @@
   --color-button-hover: #33302b;
   /* 달력 일요일 */
   --color-sunday: #834e36;
-  --font-invitation: var(--font-gowun-dodum), "Apple SD Gothic Neo",
-    "Malgun Gothic", sans-serif;
-  --font-korean-serif: var(--font-gowun-batang), "Nanum Myeongjo",
+  /* 한글은 전부 이 하나만 씁니다. 레퍼런스(repocu 무비 템플릿)와 같은 폰트입니다.
+     레퍼런스는 @font-face에서 weight 300에 Regular 파일을 물려놨기 때문에,
+     화면에 실제로 그려지는 건 Light가 아니라 Regular(400)입니다. */
+  --font-korean: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic",
+    sans-serif;
+  /* 크게 쓰는 한글 이름 전용. 본문에는 쓰지 않습니다. */
+  --font-korean-display: var(--font-gowun-batang), "Nanum Myeongjo",
     "KoPub Batang", "AppleMyungjo", "Batang", serif;
   --font-title-en: var(--font-playfair-display), "Times New Roman", serif;
   /* 레퍼런스가 영문에 쓰는 산세리프. 깔끔한 대문자 라벨·이름용입니다. */
@@ -70,7 +124,7 @@ body {
       var(--color-page) 100%
     );
   color: var(--color-text);
-  font-family: var(--font-invitation);
+  font-family: var(--font-korean);
   line-height: 1.6;
   overflow-wrap: break-word;
   text-rendering: optimizeLegibility;
@@ -98,10 +152,6 @@ textarea {
   background: rgba(132, 119, 111, 0.28);
 }
 
-.font-korean-serif {
-  font-family: var(--font-korean-serif);
-}
-
 .font-title-en,
 .invitation-page .uppercase {
   font-family: var(--font-title-en);
@@ -113,6 +163,18 @@ textarea {
 .font-sans-en,
 .invitation-page .font-sans-en {
   font-family: var(--font-sans-en);
+}
+
+/* 한글은 body에서 이미 상속되지만, 영문 폰트를 지정한 부모 안에 한글이 들어갈
+   때 되돌리는 용도로 남겨둡니다. 위 규칙들과 같은 특이도라 뒤에 있어야 합니다. */
+.font-korean,
+.invitation-page .font-korean {
+  font-family: var(--font-korean);
+}
+
+.font-korean-display,
+.invitation-page .font-korean-display {
+  font-family: var(--font-korean-display);
 }
 
 .font-script {
@@ -155,6 +217,20 @@ textarea {
   --section-muted: var(--color-text-muted);
   --section-line: var(--color-line);
   background: var(--color-surface);
+}
+
+/* 아이보리 섹션이 연달아 오면 경계에 색 변화가 없어서, 앞 섹션의 아래 여백과
+   뒤 섹션의 위 여백(112px + 96px = 208px)이 통째로 빈 공간으로 읽힙니다.
+   색이 바뀌는 경계(어두운 섹션과 맞닿는 곳)는 그 여백이 제 역할을 하므로
+   건드리지 않고, 아이보리끼리 만나는 곳만 좁힙니다.
+   .pt-24 같은 Tailwind 유틸리티(특이도 0,1,0)를 이기려면 선택자가 두 개여야
+   합니다. 여기서는 0,2,0이라 순서와 무관하게 이 값이 적용됩니다. */
+.movie-paper:has(+ .movie-paper) {
+  padding-bottom: 3.5rem;
+}
+
+.movie-paper + .movie-paper {
+  padding-top: 3.5rem;
 }
 
 .movie-dark {
@@ -287,12 +363,32 @@ textarea {
   animation-direction: reverse;
 }
 
+/*
+ * 밝게 보정한 원본 사진이 어두운 섹션 위에서 너무 쨍하게 튀는 것을 막습니다.
+ * 톤은 아래 네 값만 조절하면 됩니다.
+ *   saturate   낮출수록 채도 down (1 = 원본)
+ *   brightness 낮출수록 어두워짐
+ *   contrast   1보다 낮추면 하이라이트가 덜 날아감
+ *   --film-reel-dim  프레임 위에 덮는 어두운 오버레이 농도
+ */
 .film-reel-frame {
+  --film-reel-dim: 0.12;
   width: clamp(190px, 56vw, 230px);
   flex: none;
   border-inline: 1px solid rgba(255, 255, 255, 0.14);
   padding: 3px;
   background: var(--color-dark-soft);
+}
+
+.film-reel-image {
+  filter: saturate(0.78) brightness(0.86) contrast(0.94) grayscale(0.08);
+}
+
+.film-reel-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(24, 21, 19, var(--film-reel-dim));
 }
 
 .ending-film {
@@ -597,7 +693,7 @@ textarea {
   display: block;
   overflow: hidden;
   max-width: 188px;
-  font-family: var(--font-gowun-batang), "Nanum Myeongjo", Batang, serif;
+  font-family: var(--font-korean);
   font-size: 13px;
   font-weight: 700;
   line-height: 1.5;

@@ -19,23 +19,10 @@ function getDisplayText(value: string, fallback: string) {
   return value.trim() || fallback;
 }
 
-function formatIntroName(name: string) {
-  return name.trim();
-}
-
-function getCoupleNames(wedding: Wedding) {
-  const groomName = formatIntroName(
-    getDisplayText(wedding.intro.groom.name, "Groom"),
-  );
-  const brideName = formatIntroName(
-    getDisplayText(wedding.intro.bride.name, "Bride"),
-  );
-
-  return `${groomName} & ${brideName}`;
-}
-
 export function IntroScreen({ wedding }: IntroScreenProps) {
-  const coupleNames = getCoupleNames(wedding);
+  const groomName = getDisplayText(wedding.intro.groom.name, "Groom");
+  const brideName = getDisplayText(wedding.intro.bride.name, "Bride");
+  const coupleNames = `${groomName} & ${brideName}`;
   const introMessage = getDisplayText(
     wedding.intro.message,
     "저희의 시작에 초대합니다.",
@@ -109,22 +96,35 @@ export function IntroScreen({ wedding }: IntroScreenProps) {
               투명도 0.75를 그대로 두면 글자 획보다 후광이 굵어서 실제보다
               두껍고 뭉개져 보입니다. 작은 글자에 맞춰 낮췄습니다. */}
           <div className="intro-copy-bottom mt-auto flex flex-col items-center text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)]">
-            {/* 레퍼런스 .tit-name 그대로입니다 — Montserrat 13px 대문자.
-                굵기는 400이 아니라 300입니다. 레퍼런스는 .tit-name에만
-                font-weight를 안 적어 400으로 두지만, 어두운 사진 위 흰 글자는
-                실제보다 두껍게 보여 한 단계 낮췄습니다.
-                Montserrat에서 "GYEONG CHAN & JI YEON"은 12.826em이고 자간
-                0.08em × 21자를 더해 14.51em, 13px이면 189px입니다. 가장 좁은
-                320px 뷰포트의 가용 폭 248px에도 들어가서 크기를 화면 폭에 따라
-                줄일 필요가 없습니다.
-
-                uppercase 클래스를 안 쓰는 이유: globals.css의
-                .invitation-page .uppercase가 Playfair를 물립니다. */}
-            <h1 className="font-sans-en whitespace-nowrap text-[13px] font-light uppercase leading-none tracking-[0.08em]">
-              {coupleNames}
+            {/* 레퍼런스 .content-head 구조입니다 — 한 줄에 "A & B"로 붙이지
+                않고, 신부·신랑을 좌우로 벌린 뒤 각 이름 위에 필기체 라벨을
+                얹습니다. 좌우 순서는 레퍼런스와 반대로 신랑을 왼쪽에 둡니다.
+                레퍼런스는 이 라벨을 투명 PNG(txt_bride.png 49×19)로 넣지만,
+                같은 계열 필기체인 Pinyon Script가 이미 실려 있어 텍스트로
+                냅니다. 이미지보다 선명하고 받을 파일도 늘지 않습니다.
+                이름 자체는 레퍼런스 .tit-name 그대로 Montserrat 13px 대문자.
+                굵기만 400 대신 300인데, 어두운 사진 위 흰 글자가 실제보다
+                두껍게 보여서 한 단계 낮춘 것입니다. */}
+            <h1 className="flex w-full max-w-[280px] items-end justify-between">
+              <span className="flex flex-col items-center">
+                <span className="font-heading text-[15px] leading-none">
+                  Groom
+                </span>
+                <span className="font-sans-en mt-[3px] whitespace-nowrap text-[13px] font-light uppercase leading-none tracking-[0.08em]">
+                  {groomName}
+                </span>
+              </span>
+              <span className="flex flex-col items-center">
+                <span className="font-heading text-[15px] leading-none">
+                  Bride
+                </span>
+                <span className="font-sans-en mt-[3px] whitespace-nowrap text-[13px] font-light uppercase leading-none tracking-[0.08em]">
+                  {brideName}
+                </span>
+              </span>
             </h1>
             <span className="my-4 h-px w-10 bg-white/65" />
-            <p className="font-korean-serif max-w-[285px] whitespace-pre-line text-[0.8rem] leading-6 tracking-[0.08em] text-white/90">
+            <p className="font-korean max-w-[285px] whitespace-pre-line text-[0.8rem] leading-6 tracking-[0.08em] text-white/90">
               {introMessage}
             </p>
           </div>

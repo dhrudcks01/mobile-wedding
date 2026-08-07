@@ -66,7 +66,7 @@ function CastPerson({
         <p className="font-title-en text-[10px] font-semibold tracking-[0.22em] text-[var(--color-accent)]">
           {label}
         </p>
-        <h3 className="font-korean-serif mt-2 text-[1.7rem] font-bold leading-none text-[var(--section-text)]">
+        <h3 className="font-korean-display mt-2 text-[1.7rem] font-bold leading-none text-[var(--section-text)]">
           {name}
         </h3>
         <p className="font-title-en mt-2 text-[0.95rem] font-semibold tracking-[0.05em] text-[var(--color-accent)]">

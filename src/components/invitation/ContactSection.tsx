@@ -24,7 +24,7 @@ function ContactActions({ label, name, phone }: ContactPerson) {
         <p className="font-title-en text-[10px] tracking-[0.12em] text-[var(--section-muted)]">
           {label}
         </p>
-        <p className="font-korean-serif mt-1 text-lg font-bold text-[var(--section-text)]">
+        <p className="font-korean mt-1 text-lg font-bold text-[var(--section-text)]">
           {name}
         </p>
       </div>

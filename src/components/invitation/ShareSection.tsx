@@ -10,7 +10,7 @@ import { Toast } from "@/components/common/Toast";
 import { TornEdge } from "@/components/common/TornEdge";
 import {
   EndingFilm,
-  getEndingFilmPlaySeconds,
+  getEndingCreditsStartSeconds,
 } from "@/components/invitation/EndingFilm";
 import {
   canUseWebShare,
@@ -62,7 +62,7 @@ function CreditRow({
         <p className="mt-1 text-[10px] text-white/38">{koreanLabel}</p>
       </div>
       <div>
-        <p className="font-korean-serif text-[12px] font-bold leading-7 text-white/82">
+        <p className="font-korean text-[12px] font-bold leading-7 text-white/82">
           {koreanName}
         </p>
         {englishName.trim() ? (
@@ -99,9 +99,9 @@ export function ShareSection({
   const endingImages = wedding.images.ending.length
     ? wedding.images.ending
     : wedding.images.gallery;
-  // 엔딩 필름의 마지막 사진이 자리를 잡는 시점에 크레딧이 올라오도록 맞춥니다.
+  // 마지막 사진이 아직 들어오는 중에 크레딧이 먼저 출발하도록 맞춥니다.
   const endingSectionStyle = {
-    "--credits-start-delay": `${getEndingFilmPlaySeconds(endingImages)}s`,
+    "--credits-start-delay": `${getEndingCreditsStartSeconds(endingImages)}s`,
   } as CSSProperties;
   const venue = [wedding.event.venueName, wedding.event.hallName]
     .map((value) => value.trim())
@@ -282,7 +282,7 @@ export function ShareSection({
               <p className="font-title-en text-[10px] tracking-[0.24em] text-white/48">
                 SPECIAL THANKS
               </p>
-              <p className="font-korean-serif mt-7 text-[13px] leading-7 text-white/78">
+              <p className="font-korean mt-7 text-[13px] leading-7 text-white/78">
                 우리의 가족과 친구들,
                 <br />
                 그리고 이 순간을 함께해 주신 모든 분들

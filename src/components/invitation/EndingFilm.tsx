@@ -16,8 +16,12 @@ type EndingFrameStyle = CSSProperties & {
 
 const MAX_ENDING_FRAMES = 4;
 const FRAME_STAGGER_SECONDS = 1.2;
-/** globals.css의 ending-frame-settle 재생 시간과 같아야 합니다. */
-const FRAME_SETTLE_SECONDS = 1.45;
+/**
+ * 마지막 사진이 들어오기 시작한 시점을 기준으로 크레딧을 얼마나 더 당길지(초).
+ * 0이면 마지막 사진이 화면에 들어오는 순간 크레딧이 같이 출발합니다.
+ * 키우면 더 일찍, 음수면 더 늦게 시작합니다.
+ */
+const CREDITS_LEAD_SECONDS = 0.5;
 
 function toFrames(images: string[]) {
   return images
@@ -27,15 +31,24 @@ function toFrames(images: string[]) {
 }
 
 /**
- * 마지막 사진이 자리를 잡기까지 걸리는 시간(초)입니다.
- * ShareSection이 이 값을 엔딩 크레딧 시작 시점으로 넘겨서 사진이 끝나면 크레딧이 바로 올라옵니다.
+ * 엔딩 크레딧이 올라오기 시작할 시점(초)입니다. ShareSection이 이 값을 넘깁니다.
+ *
+ * 예전에는 마지막 사진의 정착 애니메이션(globals.css의 ending-frame-settle,
+ * 1.45s)까지 끝나기를 기다렸는데, 그러면 사진이 완전히 멈춘 뒤에야 글자가
+ * 움직여서 흐름이 한 번 끊깁니다. 지금은 마지막 사진이 들어오기 시작하는
+ * 시점보다 CREDITS_LEAD_SECONDS만큼 앞서 출발해서, 사진이 끝날 무렵에는
+ * 크레딧이 이미 올라오고 있습니다.
  */
-export function getEndingFilmPlaySeconds(images: string[]) {
+export function getEndingCreditsStartSeconds(images: string[]) {
   const frameCount = toFrames(images).length;
 
-  return frameCount === 0
-    ? 0
-    : (frameCount - 1) * FRAME_STAGGER_SECONDS + FRAME_SETTLE_SECONDS;
+  if (frameCount === 0) {
+    return 0;
+  }
+
+  const lastFrameEnters = (frameCount - 1) * FRAME_STAGGER_SECONDS;
+
+  return Math.max(0, lastFrameEnters - CREDITS_LEAD_SECONDS);
 }
 
 export function EndingFilm({ images }: EndingFilmProps) {

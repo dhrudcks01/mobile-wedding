@@ -18,7 +18,7 @@ export const wedding: Wedding = {
     // 배포 후 실제 URL로 교체하세요. 예: "https://wedding.example.com"
     url: "https://ournewday.kr",
     // 공유 미리보기 이미지입니다. public/images/og-image.jpg 파일을 교체하면 됩니다.
-    ogImage: "/images/000021560006.jpg",
+    ogImage: "/images/fix5.jpg",
   },
   intro: {
     // 첫 접속 인트로에 표시할 짧은 문구입니다.
@@ -63,16 +63,21 @@ export const wedding: Wedding = {
       `3,4호선 충무로역 1번 출구뒤 BHC 치킨집 앞 셔틀버스 이용
 셔틀버스는 예식 1시간 전부터 예식 시작 시간까지 운행됩니다.`,
   },
-  greeting: `서로가 마주 보며 다져온 사랑을
-이제 함께 한 곳을 바라보며 걸어가고자 합니다.
-귀한 걸음으로 축복해 주시면
-더없는 기쁨으로 간직하겠습니다.`,
+  greeting: `“사랑이 처음부터 풍덩 빠지는 줄만 알았지,
+이렇게 서서히 물들어 버리는 것인 줄은 몰랐다.”
+
+- 영화 <미술과 옆 동물원> -
+
+천천히 서로에게 스며든 두 사람이
+이제 같은 삶을 함께 걸어가려 합니다.
+
+저희의 시작을 따뜻하게 지켜봐 주세요.`,
   images: {
     // 대표 이미지 경로입니다. public/images/hero.jpg 파일을 교체하면 메인 이미지가 바뀝니다.
     hero: "/images/DSCF7280.JPG",
     // Invitation 위 포스터에 사용할 세로 사진입니다.
     // 비어 있으면 hero 사진을 대신 사용합니다.
-    poster: "/images/000021560006.jpg",
+    poster: "/images/lafix13.jpg",
     // Cast 섹션에 표시할 신랑·신부 개별 사진입니다.
     // 지금은 갤러리 사진을 임시로 넣어 두었으니 각자 사진으로 교체하세요.
     // 비워 두면 해당 인물의 사진 영역이 표시되지 않습니다.
@@ -82,28 +87,32 @@ export const wedding: Wedding = {
     // public/images에 사진을 넣고 원하는 순서대로 경로를 작성하세요.
     // 배열이 비어 있으면 아래 gallery 사진을 대신 사용합니다.
     film: [
-      "/images/fix8.jpg",
-      "/images/fix5.jpg",
-      "/images/fix9.jpg",
-      "/images/fix7.jpg",
-      "/images/fix3.jpg",
-      "/images/fix10.jpg",
+      "/images/couple1.jpg",
+      "/images/couple2.jpg",
+      "/images/couple3.jpg",
+      "/images/couple4.jpg",
+      "/images/couple5.jpg",
+      "/images/couple6.jpg",
+      "/images/couple7.jpg",
+      "/images/couple8.jpg",
+
     ],
     // Share 섹션 위 엔딩 필름에 순서대로 재생할 사진입니다. 최대 4장을 사용합니다.
     // 빈 배열로 두면 gallery 사진을 대신 사용합니다.
     ending: [
-      "/images/DSCF7212.JPG",
-      "/images/YSH04202.JPG",
+      "/images/lafix8.jpg",
+      "/images/lafix9.jpg",
+      "/images/lafix25.jpg",
     ],
     // public/images에 사진을 넣고 아래 배열에 경로를 추가하면 갤러리에 표시됩니다.
     // 배열이 비어 있으면 Gallery 섹션이 표시되지 않습니다.
     gallery: [
-      "/images/DSCF7172.JPG",
-      "/images/YSH04570.JPG",
-      "/images/DSCF7236.JPG",
-      "/images/YSH03534.JPG",
-      "/images/YSH04202.JPG",
-      "/images/YSH04256.JPG",
+      "/images/fix2.jpg",
+      "/images/fix4.jpg",
+      "/images/fix5.jpg",
+      "/images/fix9.jpg",
+      "/images/fix10.jpg",
+      "/images/fix3.jpg",
     ],
   },
   mapLinks: {

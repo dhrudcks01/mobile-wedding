@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import {
   Gowun_Batang,
-  Gowun_Dodum,
   Great_Vibes,
   Montserrat,
   Pinyon_Script,
@@ -14,14 +13,9 @@ import "./globals.css";
 
 const fallbackUrl = "https://example.com";
 
-const gowunDodum = Gowun_Dodum({
-  weight: "400",
-  variable: "--font-gowun-dodum",
-  display: "swap",
-  preload: false,
-  fallback: ["Apple SD Gothic Neo", "Malgun Gothic", "sans-serif"],
-});
-
+// 본문 한글은 Pretendard지만, 크게 쓰는 신랑·신부 이름만 명조로 갑니다.
+// 27px에서 Pretendard Bold는 너무 뭉툭하고, 영문 제목의 Playfair Display가
+// 세리프라 명조 쪽이 짝이 맞습니다. 지금은 CoupleSection 이름에만 씁니다.
 const gowunBatang = Gowun_Batang({
   weight: ["400", "700"],
   variable: "--font-gowun-batang",
@@ -130,7 +124,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html
       lang="ko"
       className={[
-        gowunDodum.variable,
         gowunBatang.variable,
         playfairDisplay.variable,
         montserrat.variable,

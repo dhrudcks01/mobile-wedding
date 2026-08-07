@@ -58,7 +58,7 @@ function AccountRow({
           <span className="rounded-full bg-[var(--color-surface-sunken)] px-3 py-1 text-[10px] text-[var(--color-text-muted)]">
             {accountRole}
           </span>
-          <strong className="font-korean-serif text-[15px] text-[var(--section-text)]">
+          <strong className="font-korean text-[15px] text-[var(--section-text)]">
             {account.holder}
           </strong>
         </div>
