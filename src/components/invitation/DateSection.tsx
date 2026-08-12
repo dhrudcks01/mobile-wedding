@@ -241,7 +241,7 @@ export function DateSection({ wedding }: DateSectionProps) {
         </button>
 
         <p className="mt-[34px] text-[14px] text-[#8a5941]">
-          Click Me!
+          Touch Me!
         </p>
       </div>
     </section>
