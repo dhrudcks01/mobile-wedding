@@ -77,7 +77,7 @@ export const wedding: Wedding = {
     hero: "/images/DSCF7280.JPG",
     // Invitation 위 포스터에 사용할 세로 사진입니다.
     // 비어 있으면 hero 사진을 대신 사용합니다.
-    poster: "/images/lafix13.jpg",
+    poster: "/images/lafix24.jpg",
     // Our Day 티켓 앞면 사진입니다. 흑백으로 표시되니 명암 차이가 뚜렷한
     // 세로 사진이 좋습니다. 비어 있으면 poster, hero 순으로 대신 사용합니다.
     ticket: "/images/fix2.jpg",
@@ -116,6 +116,9 @@ export const wedding: Wedding = {
       "/images/fix9.jpg",
       "/images/fix10.jpg",
       "/images/fix3.jpg",
+      "/images/lafix4.jpg",
+      "/images/lafix13.jpg",
+      "/images/lafix12.jpg",
     ],
   },
   mapLinks: {
