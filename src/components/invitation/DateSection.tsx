@@ -1,62 +1,118 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { Section } from "@/components/common/Section";
-import { CalendarButton } from "@/components/invitation/CalendarButton";
-import {
-  buildWeddingMonthCalendar,
-  WEEKDAY_LABELS,
-} from "@/lib/calendar";
-import { getWeddingCountdownText, getWeddingDate } from "@/lib/date";
+import { getWeddingDate } from "@/lib/date";
 import type { Wedding } from "@/types/wedding";
 
 type DateSectionProps = {
   wedding: Wedding;
 };
 
-type CountdownParts = {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-};
+const TICKET_WIDTH = 290;
+const TICKET_HEIGHT = 549;
 
-const EMPTY_COUNTDOWN: CountdownParts = {
-  days: 0,
-  hours: 0,
-  minutes: 0,
-  seconds: 0,
-};
+const PUNCH_RADIUS = 10;
+const CORNER_RADIUS = 22;
 
-const ENGLISH_WEEKDAYS = [
-  "SUN",
-  "MON",
-  "TUE",
-  "WED",
-  "THU",
-  "FRI",
-  "SAT",
+/* 우표 가장자리 펀치. 지름 20px 원의 중심이 티켓 위·아래 모서리에 정확히
+   걸리도록 잡아, 절반만 티켓에 물리게 합니다. */
+const PUNCH_LEFT_OFFSETS = [34.5, 67.9, 101.3, 134.7, 168.1, 201.5, 234.9];
+
+const WEEKDAY_ABBREVIATIONS = [
+  "Sun",
+  "Mon",
+  "Tue",
+  "Wed",
+  "Thu",
+  "Fri",
+  "Sat",
 ] as const;
 
-function getPosterDate(date: Date) {
-  if (Number.isNaN(date.getTime())) {
-    return "WEDDING DAY";
-  }
+/** 원 하나를 evenodd 서브패스로 그립니다. 바깥 사각형에서 이만큼 뚫립니다. */
+function getHoleSubPath(centerX: number, centerY: number, radius: number) {
+  const diameter = radius * 2;
 
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}.${month}.${day}. ${ENGLISH_WEEKDAYS[date.getDay()]}`;
+  return `M${centerX - radius} ${centerY}a${radius} ${radius} 0 1 0 ${diameter} 0a${radius} ${radius} 0 1 0 ${-diameter} 0`;
 }
 
-function getPosterTime(dateTime: string) {
+/**
+ * 티켓 실루엣을 만드는 마스크입니다.
+ *
+ * 구멍을 배경색 원으로 '덮어서' 흉내 내면 카드 그림자와 절대 맞지 않습니다.
+ * 그림자는 사각형이라, 원을 티켓 안쪽만 그리면 구멍 바깥 절반만 어두워
+ * 얼룩이 되고, 원을 온전히 그리면 이번엔 그림자 위에 원판이 떠 보입니다.
+ * 어느 쪽이든 '원의 색'을 배경에 맞추는 문제라 답이 없습니다.
+ *
+ * 그래서 실제로 뚫습니다. 뚫린 자리에는 그림자까지 포함한 진짜 배경이
+ * 그대로 비치므로 색이 어긋날 여지가 없고, 그림자도 아래 drop-shadow가
+ * 이 실루엣을 따라 그려 구멍 모양대로 파입니다.
+ *
+ * radial-gradient 여러 장을 mask-composite로 합치는 방법도 있지만, 그건
+ * 구형 웹뷰에서 합성 모드가 빠지면 구멍이 통째로 사라집니다. SVG 한 장이면
+ * 합성이 필요 없어 -webkit-mask-image만 지원하면 그대로 동작합니다.
+ */
+function getTicketMaskImage() {
+  const holes = [
+    ...PUNCH_LEFT_OFFSETS.flatMap((left) => [
+      getHoleSubPath(left + PUNCH_RADIUS, 0, PUNCH_RADIUS),
+      getHoleSubPath(left + PUNCH_RADIUS, TICKET_HEIGHT, PUNCH_RADIUS),
+    ]),
+    getHoleSubPath(0, 0, CORNER_RADIUS),
+    getHoleSubPath(TICKET_WIDTH, 0, CORNER_RADIUS),
+    getHoleSubPath(0, TICKET_HEIGHT, CORNER_RADIUS),
+    getHoleSubPath(TICKET_WIDTH, TICKET_HEIGHT, CORNER_RADIUS),
+  ].join("");
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${TICKET_WIDTH}" height="${TICKET_HEIGHT}">` +
+    `<path fill="white" fill-rule="evenodd" d="M0 0h${TICKET_WIDTH}v${TICKET_HEIGHT}H0Z${holes}"/>` +
+    `</svg>`;
+
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+
+const TICKET_MASK_IMAGE = getTicketMaskImage();
+
+const TICKET_MASK_STYLE = {
+  maskImage: TICKET_MASK_IMAGE,
+  WebkitMaskImage: TICKET_MASK_IMAGE,
+  maskSize: "100% 100%",
+  WebkitMaskSize: "100% 100%",
+  maskRepeat: "no-repeat",
+  WebkitMaskRepeat: "no-repeat",
+} as const;
+
+/* 그림자는 면이 아니라 이 레이어가 냅니다. 면에 box-shadow를 주면 마스크가
+   그림자까지 잘라 없애고, 애초에 사각형이라 구멍 모양을 따르지도 않습니다.
+   drop-shadow를 바깥 래퍼에 걸고 마스크는 안쪽 판에만 걸어, 그림자가 잘리지
+   않으면서 구멍 뚫린 실루엣을 그리게 합니다.
+   drop-shadow에는 spread가 없어 box-shadow의 -8px만큼 blur를 줄였습니다. */
+const TICKET_SHADOW_FILTER = "drop-shadow(0 14px 26px rgba(60, 52, 48, 0.3))";
+
+const FACE_CLASS_NAME = [
+  "absolute inset-0 overflow-hidden",
+  // 카카오톡 인앱 웹뷰(구형 WebKit)는 -webkit- 접두사가 있어야 뒷면이 비칩니다.
+  "[backface-visibility:hidden] [-webkit-backface-visibility:hidden]",
+].join(" ");
+
+function getTicketDate(dateTime: string) {
+  const date = getWeddingDate(dateTime);
+
+  if (Number.isNaN(date.getTime())) {
+    return "날짜 입력 예정";
+  }
+
+  const weekday = WEEKDAY_ABBREVIATIONS[date.getDay()];
+
+  return `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDate()}. ${weekday}.`;
+}
+
+function getTicketTime(dateTime: string) {
   const timeMatch = dateTime.match(/T(\d{2}):(\d{2})/);
 
   if (!timeMatch) {
-    return "TIME TO BE ANNOUNCED";
+    return "시간 입력 예정";
   }
 
   const hour = Number(timeMatch[1]);
@@ -67,169 +123,127 @@ function getPosterTime(dateTime: string) {
   return `${hour12}:${minute} ${meridiem}`;
 }
 
-function getCountdownParts(dateTime: string): CountdownParts {
-  const targetTime = new Date(dateTime).getTime();
-
-  if (Number.isNaN(targetTime)) {
-    return EMPTY_COUNTDOWN;
-  }
-
-  const difference = Math.max(0, targetTime - Date.now());
-  const totalSeconds = Math.floor(difference / 1000);
-
-  return {
-    days: Math.floor(totalSeconds / 86400),
-    hours: Math.floor((totalSeconds % 86400) / 3600),
-    minutes: Math.floor((totalSeconds % 3600) / 60),
-    seconds: totalSeconds % 60,
-  };
-}
-
-function CountdownClock({ dateTime }: { dateTime: string }) {
-  const [countdown, setCountdown] = useState<CountdownParts | null>(null);
-
-  useEffect(() => {
-    const updateCountdown = () => setCountdown(getCountdownParts(dateTime));
-
-    updateCountdown();
-    const intervalId = window.setInterval(updateCountdown, 1000);
-
-    return () => window.clearInterval(intervalId);
-  }, [dateTime]);
-
-  const values = [
-    { label: "Days", value: countdown?.days },
-    { label: "Hours", value: countdown?.hours },
-    { label: "Min", value: countdown?.minutes },
-    { label: "Sec", value: countdown?.seconds },
-  ];
-
-  return (
-    <div
-      className="mt-10 grid grid-cols-4 gap-2"
-      data-reveal="fade-up"
-      data-reveal-duration="1200"
-      role="timer"
-      aria-live="off"
-    >
-      {values.map((item) => (
-        <div
-          className="bg-[var(--color-accent-strong)] px-1 py-4 text-center"
-          key={item.label}
-        >
-          <strong className="font-title-en block text-[1.55rem] font-normal leading-none text-[var(--color-on-dark)]">
-            {item.value === undefined ? "--" : String(item.value).padStart(2, "0")}
-          </strong>
-          <span className="font-title-en mt-2 block text-[9px] uppercase tracking-[0.14em] text-[var(--color-on-dark-muted)]">
-            {item.label}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function CountdownSentence({ wedding }: { wedding: Wedding }) {
-  const countdown = getWeddingCountdownText(wedding.event.dateTime);
-  const coupleNames = `${wedding.couple.groom.name} & ${wedding.couple.bride.name}`;
-
-  if (countdown.message === "until" && countdown.daysUntil !== null) {
-    return (
-      <p
-        className="mt-6 text-[12px] leading-6 text-[var(--section-muted)]"
-        data-reveal="fade-up"
-        data-reveal-delay="150"
-      >
-        {coupleNames}의 결혼식이 <strong>{countdown.daysUntil}일</strong> 남았습니다.
-      </p>
-    );
-  }
-
-  return (
-    <p
-      className="mt-6 text-[12px] leading-6 text-[var(--section-muted)]"
-      data-reveal="fade-up"
-      data-reveal-delay="150"
-    >
-      {countdown.message}
-    </p>
-  );
-}
-
 export function DateSection({ wedding }: DateSectionProps) {
-  const weddingDate = getWeddingDate(wedding.event.dateTime);
-  const calendarCells = buildWeddingMonthCalendar(wedding.event.dateTime);
-  const posterDate = getPosterDate(weddingDate);
-  const posterTime = getPosterTime(wedding.event.dateTime);
+  // 상태는 이 하나뿐입니다. 클릭할 때마다 180씩 더해 같은 방향으로 계속 돕니다.
+  // 0/180 토글로 만들면 뒷면에서 앞면으로 돌아올 때 방향이 반대로 꺾입니다.
+  const [flip, setFlip] = useState(0);
+
+  const ticketImage =
+    wedding.images.ticket.trim() ||
+    wedding.images.poster.trim() ||
+    wedding.images.hero.trim() ||
+    "/images/hero.jpg";
+  const groomName = wedding.intro.groom.name.trim() || "Groom";
+  const brideName = wedding.intro.bride.name.trim() || "Bride";
+  const ticketDate = getTicketDate(wedding.event.dateTime);
+  const ticketTime = getTicketTime(wedding.event.dateTime);
+  // 티켓 뒷면 주소 칸은 231px뿐이라 괄호 안 지번까지 넣으면 줄이 넘어갑니다.
+  // 전체 주소는 Location 섹션에서 그대로 보여줍니다.
+  const ticketAddress = wedding.event.address.split("(")[0].trim();
 
   return (
-    <Section
-      className="movie-paper pb-28 pt-24"
-      eyebrow="When"
-      title="Our Day"
-    >
-      <CountdownClock dateTime={wedding.event.dateTime} />
-      <CountdownSentence wedding={wedding} />
+    <section className="movie-paper px-6 pb-[120px] pt-16">
+      <div className="mx-auto flex max-w-sm flex-col items-center">
+        <p className="flex flex-col items-center leading-none text-[#7a7365]">
+          <span className="font-serif-en ml-[0.32em] text-[19px] uppercase tracking-[0.32em]">
+            An
+          </span>
+          <span className="font-script text-[52px]">Invitation</span>
+          <span className="flex items-baseline gap-[9px]">
+            <span className="font-serif-en text-[18px] uppercase tracking-[0.28em]">
+              For
+            </span>
+            <span className="font-script text-[32px]">you</span>
+          </span>
+        </p>
 
-      <article
-        // 카드 배경(#e0d9c6)과 섹션 배경(#f1eee7)의 대비는 1.2:1뿐이라
-        // 색만으로는 경계가 잡히지 않습니다. 종이 질감은 그대로 두고
-        // 테두리와 그림자로 '얹힌 카드'라는 걸 만듭니다.
-        className="relative mt-14 overflow-hidden border border-[var(--color-line)] bg-[var(--color-calendar)] px-7 pb-14 pt-11 text-center shadow-[0_14px_36px_rgba(65,55,50,0.12)]"
-        data-reveal="fade-up"
-        data-reveal-duration="1300"
-      >
-        <Image
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none object-cover mix-blend-multiply"
-          fill
-          loading="lazy"
-          sizes="(max-width: 430px) 88vw, 360px"
-          src="/images/calendar-hands-lineart.png"
-        />
+        <button
+          aria-label="티켓을 뒤집어 예식 일시와 장소 보기"
+          className="mt-9 block border-0 bg-transparent p-0 [-webkit-tap-highlight-color:transparent] [perspective:1500px]"
+          onClick={() => setFlip((current) => current + 180)}
+          style={{ width: TICKET_WIDTH, height: TICKET_HEIGHT }}
+          type="button"
+        >
+          <div
+            className="relative h-full w-full transition-transform duration-[900ms] ease-[cubic-bezier(0.4,0.1,0.2,1)] [transform-style:preserve-3d]"
+            style={{ transform: `rotateY(${flip}deg)` }}
+          >
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0"
+              style={{ filter: TICKET_SHADOW_FILTER }}
+            >
+              <div
+                className="absolute inset-0 bg-[var(--color-surface)]"
+                style={TICKET_MASK_STYLE}
+              />
+            </div>
 
-        <div className="relative z-10">
-          <p className="font-title-en text-[1.02rem] font-semibold leading-none tracking-[-0.01em] text-[var(--color-text)]">
-            {posterDate}
-          </p>
-          <p className="font-title-en mt-2 text-[0.82rem] font-semibold leading-none text-[var(--color-text)]">
-            {posterTime}
-          </p>
-        </div>
+            <div
+              className={`${FACE_CLASS_NAME} bg-[#1c1b1a]`}
+              style={TICKET_MASK_STYLE}
+            >
+              <Image
+                alt={`${groomName}과 ${brideName} 웨딩 사진`}
+                className="object-cover contrast-[1.02] grayscale"
+                fill
+                loading="lazy"
+                sizes="290px"
+                src={ticketImage}
+              />
 
-        <div className="relative z-10 mx-auto mt-10 max-w-[270px]">
-          <div className="grid grid-cols-7 gap-y-3.5 text-center">
-            {WEEKDAY_LABELS.map((label, index) => (
-              <span
-                className="font-title-en text-[8px] font-semibold tracking-[0.08em] text-[var(--color-text-muted)]"
-                key={`weekday-${index}`}
-              >
-                {label}
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,13,12,0.5)_0%,rgba(14,13,12,0)_30%,rgba(14,13,12,0)_74%,rgba(14,13,12,0.42)_100%)]" />
+
+              <div className="absolute inset-x-0 top-[30px] flex flex-col items-center gap-2 leading-tight">
+                <span className="font-script text-[20px] text-[#f3efe9]">
+                  The Wedding of
+                </span>
+                <span className="font-serif-en ml-[0.14em] text-[20px] tracking-[0.14em] text-[#f7f4ee] [font-variant:small-caps]">
+                  {groomName} &amp; {brideName}
+                </span>
+              </div>
+            </div>
+
+            {/* 뒷면 이미지에도 같은 자리에 구멍이 투명으로 뚫려 있지만,
+                이미지가 도착하기 전이나 좌표가 미세하게 어긋날 때를 대비해
+                면에도 같은 마스크를 걸어 둡니다. 배경색은 두지 않습니다.
+                두면 그 색이 구멍을 도로 메웁니다. */}
+            <div
+              className={`${FACE_CLASS_NAME} [transform:rotateY(180deg)]`}
+              style={TICKET_MASK_STYLE}
+            >
+              <Image
+                alt=""
+                aria-hidden="true"
+                className="object-cover"
+                fill
+                loading="lazy"
+                sizes="290px"
+                src="/images/ticket-back-kraft.png"
+              />
+
+              <span className="absolute left-[57px] top-[77px] whitespace-nowrap text-[17px] font-semibold leading-tight text-[#22221f]">
+                {ticketDate}
               </span>
-            ))}
-            {calendarCells.map((cell, index) => (
-              <span
-                className={[
-                  "mx-auto flex size-7 items-center justify-center text-[10px]",
-                  cell.isWeddingDay
-                    ? "rounded-full bg-[var(--color-button)] font-semibold text-white"
-                    : cell.isSunday
-                      ? "text-[var(--color-sunday)]"
-                      : "text-[var(--color-text)]",
-                ].join(" ")}
-                key={`day-${index}`}
-              >
-                {cell.day ?? ""}
+              <span className="absolute left-[57px] top-[103px] whitespace-nowrap text-[18px] font-semibold leading-tight text-[#22221f]">
+                {ticketTime}
               </span>
-            ))}
+              <span className="absolute left-[59px] top-[421px] flex flex-col gap-[3px] text-left leading-tight">
+                <span className="text-[15px] font-semibold text-[#22221f]">
+                  {wedding.event.venueName || "예식 장소 입력 예정"}
+                </span>
+                <span className="text-[12.5px] text-[#33332f]">
+                  {ticketAddress}
+                </span>
+              </span>
+            </div>
           </div>
-        </div>
-      </article>
+        </button>
 
-      {/*<div data-reveal="fade-up" data-reveal-delay="120">*/}
-      {/*  <CalendarButton wedding={wedding} />*/}
-      {/*</div>*/}
-    </Section>
+        <p className="mt-[34px] text-[14px] text-[#8a5941]">
+          Click Me!
+        </p>
+      </div>
+    </section>
   );
 }

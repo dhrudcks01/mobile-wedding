@@ -78,6 +78,9 @@ export const wedding: Wedding = {
     // Invitation 위 포스터에 사용할 세로 사진입니다.
     // 비어 있으면 hero 사진을 대신 사용합니다.
     poster: "/images/lafix13.jpg",
+    // Our Day 티켓 앞면 사진입니다. 흑백으로 표시되니 명암 차이가 뚜렷한
+    // 세로 사진이 좋습니다. 비어 있으면 poster, hero 순으로 대신 사용합니다.
+    ticket: "/images/fix2.jpg",
     // Cast 섹션에 표시할 신랑·신부 개별 사진입니다.
     // 지금은 갤러리 사진을 임시로 넣어 두었으니 각자 사진으로 교체하세요.
     // 비워 두면 해당 인물의 사진 영역이 표시되지 않습니다.
@@ -87,14 +90,14 @@ export const wedding: Wedding = {
     // public/images에 사진을 넣고 원하는 순서대로 경로를 작성하세요.
     // 배열이 비어 있으면 아래 gallery 사진을 대신 사용합니다.
     film: [
+      "/images/couple3.jpg",
       "/images/couple1.jpg",
       "/images/couple2.jpg",
-      "/images/couple3.jpg",
-      "/images/couple4.jpg",
+      "/images/couple9.jpg",
+      "/images/couple8.jpg",
       "/images/couple5.jpg",
       "/images/couple6.jpg",
       "/images/couple7.jpg",
-      "/images/couple8.jpg",
 
     ],
     // Share 섹션 위 엔딩 필름에 순서대로 재생할 사진입니다. 최대 4장을 사용합니다.

@@ -1,51 +1,11 @@
-import { ImageWithFallback } from "@/components/common/ImageWithFallback";
 import { Section } from "@/components/common/Section";
 import { TornEdge } from "@/components/common/TornEdge";
+import { FilmReelPair } from "@/components/invitation/FilmReelPair";
 import type { Wedding } from "@/types/wedding";
 
 type GreetingSectionProps = {
   wedding: Wedding;
 };
-
-type FilmReelProps = {
-  images: string[];
-  reverse?: boolean;
-};
-
-function FilmReel({ images, reverse = false }: FilmReelProps) {
-  const reelImages = [...images, ...images];
-
-  return (
-    <div className="film-reel -mx-6 w-[calc(100%+3rem)]" aria-hidden="true">
-      <div
-        className={`film-reel-track ${reverse ? "film-reel-track-reverse" : ""}`}
-      >
-        {reelImages.map((image, index) => (
-          <div className="film-reel-frame" key={`${image}-${index}`}>
-            <div className="relative aspect-[16/10] overflow-hidden bg-[var(--color-dark-raised)]">
-              <ImageWithFallback
-                alt=""
-                className="film-reel-image object-cover"
-                fill
-                fallbackClassName="bg-[var(--color-dark-raised)] text-white/60"
-                fallbackDescription=""
-                fallbackTitle="Wedding Film"
-                loading="lazy"
-                sizes="220px"
-                src={image}
-              />
-              <span className="film-reel-veil" />
-            </div>
-            <div className="flex items-center justify-between px-1 pt-1 font-title-en text-[6px] tracking-[0.08em] text-white/48">
-              <span>WEDDING FILM</span>
-              <span>{String((index % images.length) + 1).padStart(2, "0")}A</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 /*
  * 레퍼런스 .box-film:before의 영사기 표시입니다(ic_cam_44.png, 44×30을
@@ -136,45 +96,30 @@ export function GreetingSection({ wedding }: GreetingSectionProps) {
       eyebrow="Opening"
       title="Invitation"
     >
-      <div
-        className="mt-10"
-        data-reveal="fade-up"
-        data-reveal-duration="1300"
+      {/* 위·아래 필름은 진행도를 공유해 한 몸으로 움직입니다. 그래서 사이에
+          낀 인사말도 이 컴포넌트가 children으로 함께 받습니다. */}
+      <FilmReelPair
+        bottomImages={bottomImages.length > 0 ? bottomImages : topImages}
+        topImages={topImages}
       >
-        <div className="origin-center -rotate-[3deg] scale-[1.08]">
-          <FilmReel images={topImages} />
+        <div
+          className="mx-auto my-14 max-w-[315px]"
+          data-reveal="fade-up"
+          data-reveal-delay="150"
+          data-reveal-duration="1500"
+        >
+          {/* 레퍼런스는 이 표시와 글 사이를 30px 띄웁니다 */}
+          <span className="mb-[30px] block">
+            <ProjectorMark />
+          </span>
+
+          {/* 레퍼런스(repocu)의 .txt-film과 동일: Pretendard Regular / 13px / 28px */}
+          <p className="font-korean whitespace-pre-line text-[13px] leading-[28px] text-[var(--section-text)]">
+            {greeting}
+          </p>
+          <span className="mx-auto mt-10 block h-px w-9 bg-[var(--section-line)]" />
         </div>
-      </div>
-
-      <div
-        className="mx-auto my-14 max-w-[315px]"
-        data-reveal="fade-up"
-        data-reveal-delay="150"
-        data-reveal-duration="1500"
-      >
-        {/* 레퍼런스는 이 표시와 글 사이를 30px 띄웁니다 */}
-        <span className="mb-[30px] block">
-          <ProjectorMark />
-        </span>
-
-        {/* 레퍼런스(repocu)의 .txt-film과 동일: Pretendard Regular / 13px / 28px */}
-        <p className="font-korean whitespace-pre-line text-[13px] leading-[28px] text-[var(--section-text)]">
-          {greeting}
-        </p>
-        <span className="mx-auto mt-10 block h-px w-9 bg-[var(--section-line)]" />
-      </div>
-
-      <div
-        data-reveal="fade-up"
-        data-reveal-duration="1300"
-      >
-        <div className="origin-center rotate-[3deg] scale-[1.08]">
-          <FilmReel
-            images={bottomImages.length > 0 ? bottomImages : topImages}
-            reverse
-          />
-        </div>
-      </div>
+      </FilmReelPair>
 
       {/* 어두운 이 섹션이 아래 밝은 섹션과 직선으로 만나지 않게 합니다. */}
       <TornEdge id="greeting" />

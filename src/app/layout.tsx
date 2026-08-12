@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import {
+  Cormorant_Garamond,
   Gowun_Batang,
   Great_Vibes,
   Montserrat,
@@ -40,6 +41,16 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
   display: "swap",
   fallback: ["Helvetica Neue", "Arial", "sans-serif"],
+});
+
+// Our Day 티켓 섹션 전용 세리프입니다. 400만 받는 이유: 티켓 헤더와 앞면
+// 이름 모두 굵기를 올리지 않고 자간으로만 인쇄 느낌을 냅니다.
+const cormorantGaramond = Cormorant_Garamond({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-cormorant-garamond",
+  display: "swap",
+  fallback: ["Times New Roman", "serif"],
 });
 
 const greatVibes = Great_Vibes({
@@ -127,10 +138,18 @@ export default function RootLayout({ children }: RootLayoutProps) {
         gowunBatang.variable,
         playfairDisplay.variable,
         montserrat.variable,
+        cormorantGaramond.variable,
         greatVibes.variable,
         pinyonScript.variable,
         californication.variable,
       ].join(" ")}
+      // IntroScreen의 높이 고정 스크립트가 하이드레이션보다 먼저 실행돼
+      // 이 태그에 --intro-vh를 심습니다. 서버는 innerHeight를 알 수 없어
+      // 그 style을 미리 렌더할 수 없으니 속성이 어긋날 수밖에 없습니다.
+      // 스크립트를 늦추면 첫 화면이 튀므로(IntroScreen 주석 참고) 경고 쪽을
+      // 끕니다. 이 속성은 이 요소의 속성 불일치만 덮고 자식에는 영향이 없어,
+      // 다른 하이드레이션 문제는 그대로 드러납니다.
+      suppressHydrationWarning
     >
       <body>{children}</body>
     </html>

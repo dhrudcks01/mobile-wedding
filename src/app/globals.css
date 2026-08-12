@@ -92,6 +92,9 @@
   --font-korean-display: var(--font-gowun-batang), "Nanum Myeongjo",
     "KoPub Batang", "AppleMyungjo", "Batang", serif;
   --font-title-en: var(--font-playfair-display), "Times New Roman", serif;
+  /* Our Day 티켓 전용 세리프. Playfair보다 획이 가늘어, 자간을 크게 벌린
+     대문자에서 인쇄된 티켓 글씨처럼 읽힙니다. */
+  --font-serif-en: var(--font-cormorant-garamond), "Times New Roman", serif;
   /* 레퍼런스가 영문에 쓰는 산세리프. 깔끔한 대문자 라벨·이름용입니다. */
   --font-sans-en: var(--font-montserrat), "Helvetica Neue", Arial, sans-serif;
   --font-script: var(--font-great-vibes), cursive;
@@ -163,6 +166,13 @@ textarea {
 .font-sans-en,
 .invitation-page .font-sans-en {
   font-family: var(--font-sans-en);
+}
+
+/* 위 .invitation-page .uppercase와 같은 이유로 선택자를 두 개 씁니다.
+   티켓 헤더의 An/For가 대문자라 그냥 두면 Playfair로 끌려갑니다. */
+.font-serif-en,
+.invitation-page .font-serif-en {
+  font-family: var(--font-serif-en);
 }
 
 /* 한글은 body에서 이미 상속되지만, 영문 폰트를 지정한 부모 안에 한글이 들어갈
@@ -350,17 +360,30 @@ textarea {
   bottom: 4px;
 }
 
+/* 손으로 넘길 수 있어야 해서 transform 애니메이션이 아니라 진짜 가로 스크롤을
+   씁니다. 자동 재생은 FilmReel이 이 요소의 scrollLeft를 밀어 만듭니다.
+   퍼포레이션(.film-reel::before/after)을 여기 두면 안 됩니다. 스크롤 컨테이너
+   안의 absolute 자식은 내용과 함께 흘러가 버리므로, 구멍 줄은 바깥 .film-reel에
+   남기고 스크롤은 이 안쪽 뷰포트만 합니다.
+   overscroll-behavior-x는 가로 스와이프가 끝까지 갔을 때 페이지 뒤로가기
+   제스처로 새는 것을 막습니다. */
+.film-reel-viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.film-reel-viewport::-webkit-scrollbar {
+  display: none;
+}
+
 .film-reel-track {
   display: flex;
   width: max-content;
   gap: 6px;
   padding-inline: 3px;
-  will-change: transform;
-  animation: film-reel-scroll 26s linear infinite;
-}
-
-.film-reel-track-reverse {
-  animation-direction: reverse;
 }
 
 /*
@@ -817,16 +840,6 @@ textarea {
   }
 }
 
-@keyframes film-reel-scroll {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    transform: translate3d(calc(-50% - 3px), 0, 0);
-  }
-}
-
 @keyframes ending-frame-pass {
   0% {
     opacity: 0;
@@ -1076,7 +1089,6 @@ textarea {
   .ending-film-flicker,
   .ending-film-window,
   .ending-credits-roll,
-  .film-reel-track,
   .movie-hero-image,
   .show-light {
     animation: none !important;
