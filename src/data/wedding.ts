@@ -110,11 +110,9 @@ export const wedding: Wedding = {
     // public/images에 사진을 넣고 아래 배열에 경로를 추가하면 갤러리에 표시됩니다.
     // 배열이 비어 있으면 Gallery 섹션이 표시되지 않습니다.
     gallery: [
-      "/images/fix2.jpg",
-      "/images/fix4.jpg",
-      "/images/fix5.jpg",
-      "/images/fix9.jpg",
       "/images/fix10.jpg",
+      "/images/fix4.jpg",
+      "/images/fix9.jpg",
       "/images/fix3.jpg",
       "/images/lafix4.jpg",
       "/images/lafix13.jpg",
