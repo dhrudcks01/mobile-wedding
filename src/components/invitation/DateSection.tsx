@@ -157,6 +157,11 @@ export function DateSection({ wedding }: DateSectionProps) {
           </span>
         </p>
 
+        <p className="mt-[55px] text-[14px] text-[#8a5941]">
+          Touch Me!
+        </p>
+
+
         <button
           aria-label="티켓을 뒤집어 예식 일시와 장소 보기"
           className="mt-9 block border-0 bg-transparent p-0 [-webkit-tap-highlight-color:transparent] [perspective:1500px]"
@@ -240,9 +245,7 @@ export function DateSection({ wedding }: DateSectionProps) {
           </div>
         </button>
 
-        <p className="mt-[34px] text-[14px] text-[#8a5941]">
-          Touch Me!
-        </p>
+
       </div>
     </section>
   );
