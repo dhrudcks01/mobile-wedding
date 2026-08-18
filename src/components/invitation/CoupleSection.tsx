@@ -9,6 +9,12 @@ type CoupleSectionProps = {
 type CastPersonProps = {
   englishName: string;
   image: string;
+  // 사진 속 인물이 작게 나올 때 사용하는 확대 배율입니다. 1이면 원본 그대로입니다.
+  imageScale?: number;
+  // 확대할 때 기준이 되는 지점입니다. CSS transform-origin 값(가로 세로)을 씁니다.
+  imageFocus?: string;
+  // true면 사진을 좌우로 뒤집어 보여 줍니다. 확대 영역은 그대로 유지됩니다.
+  imageFlip?: boolean;
   label: string;
   person: WeddingPerson;
   reverse?: boolean;
@@ -26,6 +32,9 @@ function getFamilyLine(person: WeddingPerson, relation: string) {
 function CastPerson({
   englishName,
   image,
+  imageScale = 1,
+  imageFocus = "50% 50%",
+  imageFlip = false,
   label,
   person,
   reverse = false,
@@ -34,6 +43,8 @@ function CastPerson({
   const familyLine = getFamilyLine(person, relation);
   const name = person.name.trim() || "이름 입력 예정";
   const photo = image.trim();
+  // 확대한 만큼 더 큰 원본을 내려받아야 화질이 유지됩니다.
+  const sizes = `(max-width: 430px) ${Math.round(38 * imageScale)}vw, ${Math.round(145 * imageScale)}px`;
 
   return (
     <article
@@ -43,7 +54,11 @@ function CastPerson({
       data-reveal-duration="1200"
     >
       {photo ? (
-        <div className="relative aspect-[3/4] w-[38%] shrink-0 overflow-hidden bg-[var(--color-dark-raised)]">
+        <div
+          className={`relative aspect-[3/4] w-[38%] shrink-0 overflow-hidden bg-[var(--color-dark-raised)] ${
+            imageFlip ? "[transform:scaleX(-1)]" : ""
+          }`}
+        >
           <ImageWithFallback
             alt={`${label === "GROOM" ? "신랑" : "신부"} ${name}`}
             className="object-cover"
@@ -52,8 +67,16 @@ function CastPerson({
             fallbackTitle={label}
             fill
             loading="lazy"
-            sizes="(max-width: 430px) 38vw, 145px"
+            sizes={sizes}
             src={photo}
+            style={
+              imageScale === 1
+                ? undefined
+                : {
+                    transform: `scale(${imageScale})`,
+                    transformOrigin: imageFocus,
+                  }
+            }
           />
           <span
             aria-hidden="true"
@@ -89,6 +112,10 @@ export function CoupleSection({ wedding }: CoupleSectionProps) {
         <CastPerson
           englishName={wedding.intro.groom.name}
           image={wedding.images.groom}
+          // 신랑 사진은 전신 컷이라 인물이 작게 잡혀서 상반신 위주로 확대했습니다.
+          imageFlip
+          imageFocus="37% 65%"
+          imageScale={2.4}
           label="GROOM"
           person={wedding.couple.groom}
         />
