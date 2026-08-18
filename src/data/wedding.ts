@@ -18,7 +18,7 @@ export const wedding: Wedding = {
     // 배포 후 실제 URL로 교체하세요. 예: "https://wedding.example.com"
     url: "https://ournewday.kr",
     // 공유 미리보기 이미지입니다. public/images/og-image.jpg 파일을 교체하면 됩니다.
-    ogImage: "/images/fix5.jpg",
+    ogImage: "/images/21 DSCF7236.jpg",
   },
   intro: {
     // 첫 접속 인트로에 표시할 짧은 문구입니다.
@@ -66,7 +66,7 @@ export const wedding: Wedding = {
   greeting: `“사랑이 처음부터 풍덩 빠지는 줄만 알았지,
 이렇게 서서히 물들어 버리는 것인 줄은 몰랐다.”
 
-- 영화 <미술과 옆 동물원> -
+- 영화 <미술관 옆 동물원> -
 
 천천히 서로에게 스며든 두 사람이
 이제 같은 삶을 함께 걸어가려 합니다.
@@ -84,7 +84,7 @@ export const wedding: Wedding = {
     // Cast 섹션에 표시할 신랑·신부 개별 사진입니다.
     // 지금은 갤러리 사진을 임시로 넣어 두었으니 각자 사진으로 교체하세요.
     // 비워 두면 해당 인물의 사진 영역이 표시되지 않습니다.
-    groom: "/images/fix1.jpg",
+    groom: "/images/09 YSH01794-1.jpg",
     bride: "/images/fix11.jpg",
     // Invitation 섹션의 움직이는 필름에만 사용할 사진입니다.
     // public/images에 사진을 넣고 원하는 순서대로 경로를 작성하세요.
@@ -110,8 +110,11 @@ export const wedding: Wedding = {
     // public/images에 사진을 넣고 아래 배열에 경로를 추가하면 갤러리에 표시됩니다.
     // 배열이 비어 있으면 Gallery 섹션이 표시되지 않습니다.
     gallery: [
-      "/images/fix10.jpg",
-      "/images/fix4.jpg",
+      "/images/04 YSH04202-1.jpg",
+      "/images/fix5.jpg",
+      "/images/18 YSH04404-1.jpg",
+      "/images/02 YSH02917-1.jpg",
+      "/images/13 YSH03534-1.jpg",
       "/images/fix9.jpg",
       "/images/fix3.jpg",
       "/images/lafix4.jpg",
