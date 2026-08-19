@@ -1072,6 +1072,30 @@ textarea {
   animation: intro-copy-in 1000ms cubic-bezier(0.22, 0.61, 0.36, 1) 1450ms both;
 }
 
+/* 위쪽 여백도 프레임 높이에 비례시킵니다. 4rem으로 고정해 두면 짧은 화면에서만
+   여백이 상대적으로 커져서 타이틀이 그만큼 아래로 밀립니다. */
+.intro-copy-stack {
+  padding-top: max(
+    1rem,
+    env(safe-area-inset-top),
+    calc((var(--intro-vh, 100svh) - 1.5rem) * 0.04)
+  );
+}
+
+/* 타이틀 로고는 프레임 높이에 맞춰 줄입니다.
+   인트로 사진은 세로 2:3인데 프레임은 그보다 훨씬 좁고 길어서, object-cover가
+   높이를 꽉 채우고 좌우만 잘라냅니다. 즉 사진 속 얼굴은 어떤 화면에서든 프레임
+   높이의 27% 지점부터 시작합니다(그 위는 커튼뿐입니다). 반면 로고를 233px로
+   고정해 두면 카카오톡처럼 상단 바 때문에 뷰포트가 짧아진 인앱 브라우저에서
+   같은 픽셀이 더 큰 비율을 차지해 얼굴 위로 내려앉습니다.
+   프레임 높이(= --intro-vh에서 위아래 여백 0.75rem 두 겹을 뺀 값)의 25%를 폭
+   상한으로 두면 로고 높이는 그 88%인 22%가 되고, 위 여백 4%를 더해 화면 높이와
+   무관하게 26% 언저리에서 끝납니다. 얼굴이 시작되는 28%보다 위입니다. */
+.intro-title-img {
+  width: min(233px, calc((var(--intro-vh, 100svh) - 1.5rem) * 0.25));
+  height: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

@@ -26,13 +26,17 @@ const TITLE_HEIGHT = 207;
  *   - 가로 폭이 바뀔 때(화면 회전, 데스크톱 창 크기 조절)
  *   - 높이가 25% 넘게 달라질 때(URL 바는 보통 10% 안팎이라 걸리지 않습니다)
  *
+ * innerHeight가 0일 때는 잠그지 않고 넘어갑니다. 창이 아직 그려지기 전이거나
+ * 백그라운드 탭에서 0이 잡히면 인트로 높이와 타이틀 크기가 통째로 0이 됩니다.
+ * 그 경우는 100svh 폴백에 맡기고, 다음 resize에서 제대로 된 값으로 잠급니다.
+ *
  * <script>로 넣는 이유: 클라이언트 컴포넌트의 effect는 하이드레이션 뒤에
  * 돌아서, svh가 깨진 브라우저에서는 첫 화면이 한 번 튄 뒤에 고쳐집니다.
  * 동기 인라인 스크립트는 아래 마크업이 그려지기 전에 실행됩니다.
  */
 const LOCK_INTRO_HEIGHT = `(function(){
 var el=document.documentElement,w=0,h=0;
-function lock(){w=window.innerWidth;h=window.innerHeight;el.style.setProperty('--intro-vh',h+'px');}
+function lock(){if(window.innerHeight<1)return;w=window.innerWidth;h=window.innerHeight;el.style.setProperty('--intro-vh',h+'px');}
 lock();
 addEventListener('resize',function(){
 if(window.innerWidth===w&&Math.abs(window.innerHeight-h)<=h*0.25)return;
@@ -102,7 +106,7 @@ export function IntroScreen({ wedding }: IntroScreenProps) {
             숨은 상태로 시작합니다.
             위·아래 블록을 따로 올리는 이유: 한 덩어리로 올리면 원이 열리다 멈춘
             뒤 판 하나가 통째로 튀어나와 흐름이 끊깁니다. */}
-        <div className="relative z-10 flex h-full flex-col items-center px-6 pb-[max(2.25rem,env(safe-area-inset-bottom))] pt-[max(4rem,env(safe-area-inset-top))] text-white">
+        <div className="intro-copy-stack relative z-10 flex h-full flex-col items-center px-6 pb-[max(2.25rem,env(safe-area-inset-bottom))] text-white">
           <div
             className="intro-copy-top flex flex-col items-center text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.48)]"
             aria-hidden="true"
@@ -111,11 +115,13 @@ export function IntroScreen({ wedding }: IntroScreenProps) {
                 넣습니다(.img-tit, width 233px). 웹폰트로는 그 필기체를 똑같이
                 낼 수 없어 같은 방식으로 바꿨습니다. 원본이 466×414라 표시
                 크기의 정확히 2배여서 고해상도 화면에서도 선명합니다.
+                표시 폭은 .intro-title-img에서 프레임 높이에 맞춰 줄입니다(짧은
+                인앱 브라우저에서 로고가 얼굴을 덮지 않게 하는 장치입니다).
                 max-w-full은 좁은 화면에서 좌우 패딩을 넘지 않게 하는 안전장치라
-                h-auto와 함께 두어야 비율이 유지됩니다. */}
+                height:auto와 함께 두어야 비율이 유지됩니다. */}
             <Image
               alt=""
-              className="h-auto max-w-full"
+              className="intro-title-img max-w-full"
               height={TITLE_HEIGHT}
               priority
               src="/images/tit-cover.png"
