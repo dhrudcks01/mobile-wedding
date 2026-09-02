@@ -122,6 +122,18 @@ export function AccountSection({ wedding }: AccountSectionProps) {
       eyebrow="Information"
       title="Account"
     >
+      <p
+        className="mt-6 text-[13px] leading-7 text-[var(--section-muted)]"
+        data-reveal="fade-up"
+        data-reveal-duration="1100"
+      >
+        <strong className="font-medium text-[var(--section-text)]">
+          장소 여건상 화환은 정중히 사양하고 있습니다.
+        </strong>
+        <br />
+        저희를 향한 따뜻한 마음만 감사히 받겠습니다.
+      </p>
+
       <div
         className="mt-12"
         data-reveal="fade-up"
