@@ -34,12 +34,67 @@ export async function requestDrive(url: string, init: RequestInit = {}) {
   });
 }
 
-// 1. Drive에서 파일 ID를 받고, 2. 이어 올리기 연결을 만든 후, 3. 암호화해 반환합니다.
+// 이름 앞뒤 공백과 중복 공백을 정리합니다. 이름이 없으면 익명 폴더를 사용합니다.
+export function guestFolderName(guest: string) {
+  return guest.normalize("NFC").replace(/[\u0000-\u001f]/g, " ").trim().replace(/\s+/g, " ") || "익명";
+}
+
+function escapeDriveQuery(value: string) {
+  return value.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+}
+
+// 같은 서버에서 동시에 들어온 같은 이름의 폴더 생성은 한 번만 실행합니다.
+const pendingFolders = new Map<string, Promise<string>>();
+
+export async function getGuestFolder(guest: string) {
+  const parent = required("GOOGLE_DRIVE_FOLDER_ID");
+  const name = guestFolderName(guest);
+  const key = JSON.stringify([parent, name]);
+  const pending = pendingFolders.get(key);
+  if (pending) return pending;
+
+  const result = findOrCreateGuestFolder(parent, name);
+  pendingFolders.set(key, result);
+  try {
+    return await result;
+  } finally {
+    pendingFolders.delete(key);
+  }
+}
+
+async function findOrCreateGuestFolder(parent: string, name: string) {
+  const query = [
+    "'" + escapeDriveQuery(parent) + "' in parents",
+    "name = '" + escapeDriveQuery(name) + "'",
+    "mimeType = 'application/vnd.google-apps.folder'",
+    "trashed = false",
+  ].join(" and ");
+  const params = new URLSearchParams({
+    q: query, fields: "files(id)", pageSize: "1", orderBy: "createdTime", spaces: "drive",
+  });
+  const search = await requestDrive("https://www.googleapis.com/drive/v3/files?" + params);
+  if (!search.ok) throw new UploadError("하객 폴더를 확인하지 못했습니다. 다시 시도해 주세요.", 502);
+  const existing = (await search.json()).files?.[0]?.id;
+  if (typeof existing === "string") return existing;
+
+  const response = await requestDrive("https://www.googleapis.com/drive/v3/files?fields=id", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, mimeType: "application/vnd.google-apps.folder", parents: [parent] }),
+  });
+  if (!response.ok) throw new UploadError("하객 폴더를 만들지 못했습니다. 다시 시도해 주세요.", 502);
+  const folder = await response.json();
+  if (typeof folder.id !== "string") throw new UploadError("하객 폴더 응답을 확인할 수 없습니다.", 502);
+  return folder.id;
+}
+
+// 하객 폴더를 찾은 뒤 해당 폴더에 파일 업로드 연결을 만듭니다.
 export async function createDriveSession(file: {
   name: string;
   size: number;
   mime: string;
 }, guest: string) {
+  const folderId = await getGuestFolder(guest);
   const ids = await requestDrive("https://www.googleapis.com/drive/v3/files/generateIds?count=1&space=drive&type=files");
   if (!ids.ok) {
     throw new UploadError("저장소에 연결할 수 없습니다.", 502);
@@ -54,7 +109,7 @@ export async function createDriveSession(file: {
     },
     body: JSON.stringify({
       id, name: `${new Date().toISOString().replace(/[:.]/g, "-")}_${file.name}`,
-      parents: [required("GOOGLE_DRIVE_FOLDER_ID")], mimeType: file.mime,
+      parents: [folderId], mimeType: file.mime,
       description: guest ? `하객: ${guest}` : "결혼식 하객 사진·동영상"
     }),
   });

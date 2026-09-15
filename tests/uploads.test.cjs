@@ -59,6 +59,7 @@ test("mock Drive: resumable session, chunk range, final response loss and size m
   global.fetch = async (url, init) => {
     calls.push([String(url), init]);
     if (String(url).includes("oauth2")) return Response.json({ access_token: "test-access", expires_in: 3600 });
+    if (new URL(url).searchParams.has("q")) return Response.json({ files: [{ id: "guest-folder" }] });
     if (String(url).includes("generateIds")) return Response.json({ ids: ["file-id"] });
     if (init.method === "POST") return new Response(null, { status: 200, headers: { location: "https://www.googleapis.com/upload/drive/v3/files?upload_id=test" } });
     if (String(url).includes("upload_id")) return new Response(null, { status: 404 });
@@ -70,7 +71,7 @@ test("mock Drive: resumable session, chunk range, final response loss and size m
     const { session } = await response.json();
     const data = server.decodeUploadSession(session);
     const create = calls.find(([url]) => url.includes("uploadType=resumable"));
-    assert.deepEqual(JSON.parse(create[1].body).parents, ["test-folder"]);
+    assert.deepEqual(JSON.parse(create[1].body).parents, ["guest-folder"]);
     assert.deepEqual(await server.getUploadResult(new Response(null, { status: 308, headers: { range: "bytes=0-1" } }), data), { done: false, offset: 2 });
     const probe = await chunkRoute.POST(makeRequest("", { "x-upload-session": session }));
     assert.deepEqual(await probe.json(), { done: true, offset: 3 });
@@ -135,4 +136,50 @@ test("changing the Google secret invalidates an existing upload session", () => 
     process.env.GOOGLE_CLIENT_SECRET = "different-google-secret";
     assert.throws(() => server.decodeUploadSession(token));
   } finally { process.env.GOOGLE_CLIENT_SECRET = value; }
+});
+
+test("guest folder names normalize whitespace and empty names use anonymous", () => {
+  assert.equal(server.guestFolderName("  홍길동  "), "홍길동");
+  assert.equal(server.guestFolderName("홍  길동"), "홍 길동");
+  assert.equal(server.guestFolderName("   "), "익명");
+});
+
+test("guest folders are searched within the configured parent, reused, and created once for concurrent requests", async () => {
+  const originalFetch = global.fetch;
+  let folder;
+  let creates = 0;
+  const queries = [];
+  global.fetch = async (url, options) => {
+    const address = new URL(url);
+    if (address.searchParams.has("q")) {
+      queries.push(address.searchParams.get("q"));
+      return Response.json({ files: folder ? [{ id: folder.id }] : [] });
+    }
+    assert.equal(options.method, "POST");
+    const body = JSON.parse(options.body);
+    assert.deepEqual(body.parents, ["test-folder"]);
+    assert.equal(body.mimeType, "application/vnd.google-apps.folder");
+    folder = { ...body, id: "new-guest-folder" };
+    creates++;
+    return Response.json({ id: folder.id });
+  };
+  try {
+    const ids = await Promise.all([server.getGuestFolder(" 홍길동 "), server.getGuestFolder("홍길동")]);
+    assert.deepEqual(ids, ["new-guest-folder", "new-guest-folder"]);
+    assert.equal(creates, 1);
+    assert.equal(folder.name, "홍길동");
+    assert.equal(await server.getGuestFolder("홍길동"), "new-guest-folder");
+    assert.equal(creates, 1);
+    assert.ok(queries.every(q => q.includes("'test-folder' in parents") && q.includes("trashed = false")));
+  } finally { global.fetch = originalFetch; }
+});
+
+test("folder lookup failure never creates another folder or falls back to the root", async () => {
+  const originalFetch = global.fetch;
+  let calls = 0;
+  global.fetch = async () => { calls++; return new Response(null, { status: 403 }); };
+  try {
+    await assert.rejects(() => server.getGuestFolder("실패 테스트"));
+    assert.equal(calls, 1);
+  } finally { global.fetch = originalFetch; }
 });

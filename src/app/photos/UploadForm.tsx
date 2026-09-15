@@ -134,11 +134,13 @@ export function UploadForm({ isOpen }: { isOpen: boolean }) {
           maxLength={40}
           value={guestName}
           disabled={isUploading}
-          placeholder="성함을 남겨 주셔도 좋아요"
+          placeholder="입력한 이름의 폴더에 사진을 모아 드려요"
           autoComplete="name"
           onChange={(event) => setGuestName(event.target.value)}
         />
       </label>
+
+      <p className={styles.hint}>같은 이름은 같은 폴더에 저장됩니다. 미입력 시 익명으로 저장됩니다.</p>
 
       <label className={styles.picker}>
         <span className={styles.plus} aria-hidden="true">＋</span>
