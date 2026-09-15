@@ -5,15 +5,14 @@ const assert = require("node:assert/strict");
 require("./register-typescript.cjs");
 const policy = require("../src/lib/photos/upload-rules.ts");
 const server = { ...require("../src/lib/photos/upload-security.ts"), ...require("../src/lib/photos/google-drive.ts") };
+const { uploadConfig } = require("../src/lib/photos/upload-config.ts");
 const sessionRoute = require("../src/app/api/photos/session/route.ts");
 const chunkRoute = require("../src/app/api/photos/chunk/route.ts");
 Object.assign(process.env, {
-  UPLOAD_ENABLED: "true", UPLOAD_ORIGIN: "https://example.test", UPLOAD_EVENT_KEY: "test-event-key",
-  UPLOAD_SESSION_SECRET: "test-session-secret-at-least-32-characters",
-  UPLOAD_CLOSES_AT: "2099-01-01T00:00:00Z", GOOGLE_CLIENT_ID: "test-client", GOOGLE_CLIENT_SECRET: "test-secret",
+  GOOGLE_CLIENT_ID: "test-client", GOOGLE_CLIENT_SECRET: "test-secret",
   GOOGLE_REFRESH_TOKEN: "test-refresh", GOOGLE_DRIVE_FOLDER_ID: "test-folder",
 });
-const headers = { origin: process.env.UPLOAD_ORIGIN, "x-event-key": process.env.UPLOAD_EVENT_KEY };
+const headers = { origin: "https://ournewday.kr" };
 const makeRequest = (body, extra = {}) => new Request("https://photos.example.test/api/photos/session", { method: "POST", headers: { ...headers, ...extra }, body });
 test("format and size policy: empty, oversized, forged MIME and unsupported types rejected", () => {
   assert.equal(policy.validateFile("IMG.HEIC", 20, "").mime, "image/heic");
@@ -26,14 +25,13 @@ test("Drive ranges use confirmed bytes, including absent and malformed ranges", 
   assert.throws(() => policy.receivedOffset("bytes=0-200", 100));
   assert.throws(() => policy.receivedOffset("garbage", 100));
 });
-test("closed reception and wrong event/origin are rejected", () => {
+test("only four Google settings are required; closed reception and wrong origins are rejected", () => {
   server.checkUploadRequest(makeRequest(""));
   assert.throws(() => server.checkUploadRequest(makeRequest("", { origin: "https://evil.test" })));
-  assert.throws(() => server.checkUploadRequest(makeRequest("", { "x-event-key": "wrong" })));
-  process.env.UPLOAD_ENABLED = "false";
+  uploadConfig.enabled = false;
   assert.equal(server.isUploadOpen(), false);
   assert.throws(() => server.checkUploadRequest(makeRequest("")));
-  process.env.UPLOAD_ENABLED = "true";
+  uploadConfig.enabled = true;
 });
 test("encrypted sessions reject modification, expiration and arbitrary proxy targets", () => {
   const data = { url: "https://www.googleapis.com/upload/drive/v3/files?upload_id=test", size: 10, mime: "image/jpeg", id: "file-id", expires: Date.now() + 10000 };
@@ -94,7 +92,7 @@ test("browser sends chunks in order to /api/photos and only finishes after serve
   const file = new File([new Uint8Array(policy.CHUNK_BYTES + 3)], "clip.mp4", { type: "video/mp4" });
   global.fetch = async (url, options) => {
     requests.push([url, options]);
-    assert.equal(new Headers(options.headers).get("x-event-key"), "qr-key");
+    assert.equal(new Headers(options.headers).has("x-event-key"), false);
     if (url === "/api/photos/session") return Response.json({ session: "session-token" });
     assert.equal(url, "/api/photos/chunk");
     if (options.method === "POST") return Response.json({ done: false, offset: 0 });
@@ -103,8 +101,8 @@ test("browser sends chunks in order to /api/photos and only finishes after serve
     return Response.json({ done: next === file.size, offset: next });
   };
   try {
-    const session = await createUploadSession(file, "guest", "qr-key");
-    await uploadFile(file, session, "qr-key", (value) => progress.push(value));
+    const session = await createUploadSession(file, "guest");
+    await uploadFile(file, session, (value) => progress.push(value));
     const chunks = requests.filter(([, options]) => options.method === "PUT");
     assert.deepEqual(chunks.map(([, options]) => options.body.size), [policy.CHUNK_BYTES, 3]);
     assert.deepEqual(chunks.map(([, options]) => new Headers(options.headers).get("x-upload-offset")), ["0", String(policy.CHUNK_BYTES)]);
@@ -112,4 +110,29 @@ test("browser sends chunks in order to /api/photos and only finishes after serve
   } finally {
     global.fetch = originalFetch;
   }
+});
+
+test("missing Google configuration and an expired reception are rejected", () => {
+  const end = uploadConfig.closesAt;
+  try {
+    uploadConfig.closesAt = "2000-01-01T00:00:00Z";
+    assert.equal(server.isUploadOpen(), false);
+    uploadConfig.closesAt = end;
+    for (const name of ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REFRESH_TOKEN", "GOOGLE_DRIVE_FOLDER_ID"]) {
+      const value = process.env[name];
+      try {
+        delete process.env[name];
+        assert.equal(server.isUploadOpen(), false);
+      } finally { process.env[name] = value; }
+    }
+  } finally { uploadConfig.closesAt = end; }
+});
+
+test("changing the Google secret invalidates an existing upload session", () => {
+  const value = process.env.GOOGLE_CLIENT_SECRET;
+  const token = server.encodeUploadSession({ url: "https://www.googleapis.com/upload/drive/v3/files?upload_id=test", size: 3, mime: "image/jpeg", id: "file-id", expires: Date.now() + 60000 });
+  try {
+    process.env.GOOGLE_CLIENT_SECRET = "different-google-secret";
+    assert.throws(() => server.decodeUploadSession(token));
+  } finally { process.env.GOOGLE_CLIENT_SECRET = value; }
 });

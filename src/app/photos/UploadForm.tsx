@@ -22,7 +22,6 @@ function getStatusText(item: UploadItem) {
 }
 
 export function UploadForm({ isOpen }: { isOpen: boolean }) {
-  const [eventKey, setEventKey] = useState("");
   const [guestName, setGuestName] = useState("");
   const [files, setFiles] = useState<UploadItem[]>([]);
   const [message, setMessage] = useState("");
@@ -30,25 +29,6 @@ export function UploadForm({ isOpen }: { isOpen: boolean }) {
   const [hasConsent, setHasConsent] = useState(false);
   // React 상태가 갱신되기 전의 빠른 더블 클릭도 막습니다.
   const uploadInProgress = useRef(false);
-
-  useEffect(() => {
-    const keyFromQr = new URLSearchParams(window.location.hash.slice(1)).get("key");
-    if (keyFromQr) {
-      setEventKey(keyFromQr);
-      try {
-        sessionStorage.setItem("wedding-upload-key", keyFromQr);
-      } catch {
-        // 저장소 사용이 막힌 브라우저에서도 현재 화면의 업로드는 가능합니다.
-      }
-      history.replaceState(null, "", location.pathname + location.search);
-      return;
-    }
-    try {
-      setEventKey(sessionStorage.getItem("wedding-upload-key") ?? "");
-    } catch {
-      // 키를 읽을 수 없으면 QR을 다시 스캔하도록 안내합니다.
-    }
-  }, []);
 
   useEffect(() => {
     if (!isUploading) return;
@@ -104,7 +84,7 @@ export function UploadForm({ isOpen }: { isOpen: boolean }) {
 
   // 파일별로 연결 만들기 → 전송 → 완료 표시. 실패한 파일만 다시 보냅니다.
   async function handleUpload() {
-    if (uploadInProgress.current || !hasConsent || !eventKey || !isOpen) return;
+    if (uploadInProgress.current || !hasConsent || !isOpen) return;
     uploadInProgress.current = true;
     setIsUploading(true);
     setMessage("");
@@ -114,9 +94,9 @@ export function UploadForm({ isOpen }: { isOpen: boolean }) {
         if (item.status === "done") continue;
         updateFile(item.id, { status: "sending", error: undefined });
         try {
-          const session = item.session ?? await createUploadSession(item.file, guestName, eventKey);
+          const session = item.session ?? await createUploadSession(item.file, guestName);
           updateFile(item.id, { session });
-          await uploadFile(item.file, session, eventKey, (progress) => {
+          await uploadFile(item.file, session, (progress) => {
             updateFile(item.id, { progress });
           });
           updateFile(item.id, { status: "done", progress: 100 });
@@ -136,7 +116,7 @@ export function UploadForm({ isOpen }: { isOpen: boolean }) {
   const completedCount = files.filter((item) => item.status === "done").length;
   const pendingCount = files.length - completedCount;
   const allCompleted = completedCount > 0 && pendingCount === 0;
-  const canUpload = isOpen && !!eventKey && hasConsent && pendingCount > 0 && !isUploading;
+  const canUpload = isOpen && hasConsent && pendingCount > 0 && !isUploading;
   let buttonText = "추억 전달하기";
   if (pendingCount > 0) buttonText = `${pendingCount}개의 추억 전달하기`;
   if (allCompleted) buttonText = "감사합니다. 추억을 잘 받았어요";
@@ -146,9 +126,6 @@ export function UploadForm({ isOpen }: { isOpen: boolean }) {
     <section className={styles.form} aria-label="사진과 동영상 전달">
       {!isOpen && (
         <p className={styles.notice}>지금은 사진·동영상 접수 준비 중이거나 접수가 종료되었습니다.</p>
-      )}
-      {isOpen && !eventKey && (
-        <p className={styles.notice}>행사장에 비치된 QR 코드로 접속해 주세요.</p>
       )}
 
       <label className={styles.name}>
@@ -171,7 +148,7 @@ export function UploadForm({ isOpen }: { isOpen: boolean }) {
           type="file"
           accept={ACCEPT}
           multiple
-          disabled={isUploading || !isOpen || !eventKey}
+          disabled={isUploading || !isOpen}
           onChange={handleFileSelect}
           aria-label="사진과 동영상 파일 선택"
         />

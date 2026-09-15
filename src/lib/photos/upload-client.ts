@@ -7,11 +7,9 @@ export class TransferError extends Error {
   constructor(message: string, public status: number) { super(message); }
 }
 
-async function requestUploadApi(path: string, key: string, init: RequestInit) {
-  const headers = new Headers(init.headers);
-  headers.set("x-event-key", key);
+async function requestUploadApi(path: string, init: RequestInit) {
   const response = await fetch(`/api/photos/${path}`, {
-    ...init, headers, signal: AbortSignal.timeout(60000)
+    ...init, signal: AbortSignal.timeout(60000)
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
@@ -20,8 +18,8 @@ async function requestUploadApi(path: string, key: string, init: RequestInit) {
   return data;
 }
 
-export async function createUploadSession(file: File, guest: string, key: string): Promise<string> {
-  const data = await requestUploadApi("session", key, {
+export async function createUploadSession(file: File, guest: string): Promise<string> {
+  const data = await requestUploadApi("session", {
     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
       name: file.name, size: file.size, type: file.type, guest
     })
@@ -30,14 +28,14 @@ export async function createUploadSession(file: File, guest: string, key: string
 }
 
 // 한 파일을 작은 조각으로 나누어 순서대로 보냅니다. 실패하면 최대 3회 재시도합니다.
-export async function uploadFile(file: File, session: string, key: string, onProgress: (percent: number) => void) {
+export async function uploadFile(file: File, session: string, onProgress: (percent: number) => void) {
   const headers = { "x-upload-session": session };
   let failures = 0;
   let state: UploadProgress | undefined;
   while (true) {
     try {
       if (!state) {
-        state = await requestUploadApi("chunk", key, { method: "POST", headers }) as UploadProgress;
+        state = await requestUploadApi("chunk", { method: "POST", headers }) as UploadProgress;
       }
       if (!Number.isSafeInteger(state.offset) || state.offset < 0 || state.offset > file.size) {
         throw new Error("전송 위치를 확인할 수 없습니다.");
@@ -51,7 +49,7 @@ export async function uploadFile(file: File, session: string, key: string, onPro
         throw new Error("저장 완료를 확인 중입니다. 다시 시도해 주세요.");
       }
       const previous = state.offset;
-      state = await requestUploadApi("chunk", key, {
+      state = await requestUploadApi("chunk", {
         method: "PUT", headers: {
           ...headers, "x-upload-offset": String(previous), "Content-Type": "application/octet-stream"
         }, body: file.slice(previous, previous + CHUNK_BYTES)
