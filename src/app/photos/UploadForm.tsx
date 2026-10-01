@@ -128,24 +128,34 @@ export function UploadForm({ isOpen }: { isOpen: boolean }) {
         <p className={styles.notice}>지금은 사진·동영상 접수 준비 중이거나 접수가 종료되었습니다.</p>
       )}
 
-      <label className={styles.name}>
-        보내는 분 <span>선택</span>
-        <input
-          maxLength={40}
-          value={guestName}
-          disabled={isUploading}
-          placeholder="입력한 이름의 폴더에 사진을 모아 드려요"
-          autoComplete="name"
-          onChange={(event) => setGuestName(event.target.value)}
-        />
-      </label>
-
-      <p className={styles.hint}>같은 이름은 같은 폴더에 저장됩니다. 미입력 시 익명으로 저장됩니다.</p>
+      <div className={styles.card}>
+        <label className={styles.name}>
+          <span className={styles.nameLabel}>
+            보내는 분 <span className={styles.badge}>선택</span>
+          </span>
+          <input
+            maxLength={40}
+            value={guestName}
+            disabled={isUploading}
+            placeholder="이름을 적어 주세요"
+            autoComplete="name"
+            onChange={(event) => setGuestName(event.target.value)}
+          />
+        </label>
+        <p className={styles.cardHint}>
+          같은 이름은 같은 폴더에 모아 드려요. 비워 두면 익명으로 저장됩니다.
+        </p>
+      </div>
 
       <label className={styles.picker}>
-        <span className={styles.plus} aria-hidden="true">＋</span>
+        <span className={styles.plus} aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3">
+            <path d="M3.5 7.5h3l1.6-2.2h7.8l1.6 2.2h3v11.2h-17z" strokeLinejoin="round" />
+            <circle cx="12" cy="12.8" r="3.6" />
+          </svg>
+        </span>
         <strong>사진 · 동영상 선택</strong>
-        <span>여러 개를 한 번에 고를 수 있어요</span>
+        <span className={styles.pickerHint}>여러 개를 한 번에 고를 수 있어요</span>
         <input
           type="file"
           accept={ACCEPT}
@@ -168,7 +178,7 @@ export function UploadForm({ isOpen }: { isOpen: boolean }) {
           </div>
           <ul className={styles.list}>
             {files.map((item) => (
-              <li key={item.id}>
+              <li key={item.id} className={styles.file} data-status={item.status}>
                 <div className={styles.fileTop}>
                   <span className={styles.fileName}>{item.file.name}</span>
                   {!isUploading && (
@@ -184,7 +194,7 @@ export function UploadForm({ isOpen }: { isOpen: boolean }) {
                 </div>
                 <div className={styles.fileMeta}>
                   <span>{(item.file.size / 1024 / 1024).toFixed(1)} MB</span>
-                  <span>{getStatusText(item)}</span>
+                  <span className={styles.status}>{getStatusText(item)}</span>
                 </div>
                 <progress max={100} value={item.progress} aria-label={`${item.file.name} 전송 진행률`} />
                 {item.error && <p className={styles.error}>{item.error}</p>}
