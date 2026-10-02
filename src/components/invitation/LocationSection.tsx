@@ -1,7 +1,7 @@
 import { Section } from "@/components/common/Section";
 import { KakaoMap } from "@/components/invitation/KakaoMap";
 import { getAvailableMapLinks } from "@/lib/map";
-import type { Wedding } from "@/types/wedding";
+import type { Wedding, WeddingCharterBus } from "@/types/wedding";
 
 type LocationSectionProps = {
   kakaoJavaScriptKey?: string;
@@ -34,6 +34,37 @@ function InfoBlock({ label, title, value }: InfoBlockProps) {
       <p className="mt-2 whitespace-pre-line text-[13px] leading-7 text-[var(--section-muted)]">
         {value}
       </p>
+    </div>
+  );
+}
+
+// 출발지 이름을 왼쪽 칸에 두고, 장소와 시간을 오른쪽 칸에 맞춰 세웁니다.
+function CharterBusBlock({ buses }: { buses: WeddingCharterBus[] }) {
+  if (buses.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="border-t border-[var(--section-line)] py-6 text-left">
+      <p className="font-title-en text-[10px] font-semibold tracking-[0.14em] text-[var(--section-muted)]">
+        CHARTER BUS
+      </p>
+      <p className="mt-3 text-sm font-semibold text-[var(--section-text)]">
+        대절버스 이용 시
+      </p>
+      <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 text-[13px] leading-7">
+        {buses.map((bus) => (
+          <div className="contents" key={bus.departure}>
+            <dt className="font-medium text-[var(--section-text)]">
+              {bus.departure}
+            </dt>
+            <dd className="text-[var(--section-muted)]">
+              {bus.place}
+              <span className="block">{bus.time}</span>
+            </dd>
+          </div>
+        ))}
+      </dl>
     </div>
   );
 }
@@ -114,6 +145,7 @@ export function LocationSection({
           title="자가용 이용 시"
           value={wedding.event.parking}
         />
+        <CharterBusBlock buses={wedding.event.charterBuses} />
       </div>
     </Section>
   );

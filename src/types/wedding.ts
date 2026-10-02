@@ -28,6 +28,12 @@ export type WeddingCouple = {
   bride: WeddingPerson;
 };
 
+export type WeddingCharterBus = {
+  departure: string;
+  place: string;
+  time: string;
+};
+
 export type WeddingEvent = {
   dateTime: string;
   displayDate: string;
@@ -36,6 +42,7 @@ export type WeddingEvent = {
   address: string;
   parking: string;
   transport: string;
+  charterBuses: WeddingCharterBus[];
 };
 
 export type WeddingImages = {
