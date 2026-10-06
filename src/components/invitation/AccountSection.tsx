@@ -134,6 +134,18 @@ export function AccountSection({ wedding }: AccountSectionProps) {
         저희를 향한 따뜻한 마음만 감사히 받겠습니다.
       </p>
 
+      <p
+        className="mt-6 text-[13px] leading-7 text-[var(--section-muted)]"
+        data-reveal="fade-up"
+        data-reveal-duration="1100"
+      >
+        <strong className="font-medium text-[var(--section-text)]">
+          축의대에서 모바일 청첩장을 확인하고 있습니다.
+        </strong>
+        <br />
+        번거로우시더라도 미리 준비해 주시면 감사하겠습니다.
+      </p>
+
       <div
         className="mt-12"
         data-reveal="fade-up"
