@@ -189,6 +189,14 @@ export const wedding: Wedding = {
       number: "542210314769",
     },
   ],
+  guestSnap: {
+    // 하객 사진·영상 업로드 페이지(/photos)로 이동하는 버튼 문구입니다.
+    title: "Our Day, Your Eyes",
+    message: `여러분의 시선에 담긴 우리의 하루,
+사진과 영상으로 전해 주시면 오래 간직할게요.`,
+    buttonLabel: "사진·영상 보내기",
+    href: "/photos",
+  },
 };
 
 export type { Wedding };

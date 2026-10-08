@@ -71,6 +71,13 @@ export type WeddingAccount = {
   number: string;
 };
 
+export type WeddingGuestSnap = {
+  title: string;
+  message: string;
+  buttonLabel: string;
+  href: string;
+};
+
 export type Wedding = {
   meta: WeddingMeta;
   intro: WeddingIntro;
@@ -80,4 +87,5 @@ export type Wedding = {
   images: WeddingImages;
   mapLinks: WeddingMapLinks;
   accounts: WeddingAccount[];
+  guestSnap: WeddingGuestSnap;
 };

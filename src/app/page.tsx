@@ -5,6 +5,7 @@ import { CoupleSection } from "@/components/invitation/CoupleSection";
 import { DateSection } from "@/components/invitation/DateSection";
 import { GallerySection } from "@/components/invitation/GallerySection";
 import { GreetingSection } from "@/components/invitation/GreetingSection";
+import { GuestSnapSection } from "@/components/invitation/GuestSnapSection";
 import { IntroScreen } from "@/components/invitation/IntroScreen";
 import { LocationSection } from "@/components/invitation/LocationSection";
 import { PhotoBoothSection } from "@/components/invitation/PhotoBoothSection";
@@ -37,6 +38,7 @@ export default function Home() {
       />
       <ContactSection wedding={wedding} />
       <AccountSection wedding={wedding} />
+      <GuestSnapSection wedding={wedding} />
       <ShareSection
         kakaoJavaScriptKey={kakaoJavaScriptKey}
         wedding={wedding}
